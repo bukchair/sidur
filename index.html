@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="he" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#1b2c78">
+<title>סידור וחומש בית אהרן וישראל</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+@font-face{font-family:'Alef';src:url('Alef-Regular.ttf');font-display:swap}
+@font-face{font-family:'Hadasim';src:url('HadasimCLM-Regular.ttf');font-display:swap}
+@font-face{font-family:'Ezra';src:url('SILEOTSR.ttf');font-display:swap}
+@font-face{font-family:'Shofar';src:url('ShofarRegular.ttf');font-display:swap}
+/* Frank Ruhl Libre and Heebo: SIL Open Font License 1.1 (the licence texts sit beside the files) */
+@font-face{font-family:'Frank';src:url('FrankRuhlLibre.ttf');font-weight:300 900;font-display:swap}
+@font-face{font-family:'Heebo';src:url('Heebo.ttf');font-weight:100 900;font-display:swap}
+@font-face{font-family:'RashiScript';src:url('NotoRashiHebrew.woff2') format('woff2');font-display:swap}
+
+/* Design "א" (chosen by the owner, 13.10.2026): the deep blue and the gold of the cover, flat; the content on a clean
+   white sheet with soft corners; one thin gold arch on the home page; gold only where it is needed. */
+:root{
+  --fs:22px; --lh:1.95; --body:'Ezra'; --r:12px;
+  --f-ui:'Heebo','Alef',system-ui,sans-serif; --f-serif:'Frank','Hadasim','David','Times New Roman',serif; --f-disp:'Frank','Hadasim','David','Times New Roman',serif;
+  --velvet:#1b2c78; --velvet2:#0f1a4d; --gold:#c7a14a; --gold-hi:#f6e5b3; --gold-lo:#b08d3c; --gold-ink:#221803; --gold-mk:#ae8a35;
+  --on:#f4ecd6; --on-mute:#b9b7c9; --pri:#1b2c78; --on-pri:#f6e5b3;
+  --page:#fdfcf9; --page2:#f5f2e9; --ink:#1b1b22; --mute:#7a7567; --rule:#ddd6c4; --hair:#ece8dd; --ins:#27419a; --add:#a12b2b;
+  --c-green:#1c6b2e; --c-purple:#6a2077; --c-teal:#037683; --c-orange:#b3501a;
+  /* names the older parts of the page still use */
+  --bg:var(--velvet2); --surface:var(--page); --surface2:var(--page2); --muted:var(--mute); --line:var(--hair);
+  --accent:var(--gold-mk); --accent-ink:var(--gold-ink); --divine:var(--add);
+  --shadow2:0 10px 34px rgba(0,0,0,.35);
+}
+:root[data-theme="sepia"]{
+  --gold-mk:#9a7226; --page:#f3e9d2; --page2:#e9dcc0; --ink:#33291b; --mute:#786849; --rule:#d3c3a0; --hair:#e0d2b2; --ins:#1c3c78; --add:#8a1d1d;
+}
+:root[data-theme="dark"]{
+  --velvet:#101a4a; --velvet2:#070b24; --gold:#c9a54f; --gold-hi:#ecd9a0; --gold-lo:#8a6620; --gold-ink:#231703; --gold-mk:#d6b462;
+  --on:#efe5c9; --on-mute:#a7a6b8; --pri:#2b3f9c; --on-pri:#f6e5b3;
+  --page:#0f1220; --page2:#191d31; --ink:#e9e4d6; --mute:#9d978a; --rule:#363b57; --hair:#262b42; --ins:#a9bbff; --add:#f2a0a8;
+  --c-green:#8fd49a; --c-purple:#e0a8e0; --c-teal:#5cc7d3; --c-orange:#ffa070;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%}
+html{overscroll-behavior-y:none}   /* a pull at the top must not reload the page in the middle of a prayer */
+body{background:var(--velvet2);color:var(--on);font-family:var(--f-serif);font-size:16px;line-height:1.35;-webkit-text-size-adjust:100%}
+/* the ground: one calm blue, lighter at the top; fixed, so long prayers scroll over it */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(130% 62% at 50% 0%,var(--velvet) 0%,var(--velvet2) 100%)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;text-align:inherit;border-radius:0;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .1s ease-out,background-color .1s ease-out}
+select,input{touch-action:manipulation}
+.go{flex:none;align-self:center;width:.46em;height:.46em;border:solid var(--gold-mk);border-width:0 0 2px 2px;transform:rotate(45deg);margin-inline-start:2px}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.hide{display:none!important}
+.hd .ttl,.plate .hl,.nbtn,.toc .first .t,.cap2,.sheethd h4,.comhd h4,.aboutbody h3,.abver h4,.abthanks h4,.abcontact h4,.abgive .t,.abcred h4,.setbody h5,.calnav .mt{font-weight:500}
+.chev{display:inline-block;flex:none;width:.55em;height:.55em;border:solid currentColor;border-width:0 0 .13em .13em;transform:rotate(-135deg)}
+.ld{flex:1;min-width:10px}
+
+/* ---------- splash ---------- */
+#splash{position:fixed;inset:0;z-index:100;background:#00011f;display:flex;align-items:center;
+  justify-content:center;transition:opacity .45s ease;touch-action:manipulation;overflow:hidden}
+#splash.hidden{opacity:0;pointer-events:none}
+/* the picture keeps its own proportions, so the month plate and the button can be placed on it by percentage */
+#splash::before{content:'';position:absolute;inset:-48px;background:url(splash.jpeg) center/cover;filter:blur(26px) brightness(.7)}
+#splash .art{position:relative;z-index:1;flex:none;aspect-ratio:1536/2752;width:min(100vw,55.81vh);width:min(100vw,55.81dvh)}
+#splash img{width:100%;height:100%;object-fit:cover;display:block}
+#splash .month{position:absolute;left:29%;top:63.3%;width:43.5%;height:4%;display:grid;place-items:center;
+  font-family:var(--f-disp);color:#3b230e;line-height:1;white-space:nowrap;
+  font-size:min(4.5vw,2.51vh);font-size:min(4.5vw,2.51dvh);pointer-events:none}
+#splash .shulhit{position:absolute;left:6.5%;top:78%;width:87%;height:20.6%;border-radius:5% / 12%;transition:background .12s}
+#splash .shulhit:active{background:rgba(255,255,255,.2)}
+
+/* ---------- the sheet: the content of every screen, white, with soft corners at the top ---------- */
+.view{display:none}
+.view.show{display:block}
+.frame{margin:0 auto;width:100%;max-width:760px;color:var(--ink)}
+.leaf{background:var(--page);border-radius:22px 22px 0 0;padding:12px 16px calc(18px + env(safe-area-inset-bottom));min-height:calc(100vh - 58px - env(safe-area-inset-top));min-height:calc(100dvh - 58px - env(safe-area-inset-top))}
+.box{position:relative;border-radius:var(--r);background:var(--page2)}
+.box .cap{display:block;grid-column:1 / -1;font-family:var(--f-ui);font-size:12.5px;color:var(--mute);line-height:1.3;margin-bottom:4px}
+.cap2{display:flex;align-items:center;gap:12px;font-family:var(--f-disp);font-size:17px;color:var(--ins);margin-top:10px;text-align:center}
+.cap2::before,.cap2::after{content:"";flex:1;height:1px;background:var(--ins);opacity:.45}
+
+/* ---------- home ---------- */
+#home.show{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;padding-top:calc(clamp(4px,.9vh,8px) + env(safe-area-inset-top));
+  --rh:clamp(31px,5.05vh,49px)}
+.plate{flex:none;margin:0 auto;width:calc(100% - 48px);max-width:692px;padding:clamp(10px,1.9vh,20px) 12px clamp(4px,.9vh,10px);display:grid;justify-items:center;text-align:center;cursor:pointer;
+  border:1px solid color-mix(in srgb,var(--gold) 65%,transparent);border-bottom:0;border-radius:26px 26px 0 0}
+.plate .d{font-size:13.5px;color:var(--on-mute)}
+.plate .d button{color:var(--gold-hi);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold-lo)}
+.plate .hl{font-family:var(--f-disp);font-size:clamp(22px,7.2vw,28px);line-height:1.25;color:var(--gold-hi)}
+.plate .tm{font-family:var(--f-ui);font-size:13.5px;color:var(--on);font-variant-numeric:tabular-nums}
+.plate{background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.03));transition:transform .12s ease-out,background-color .12s ease-out}
+.plate:active{transform:scale(.985);background-color:rgba(255,255,255,.07)}
+.plrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px 10px;margin-top:2px}
+.plate .more{display:inline-flex;align-items:center;gap:5px;padding:2px 11px 2px 9px;border-radius:999px;background:var(--gold);color:var(--gold-ink);font-family:var(--f-ui);font-size:12.5px;font-weight:700;line-height:1.5}
+.plate .more .go{border-color:var(--gold-ink);width:.42em;height:.42em}
+#home .frame{flex:1;display:flex}
+#home .frame,#home .plate{box-sizing:border-box}
+#home .leaf{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;padding:clamp(8px,1.5vh,14px) 16px calc(4px + env(safe-area-inset-bottom))}
+.now{background:none;display:grid;grid-template-columns:1.25fr 1fr;gap:0 9px}
+.now.one{grid-template-columns:1fr}
+.nbtn{height:clamp(38px,5.8vh,54px);display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border:1px solid var(--rule);border-radius:var(--r);background:var(--page);
+  font-family:var(--f-disp);font-size:clamp(18px,5.4vw,22px);overflow:hidden}
+.nbtn.pri,.nbtn.pri:active{background:var(--pri);color:var(--on-pri);border-color:transparent}
+.nbtn:not(.pri){font-size:clamp(12.5px,4.6vw,20px)}
+.nbtn:active,.toc .row:active,.tl button:active,.idx button:active,.srw:active,.cc:active{background:var(--page2)}
+.nbtn:active,.askbtns button:active,.combtn:active,.ib:active,.fs button:active,.pbtn:active,.chipb:active,.com .c:active{transform:scale(.97)}
+.toc{list-style:none;margin:clamp(1px,.6vh,6px) 0 0;padding:0}
+.toc .row{display:flex;align-items:baseline;gap:8px;width:calc(100% + 12px);margin-inline:-6px;padding-inline:6px;height:var(--rh);padding-top:calc((var(--rh) - 26px) / 2);border-bottom:1px solid var(--hair)}
+.toc .n{flex:none;font-family:var(--f-disp);color:var(--gold-mk);width:18px;font-size:18px}
+.toc .t{flex:none;font-size:clamp(14.5px,5.2vw,21px);white-space:nowrap}
+.toc .first .t{font-family:var(--f-disp);font-size:clamp(17px,6vw,24px)}
+.toc .x{flex:0 1 auto;min-width:0;font-size:14.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toc .x.add{color:var(--add)}
+.side{display:grid;gap:clamp(8px,1.4vh,12px);margin-top:clamp(10px,1.8vh,18px)}
+.zm{padding:clamp(9px,1.5vh,13px) 14px clamp(7px,1.3vh,11px);display:grid;gap:1px}
+.zm .r{display:flex;align-items:baseline;gap:8px;font-size:15px;line-height:1.35;color:var(--mute)}
+.zm .r em{font-style:normal;color:var(--add)}
+.zm .r b{font-weight:400;font-family:var(--f-ui);font-variant-numeric:tabular-nums;color:var(--ink);font-size:16px}
+.zm .r.big{font-size:19px;color:var(--ink)}
+.zm .r.big b{font-size:20px}
+.zm .lnk{display:none;justify-self:end;font-size:14.5px;color:var(--ins);text-decoration:underline;text-underline-offset:3px;padding:3px 0}
+.foot{padding-top:clamp(3px,.8vh,8px);text-align:center;font-size:15px;line-height:1.35}
+.foot:empty{display:none}
+.foot .tn{color:var(--add)}
+.col{display:flex;justify-content:center;border-top:1px solid var(--rule);margin-top:auto;padding-top:1px;font-family:var(--f-ui);font-size:15px;color:var(--mute)}
+.col button{padding:clamp(3px,.8vh,6px) clamp(6px,3.4vw,16px)}
+.col button+button{border-inline-start:1px solid var(--hair)}
+.ded{margin:0;padding:clamp(0px,.35vh,4px) 0 clamp(0px,.3vh,3px);text-align:center;font-size:12.5px;line-height:1.4;color:var(--mute)}
+
+/* ---------- head of the inner pages (on the blue) ---------- */
+.hd{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;
+  padding:calc(8px + env(safe-area-inset-top)) max(12px,calc(50% - 368px)) 8px;background:var(--velvet);
+  background:color-mix(in srgb,var(--velvet) 78%,transparent);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+  box-shadow:0 1px 0 rgba(255,255,255,.07),0 10px 18px -14px rgba(0,0,0,.6)}
+/* the original's "hide the menu bar while scrolling the prayer": the head slides away going down and returns going up */
+.hd{transition:transform .28s cubic-bezier(.32,.72,0,1)}
+body.hdoff .view.show .hd{transform:translateY(-102%)}
+body.hdoff .steps{top:env(safe-area-inset-top)}
+.steps{transition:top .28s cubic-bezier(.32,.72,0,1)}
+.hd .st{display:flex;align-items:center;gap:4px}
+.hd .en{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.hd .ttl{font-family:var(--f-disp);font-size:clamp(20px,6.4vw,27px);line-height:1.2;color:var(--gold-hi);text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:56vw}
+.ib{width:38px;height:38px;display:grid;place-items:center;color:var(--gold);border-radius:10px}
+.ib:active{background:rgba(255,255,255,.08)}
+.ib svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ib .chev{font-size:19px}
+.fs{display:flex;align-items:stretch;border:1px solid color-mix(in srgb,var(--gold) 60%,transparent);border-radius:10px;height:34px;color:var(--gold-hi);font-family:var(--f-disp)}
+.fs button{padding:0 9px;display:grid;place-items:center}
+.fs button+button{border-inline-start:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.fs .sm{font-size:14px}
+.fs .lg{font-size:23px}
+.sub{text-align:center;font-size:14.5px;color:var(--on-mute);margin:-4px 0 10px}
+
+/* ---------- menus ---------- */
+.tl{list-style:none;margin:2px 0 0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;inset-block:22px;inset-inline-start:5px;width:1px;background:var(--rule);opacity:.6}
+.tl li{position:relative;border-bottom:1px dotted var(--hair)}
+.tl li:last-child{border-bottom:0}
+.tl li::before{content:"";position:absolute;inset-inline-start:1px;top:50%;width:9px;height:9px;margin-top:-5px;transform:rotate(45deg);background:var(--page);border:1px solid var(--rule);pointer-events:none}
+.tl button{display:flex;align-items:baseline;gap:8px;width:100%;min-height:49px;padding:12px 0 10px;padding-inline:26px 4px}
+.tl .t{flex:1}
+.tl .ld{flex:1}
+.tl .t:has(+ .ld){flex:none}
+.tl .t{font-size:20.5px}
+.tl .x{flex:none;font-size:14.5px;color:var(--mute)}
+.tl .is-now .t{font-family:var(--f-disp);font-size:24px}
+.tl .is-now .x{color:var(--ins)}
+.tl .is-now::before{inset-inline-start:-1px;width:13px;height:13px;margin-top:-7px;background:var(--gold-mk);border-color:var(--gold-mk)}
+.tl .is-sp .x{color:var(--add)}
+.tl .is-sp::before{border-color:var(--add)}
+.tl.two{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+.tl.two::before{display:none}
+.idx{list-style:none;margin:2px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:22px;background:linear-gradient(var(--hair),var(--hair)) center/1px 100% no-repeat}
+.idx li{border-bottom:1px dotted var(--hair)}
+.idx button{display:flex;align-items:baseline;gap:6px;width:100%;min-height:48px;padding:12px 2px 10px}
+.idx .t{flex:1}
+.idx .n{flex:none;font-family:var(--f-disp);color:var(--ins);width:14px;font-size:15px}
+.idx .t{font-size:clamp(16px,4.8vw,18.5px)}
+.empty{text-align:center;color:var(--mute);padding:56px 20px;font-size:16px;line-height:1.7}
+
+/* ---------- reader ---------- */
+#reader .leaf{padding-top:0}
+.steps{position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:10;display:flex;gap:18px;align-items:baseline;overflow-x:auto;scrollbar-width:none;
+  margin:0 -16px;padding:11px 16px 8px;background:var(--page);border-bottom:1px solid var(--rule);border-radius:22px 22px 0 0;font-family:var(--f-ui);font-size:14.5px;white-space:nowrap}
+.steps::-webkit-scrollbar{display:none}
+.steps button{flex:none;color:var(--mute);padding:2px 0}
+.steps .on{color:var(--ink);display:flex;align-items:center;gap:7px;box-shadow:0 2px 0 var(--gold-mk)}
+.steps .on::before{content:"";width:7px;height:7px;transform:rotate(45deg);background:var(--gold-mk)}
+.rbody{max-width:760px;margin:0 auto;padding:14px 0 calc(60px + env(safe-area-inset-bottom));
+  font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:var(--lh);text-align:justify;word-spacing:.02em}
+.rbody p{margin:0 0 .55em}
+:root[data-align="start"] .rbody{text-align:start}
+/* the original's own colours, tuned to the leaf: the user's choice of hue in the settings is kept */
+.rbody .fc{color:var(--fc)}
+.rbody .fc[data-c="0000ff"]{--fc:var(--ins)!important}
+.rbody .fc[data-c="ff0000"]{--fc:var(--add)!important}
+.rbody .fc[data-c="008000"]{--fc:var(--c-green)!important}
+.rbody .fc[data-c="800080"]{--fc:var(--c-purple)!important}
+.rbody .fc[data-c="0393a3"]{--fc:var(--c-teal)!important}
+.rbody .fc[data-c="ff8040"]{--fc:var(--c-orange)!important}
+.rbody a.sk{display:block;height:0;scroll-margin-top:calc(104px + env(safe-area-inset-top))}
+
+/* ---------- commentary in place ---------- */
+.rbody .vs{font:inherit;color:inherit;pointer-events:none}
+.rbody .com{display:none}
+:root[data-com="on"] .rbody .vs{pointer-events:auto;color:var(--ins);text-decoration:underline;text-underline-offset:.3em;text-decoration-thickness:1px}
+:root[data-com="on"] .rbody .ph{text-decoration:underline dotted var(--gold-mk);text-decoration-thickness:2px;text-underline-offset:.42em;cursor:pointer}
+:root[data-com="on"] .rbody .com{display:flex;flex-wrap:wrap;align-items:center;gap:7px;border-block:1px solid var(--hair);padding:7px 0;margin:6px 0 10px;
+  font-family:var(--f-serif);font-size:14.5px;line-height:1.3;text-align:start;word-spacing:0}
+.com .lb{color:var(--mute)}
+.com .c{color:var(--ins);border:1px solid var(--rule);padding:3px 10px 4px}
+.com .c:active{background:var(--page2)}
+/* the bar of commentaries: the switch, and beside it a strip of the books that speak on this page; the strip scrolls sideways */
+.combar{position:fixed;z-index:30;inset-inline:max(10px,calc(50% - 368px));bottom:calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;pointer-events:none}
+.combar>*{pointer-events:auto}
+.combtn{flex:none;display:flex;align-items:center;gap:7px;height:46px;padding:0 16px;
+  background:var(--page);color:var(--ink);border:1px solid var(--rule);border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.22);font-family:var(--f-serif);font-size:16.5px}
+.comstrip{flex:0 1 auto;min-width:0;display:flex;align-items:center;gap:5px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:5px;border-radius:999px;border:1px solid var(--rule);
+  background:color-mix(in srgb,var(--page) 84%,transparent);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);box-shadow:0 6px 18px rgba(0,0,0,.22);
+  animation:comin .34s cubic-bezier(.32,.72,0,1)}
+@keyframes comin{from{opacity:0;transform:translateX(-14px)}}
+.comstrip::-webkit-scrollbar{display:none}
+.comstrip:empty,:root:not([data-com="on"]) .comstrip{display:none}
+.comstrip button{flex:none;display:inline-flex;align-items:baseline;gap:5px;height:34px;padding:0 13px;border-radius:999px;font-family:var(--f-serif);font-size:15.5px;line-height:34px;color:var(--ink);white-space:nowrap}
+.comstrip button small{font-family:var(--f-ui);font-size:11px;color:var(--mute)}
+.comstrip button:active{transform:scale(.96)}
+.comstrip button[aria-pressed="true"]{background:var(--pri);color:var(--on-pri)}
+.comstrip button[aria-pressed="true"] small{color:inherit;opacity:.8}
+.comstrip .nx{align-items:center;background:var(--gold);color:var(--gold-ink);font-family:var(--f-ui);font-size:13px;font-weight:700}
+.comstrip .nx .go{border-color:var(--gold-ink)}
+:root[data-com="on"] .rbody .ph.off{text-decoration:none;cursor:auto}
+.rbody .flash{background:color-mix(in srgb,var(--gold) 38%,transparent);border-radius:4px;transition:background-color .9s ease}
+.combtn i{width:7px;height:7px;transform:rotate(45deg);border:1px solid var(--gold-mk)}
+.combtn[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
+.combtn[aria-pressed="true"] i{background:var(--gold-ink);border-color:var(--gold-ink)}
+.sheet.comsheet{font-family:var(--f-serif);max-height:62vh;padding-top:0;display:flex;flex-direction:column;overflow:hidden}
+.comhd{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:12px 0 8px;border-bottom:1px solid var(--rule)}
+.comhd h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:22px}
+.comhd button{flex:none;font-size:15px;color:var(--ins);padding:4px 2px}
+#comBody{flex:1;min-height:0;overflow-y:auto;padding:4px 0 6px}
+.ce{padding:10px 0 12px;border-bottom:1px dotted var(--hair)}
+.csrc{font-size:14.5px;color:var(--ins);margin-bottom:4px}
+.ctx{font-size:18px;line-height:1.7;text-align:justify}
+.ctx+.ctx{margin-top:8px}
+.ctx small{font-size:.85em;color:var(--mute)}
+.cmore{margin-top:8px;font-size:15px;color:var(--ins);text-decoration:underline;text-underline-offset:3px}
+.cnone{font-size:15.5px;color:var(--mute);margin:12px 0}
+.ccr{padding-top:10px;font-family:var(--f-ui);font-size:11.5px;line-height:1.6;color:var(--mute)}
+/* credit lines carry long Latin names and addresses: they must break inside the leaf, never widen the page */
+.aboutbody,.abcred,.ccr,.leaf{overflow-wrap:anywhere}
+.abcred ul{word-break:break-word}
+.abcred h4{font-family:var(--f-disp);font-weight:400;font-size:21px;margin:18px 0 4px;text-align:center}
+.abver{border-block:1px solid var(--rule);margin:18px 0;padding:6px 0 12px}
+.abver h4{font-family:var(--f-disp);font-weight:400;font-size:23px;margin:10px 0 6px;text-align:center}
+.abver ul{margin:0;padding-inline-start:20px;display:grid;gap:7px;font-size:16px;line-height:1.6}
+.abver li::marker{color:var(--gold-mk)}
+.abver b{font-weight:700}
+.abcred ul{margin:6px 0 0;padding-inline-start:18px;font-size:13.5px;line-height:1.6;color:var(--mute);font-family:var(--f-ui)}
+
+/* ---------- search, reminders, chok ---------- */
+#home{position:relative}
+.homefind{position:absolute;top:calc(clamp(4px,.9vh,8px) + clamp(10px,1.9vh,20px) + 15px + env(safe-area-inset-top));inset-inline-end:30px;width:40px;height:40px;display:grid;place-items:center;color:var(--gold);z-index:2}
+.homefind svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+.homefind:active{transform:scale(.94)}
+.sheet.findsheet{padding:0;top:calc(10px + env(safe-area-inset-top));bottom:0;max-height:none;display:flex;flex-direction:column;overflow:hidden;border-radius:18px 18px 0 0;border-top:0}
+.findbar{flex:none;display:flex;gap:10px;align-items:center;padding:12px 14px 10px;border-bottom:1px solid var(--hair)}
+.findbar input{flex:1;min-width:0;font-size:16px;font-family:var(--f-ui);padding:11px 12px;border:1px solid var(--rule);background:var(--page);color:var(--ink);border-radius:0}
+.findbar button{flex:none;font-size:16px;font-weight:700;color:var(--ins);padding:6px 2px}
+.findbody{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 14px calc(18px + env(safe-area-inset-bottom))}
+.findnote{font-size:13.5px;color:var(--mute);margin:10px 2px 4px;line-height:1.55}
+.findres{list-style:none;margin:0;padding:0}
+.findres li{display:flex;align-items:stretch;border-bottom:1px dotted var(--hair)}
+.findres .fr{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;min-height:48px;padding:11px 2px 9px;font-family:var(--f-serif)}
+.findres .t{flex:1;min-width:0;font-size:18px;line-height:1.35;overflow-wrap:anywhere}
+.findres .x{flex:none;font-size:12.5px;color:var(--mute);font-family:var(--f-ui)}
+.findres .star{flex:none;width:44px;font-size:21px;color:var(--mute);text-align:center}
+.findres .star[aria-pressed="true"]{color:var(--gold-mk)}
+.findres .fr:active{background:var(--page2)}
+.remstate{font-family:var(--f-ui);font-size:13.5px;line-height:1.6;color:var(--mute);padding:10px 2px 4px}
+.remstate p{margin:0 0 8px}
+.remlist{list-style:none;margin:6px 0 0;padding:0}
+.remlist li{display:flex;align-items:center;gap:10px;border-bottom:1px dotted var(--hair)}
+.remlist .rrow{flex:1;min-width:0;display:grid;gap:1px;padding:11px 2px 10px;min-height:54px}
+.remlist .rrow .t{font-size:19px}
+.remlist .rrow .x{font-size:13px;color:var(--mute);font-family:var(--f-ui);line-height:1.45}
+.remlist .rrow:active{background:var(--page2)}
+.remlist .none{display:block;border:0;padding:16px 2px;color:var(--mute);font-size:15.5px;line-height:1.6}
+.remdays{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px 10px}
+.remdays .chipb{min-width:38px;justify-content:center;font-family:var(--f-serif);font-size:17px}
+.rembtns{display:flex;gap:8px;padding:16px 0 4px}
+.rembtns .pbtn{flex:1;font-family:var(--f-ui);font-size:15.5px}
+.rembtns .del{flex:0 0 auto;color:var(--add);border-color:var(--add)}
+.srw input[type=time]{flex:0 1 auto;font:inherit;font-size:16px;color:var(--ins);background:none;border:0;padding:8px 0;text-align:end}
+.choktools{display:flex;gap:8px;align-items:center;padding:10px 0 2px}
+.choktools select{flex:1;min-width:0}
+#chokBody .ctx{margin:0 0 6px;font-family:var(--body),'Ezra',serif;font-size:calc(var(--fs) * .9);line-height:1.85}
+#chokBody .csrc{margin-top:4px}
+#chokBody .chsub{font-size:14px;color:var(--mute);margin:10px 0 2px;font-family:var(--f-serif)}
+#chokBody .ctx.sub{font-size:calc(var(--fs) * .76);line-height:1.75;color:var(--ink)}
+#chokBody .ctx.targ{font-size:calc(var(--fs) * .8);color:var(--ins)}
+#chokBody .ctx.note{color:var(--mute)}
+#chokBody .ctx small{font-size:.85em}
+
+/* ---------- zmanim ---------- */
+.luhead{text-align:center;padding:10px 0 8px;border-bottom:1px solid var(--rule)}
+.luhead .d1{font-family:var(--f-disp);font-size:22px}
+.luhead .d2{font-size:14px;color:var(--mute);margin-top:2px}
+.lunotes{padding:10px 0 4px;text-align:center;font-size:15.5px;line-height:1.75}
+.lurow{display:flex;align-items:baseline;gap:8px;min-height:42px;padding:9px 2px 7px;border-bottom:1px dotted var(--hair)}
+.lurow .nm{font-size:19px}
+.lurow .tm{font-size:18px;font-variant-numeric:tabular-nums;font-family:var(--f-ui)}
+.lurow.hl .nm{font-family:var(--f-disp);font-size:22px}
+.lurow.hl .tm{font-size:21px;color:var(--ins)}
+.lurow.hl{box-shadow:10px 0 0 var(--page),13px 0 0 var(--gold-mk)}
+.luwarn{padding:14px 4px 6px;font-size:12.5px;color:var(--mute);line-height:1.7;text-align:center;font-family:var(--f-ui)}
+
+/* ---------- about ---------- */
+.aboutbody{max-width:700px;margin:0 auto;padding:8px 2px 20px;font-size:17px;line-height:1.75;color:var(--ink)}
+.aboutbody h3{font-family:var(--f-disp);font-weight:400;font-size:26px;text-align:center;margin:8px 0 2px}
+.aboutbody .ab-sub{text-align:center;color:var(--mute);font-size:14px;margin:0 0 18px}
+.aboutbody p{margin:0 0 14px;text-align:justify}
+.aboutbody .ab-ded{border:1px solid var(--rule);padding:12px 14px;text-align:center;line-height:1.8}
+.aboutbody .ab-lead{text-align:center}
+.abthanks h4,.abcontact h4{font-family:var(--f-disp);font-weight:400;font-size:21px;margin:18px 0 6px;text-align:center}
+.abthanks p{margin:0 0 8px}
+.abgive{display:grid;justify-items:center;gap:4px;margin:20px 0;padding:18px 16px 16px;text-align:center;text-decoration:none;color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--gold) 45%,var(--page));border-radius:var(--r);background:color-mix(in srgb,var(--gold) 12%,var(--page))}
+.abgive svg{width:30px;height:30px;fill:none;stroke:var(--gold-mk);stroke-width:1.5;stroke-linejoin:round}
+.abgive .t{font-family:var(--f-disp);font-size:22px;line-height:1.3}
+.abgive .x{font-family:var(--f-ui);font-size:13.5px;line-height:1.55;color:var(--mute);max-width:30ch}
+.abgive .b{margin-top:10px;width:100%;max-width:300px;min-height:46px;display:grid;place-items:center;font-family:var(--f-ui);font-size:17px;font-weight:700;color:var(--gold-ink);
+  background:var(--gold);transition:transform .1s ease-out}
+.abgive:active .b{transform:scale(.97)}
+.abcontact{text-align:center;margin:18px 0}
+.abcontact .nm{text-align:center;margin:0 0 10px;font-size:19px}
+.abcontact .sm{text-align:center;margin:10px 0 0;font-size:13.5px;color:var(--mute);font-family:var(--f-ui)}
+.abrow{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.abrow .pbtn{flex:1 1 150px;gap:8px;font-family:var(--f-ui);font-size:15.5px;text-decoration:none;color:var(--ins)}
+.abrow svg{flex:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.abhouse{display:block;margin:6px 0 4px;padding:12px;text-align:center;text-decoration:none;color:var(--mute);font-family:var(--f-ui);font-size:14.5px;border-block:1px solid var(--hair)}
+.abhouse b{color:var(--ink);letter-spacing:1.5px}
+.aboutbody .ab-note{font-size:13.5px;color:var(--mute);text-align:center;line-height:1.7}
+
+/* ---------- guide, and the new user's kit ---------- */
+.guide{max-width:700px;margin:0 auto;padding:6px 0 18px}
+.guide .g-lead{margin:6px 2px 22px;text-align:center;font-size:16.5px;line-height:1.6;color:var(--mute)}
+.gkit{display:grid;gap:8px;justify-items:start;padding:14px 14px 14px;margin-bottom:10px}
+.gkit p{margin:0;font-size:16px;line-height:1.6}
+.gsec{border-bottom:1px solid var(--hair)}
+.gsec summary{display:flex;align-items:baseline;gap:8px;min-height:54px;padding:14px 6px 11px;margin-inline:-6px;cursor:pointer;list-style:none}
+.gsec summary::-webkit-details-marker{display:none}
+.gsec summary:active{background:var(--page2)}
+.gsec .n{flex:none;font-family:var(--f-disp);color:var(--ins);width:22px;font-size:18px}
+.gsec .t{flex:1;min-width:0;font-size:20px}
+.gsec .chev{color:var(--gold-mk);font-size:15px;transform:rotate(-45deg);transition:transform .2s ease;align-self:center}
+.gsec[open] .chev{transform:rotate(135deg)}
+.gsec .gb{padding:0 2px 16px;padding-inline-start:12px}
+.gsec ul{margin:0 0 10px;padding-inline-start:18px;display:grid;gap:7px;font-size:16.5px;line-height:1.6}
+.gsec li::marker{color:var(--gold-mk)}
+.gsec .only{color:var(--mute);font-size:13.5px;font-family:var(--f-ui);margin:0 0 8px}
+.gsec .pbtn{min-height:40px;font-size:15.5px}
+.kitsteps{flex:none;display:flex;align-items:center;gap:6px;padding:2px 20px 8px;font-size:13px;color:var(--mute)}
+.kitsteps i{width:22px;height:4px;border-radius:2px;background:var(--hair)}
+.kitsteps i.on{background:var(--gold-mk)}
+.kitsteps span{margin-inline-start:auto}
+.kitp{display:none}
+.kitp.on{display:block}
+.kitp>p{margin:8px 8px 14px;font-size:16px;line-height:1.65}
+.kitp h5{margin-top:14px}
+.kitnav{flex:none;display:flex;gap:10px;padding:10px 14px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--hair);background:var(--page2)}
+.kitnav .pbtn{flex:1;font-family:var(--f-ui);font-size:16px}
+/* ---------- sheets ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,10,.55);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--page);color:var(--ink);font-family:var(--f-ui);
+  border-radius:20px 20px 0 0;
+  padding:8px 20px calc(26px + env(safe-area-inset-bottom));transform:translateY(104%);
+  transition:transform .46s cubic-bezier(.32,.72,0,1);max-width:760px;margin:0 auto;max-height:86vh;overflow-y:auto;overscroll-behavior:contain}
+.sheet.show{transform:translateY(0);box-shadow:0 -10px 44px rgba(0,0,0,.35)}   /* only while open: a closed sheet waits just under the edge, and its shadow would lie over the page */
+/* ---------- settings: a live sample on top, then soft cards; every choice is made by touching it ---------- */
+.sheet.setsheet{padding:0;max-height:94vh;max-height:94dvh;display:flex;flex-direction:column;overflow:hidden;border-top:0;border-radius:20px 20px 0 0;
+  background:var(--page2)}
+.sheethd{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px 10px;position:relative}
+.sheethd,.findbar,.comhd{touch-action:none}
+.sheethd::before{content:"";position:absolute;top:6px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--hair)}
+.sheethd h4{margin:8px 0 0;font-family:var(--f-disp);font-weight:400;font-size:28px;line-height:1.1}
+.sheethd .done{margin-top:8px;font-family:var(--f-ui);font-size:15px;font-weight:700;color:var(--gold-ink);padding:8px 18px;border-radius:999px;
+  background:var(--gold);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.sheethd .done:active{transform:scale(.97)}
+.setbody{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 14px calc(30px + env(safe-area-inset-bottom))}
+.setbody h5{display:flex;align-items:center;gap:8px;margin:22px 6px 8px;font-family:var(--f-disp);font-weight:400;font-size:19px;color:var(--ink)}
+.setbody h5::before{content:"";width:7px;height:7px;transform:rotate(45deg);background:var(--gold-mk);flex:none}
+.setbody h5:first-of-type{margin-top:8px}
+.grp{background:var(--page);border:1px solid var(--hair);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.srw{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:8px 14px;font-size:16px;cursor:pointer}
+.srw+.srw,.previewbox+.srw{border-top:1px solid var(--hair)}
+.srw>span{flex:1;min-width:0}
+.srw.stack{flex-direction:column;align-items:stretch;gap:9px;padding:12px 14px 13px;cursor:default}
+.srw.stack>span{font-size:13.5px;color:var(--mute)}
+.srw small{display:block;font-size:12.5px;color:var(--mute);line-height:1.35;margin-top:1px}
+.srw select{flex:0 1 auto;max-width:60%;font:inherit;font-size:16px;color:var(--ins);background:none;border:0;padding:8px 0 8px 18px;text-align:end;text-align-last:end;direction:rtl;
+  appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ins) 50%),linear-gradient(-45deg,transparent 50%,var(--ins) 50%);
+  background-size:5px 5px,5px 5px;background-position:4px 55%,9px 55%;background-repeat:no-repeat}
+.srw select option{color:#1d1a16;background:#fff}
+.srw input[type=text]{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:none;border:0;text-align:end;padding:8px 0}
+.srw input::placeholder{color:var(--mute)}
+/* one choice out of a few: all the choices in view, the chosen one raised */
+.segc{display:flex;gap:3px;padding:3px;border-radius:11px;background:var(--page2);flex:0 1 auto}
+.srw.stack .segc{flex:none}
+.segc button{flex:1;min-height:38px;padding:6px 12px;border-radius:9px;font-size:15px;text-align:center;color:var(--ink);white-space:nowrap;transition:background-color .15s ease,box-shadow .15s ease,transform .1s ease-out}
+.segc button[aria-pressed="true"]{background:var(--page);box-shadow:0 1px 3px rgba(0,0,0,.22),0 0 0 1px var(--hair);font-weight:700}
+.segc button:active{transform:scale(.97)}
+.segc.fonts button{font-size:17.5px;padding:4px 2px}
+.segc.themes{background:none;padding:0;gap:10px}
+.segc.themes button{display:grid;justify-items:center;gap:6px;padding:10px 6px 8px;border-radius:12px;border:1px solid var(--hair);font-size:14px;background:var(--page)}
+.segc.themes button i{width:100%;height:46px;border-radius:8px;border:1px solid rgba(0,0,0,.18);display:grid;place-items:center;font-family:'Ezra',serif;font-size:22px;font-style:normal}
+.segc.themes button i::after{content:"אב"}
+.segc.themes .t-light i{background:#fdfcf9;color:#1b1b22}
+.segc.themes .t-sepia i{background:#f3e9d2;color:#33291b}
+.segc.themes .t-dark i{background:#0f1220;color:#e9e4d6}
+.segc.themes button[aria-pressed="true"]{border-color:var(--gold-mk);box-shadow:0 0 0 2px var(--gold-mk)}
+.segc.dots{background:none;padding:0;gap:12px}
+.segc.dots button{flex:none;width:32px;height:32px;min-height:0;padding:0;border-radius:50%;background:var(--d);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.segc.dots button[aria-pressed="true"]{background:var(--d);box-shadow:0 0 0 3px var(--page),0 0 0 5px var(--d)}
+.sizer{display:flex;align-items:center;gap:12px}
+.sizer .sa{font-family:'Ezra',serif;font-size:15px;color:var(--mute)}
+.sizer .la{font-family:'Ezra',serif;font-size:27px;color:var(--mute);line-height:1}
+.sizer input[type=range]{flex:1;min-width:0;height:32px;margin:0;accent-color:var(--gold-mk);direction:rtl}
+.sw{flex:none;width:51px;height:31px;border-radius:999px;background:var(--hair);position:relative;transition:background-color .2s ease}
+.sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:transform .22s cubic-bezier(.32,.72,0,1)}
+.sw[aria-checked="true"]{background:var(--gold-mk)}
+.sw[disabled]{opacity:.45}
+.sw[aria-checked="true"]::after{transform:translateX(-20px)}   /* right to left: on is at the far (left) end */
+:root:not([data-loc="on"]) .cityalt{display:none}
+.hint{margin:7px 10px 0;font-size:12.5px;line-height:1.5;color:var(--mute);font-family:var(--f-ui)}
+.previewbox{padding:16px 14px 14px;font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:1.75;text-align:center;background:var(--page);min-height:112px;display:grid;align-content:center;gap:2px}
+.previewbox .pv-i{font-size:.72em}
+.pbtn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:1px solid var(--rule);font-family:var(--f-serif);font-size:16.5px;background:var(--page)}
+.pbtn.main{border:0;background:var(--gold);color:var(--gold-ink);font-weight:700}
+.chipb{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px;border:1px solid var(--rule);font-size:14.5px;background:var(--page)}
+.chipb[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold-lo)}
+.lnk{color:var(--ins);text-decoration:underline;text-underline-offset:3px}
+.sel{width:100%;padding:12px 12px;border:1px solid var(--rule);background:var(--page);color:var(--ink);font-size:16px;font-family:var(--f-ui);border-radius:0}
+
+/* ---------- calendar ---------- */
+.calnav{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:4px 0 2px}
+.calnav button{height:48px;display:grid;place-items:center;color:var(--ins);font-size:20px}
+.calnav .mt{text-align:center;font-family:var(--f-disp);font-size:clamp(24px,7.4vw,30px);line-height:1.15}
+.calnav .gm{display:block;font-family:var(--f-ui);font-size:12.5px;color:var(--mute)}
+.calyr{display:flex;justify-content:center;gap:18px;font-size:14.5px;padding-bottom:6px}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--rule);border-inline-start:1px solid var(--hair);margin-top:4px}
+.calgrid .wd{font-size:12.5px;color:var(--mute);text-align:center;padding:4px 0;border-bottom:1px solid var(--rule);border-inline-end:1px solid var(--hair)}
+.cc{position:relative;min-height:clamp(56px,15vw,84px);padding:4px 4px 3px;border-bottom:1px solid var(--hair);border-inline-end:1px solid var(--hair);display:flex;flex-direction:column;gap:1px;text-align:start;overflow:hidden}
+.cc.blank{background:none}
+.cc .hn{font-family:var(--f-disp);font-size:clamp(17px,5vw,22px);line-height:1}
+.cc .gd{position:absolute;top:3px;inset-inline-end:3px;font-family:var(--f-ui);font-size:10.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cc .lb{font-size:clamp(9px,2.6vw,12px);line-height:1.15;color:var(--ins);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.cc .ct{margin-top:auto;align-self:flex-end;font-family:var(--f-ui);font-size:10px;color:var(--mute)}
+.cc .ct.star{color:var(--gold-mk);font-weight:700}
+.cc .ct.star::before{content:"\25C6\00a0";font-size:7px}
+.cc.sh{background:var(--page2)}
+.cc.yt .hn,.cc.fast .lb{color:var(--add)}
+.cc.today{box-shadow:inset 0 -3px 0 var(--gold-mk)}
+.cc[aria-pressed="true"]{outline:2px solid var(--gold-mk);outline-offset:-2px;background:var(--page2)}
+.calinfo{font-size:13.5px;line-height:1.6;color:var(--mute);text-align:center;padding:8px 2px 0}
+.calinfo b{font-weight:400;color:var(--ink)}
+.callabels{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0 0}
+.callabels span{font-size:14.5px;color:var(--ins);border:1px solid var(--hair);padding:1px 10px 2px}
+.calorig{text-align:center;font-size:15.5px;line-height:1.7;margin-top:8px}
+.calorig b{font-weight:400;color:var(--add)}
+.calorig .hil{color:var(--add)}
+.calbox{margin-top:16px;padding:12px 12px 8px}
+.yz{list-style:none;margin:0;padding:0}
+.yz li{display:flex;gap:9px;align-items:baseline;padding:7px 0;border-bottom:1px dotted var(--hair);font-size:16.5px;line-height:1.45}
+.yz li:last-child{border-bottom:0}
+.yz li i{flex:none;width:6px;height:6px;transform:rotate(45deg) translateY(-2px);border:1px solid var(--rule)}
+.yz li.em{font-weight:700}
+.yz li.em i{background:var(--gold-mk);border-color:var(--gold-mk)}
+.yz .ago{font-family:var(--f-ui);font-size:12px;font-weight:400;color:var(--mute);margin-inline-start:8px;white-space:nowrap}
+.yz .none,.yz .carry{color:var(--mute);font-size:14.5px}
+.yznote{margin:8px 0 2px;font-size:12.5px;line-height:1.55;color:var(--mute);font-family:var(--f-ui)}
+.rescount{font-size:13.5px;color:var(--mute);margin:8px 2px 0}
+/* results of the yahrzeit search: the date first, then the whole entry, wrapped (the entries are long) */
+.yzres{list-style:none;margin:6px 0 0;padding:0}
+.yzres li{border-bottom:1px dotted var(--hair)}
+.yzres button{display:block;width:100%;padding:10px 2px 10px}
+.yzres button:active{background:var(--page2)}
+.yzres .x{display:block;font-family:var(--f-ui);font-size:12.5px;color:var(--ins);margin-bottom:1px}
+.yzres .t{display:block;font-family:var(--f-serif);font-size:17.5px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+.yzres .t.em{font-weight:700}
+
+/* ---------- chumash ---------- */
+.smvtools{display:grid;gap:8px;padding:10px 0 4px}
+.smvtools .row1{display:flex;gap:8px;align-items:center}
+.smvtools select{flex:1;min-width:0}
+.smvopts{display:flex;flex-wrap:wrap;gap:6px}
+.smvopts .chipb{flex:1 1 auto;justify-content:center;font-size:14px;padding:4px 8px;white-space:nowrap}
+.smvnote{font-size:13px;line-height:1.55;color:var(--mute);font-family:var(--f-ui)}
+#smv.study .smvtools,#smv.study .sub{display:none}
+.chap{text-align:center;font-size:14.5px;color:var(--mute);margin:12px 0 2px}
+.pv{display:flex;gap:10px;padding:10px 0;border-bottom:1px dotted var(--hair)}
+.pv.marked{box-shadow:10px 0 0 var(--page),13px 0 0 var(--gold-mk)}
+.pn{flex:none;width:24px;font-family:var(--f-disp);font-size:17px;color:var(--ins);padding-top:.35em}
+.pb{flex:1;min-width:0}
+.mikra{margin:0;font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:1.9}
+:root[data-font="Frank"] .mikra{font-family:'Ezra',serif}
+.mikra.again{color:var(--mute)}
+.mikra .pm{font-size:.6em;color:var(--mute)}
+.rw{text-decoration:underline dotted var(--gold-mk);text-decoration-thickness:2px;text-underline-offset:.38em;cursor:pointer}
+.rw.on{background:color-mix(in srgb,var(--gold) 28%,transparent)}
+.targum{margin:2px 0 0;font-family:var(--body),'Ezra',serif;font-size:calc(var(--fs) * .8);line-height:1.8;color:var(--ins)}
+.pact{display:flex;gap:8px;margin-top:6px}
+.pact button{font-size:13.5px;color:var(--ins);border:1px solid var(--hair);padding:3px 10px 4px;font-family:var(--f-serif)}
+.pact .rbtn[aria-expanded="true"]{border-color:var(--rule);background:var(--page2)}
+.rashi{margin-top:8px;border-inline-start:2px solid var(--rule);padding-inline-start:10px}
+.rc{font-size:calc(var(--fs) * .78);line-height:1.7;padding:5px 0;text-align:justify}
+.rc.hit{background:color-mix(in srgb,var(--gold) 16%,transparent)}
+.rc small{font-size:.85em;color:var(--mute)}
+.rashiscript .rc{font-family:'RashiScript',var(--f-serif);font-size:calc(var(--fs) * .86)}
+.rashiscript .rc .com,.rashiscript .supbox{font-family:var(--f-serif)}
+.rc .com.sup{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px;font-size:13.5px;font-family:var(--f-serif);border:0;padding:0}
+.supbox{margin:6px 0;padding:8px 10px;border:1px solid var(--hair);background:var(--page2)}
+.supnote{font-size:calc(var(--fs) * .72);line-height:1.65;margin-top:4px}
+.smvfoot{display:flex;gap:10px;justify-content:center;padding:18px 0 6px}
+.smvcred{font-family:var(--f-ui);font-size:11.5px;line-height:1.6;color:var(--mute);text-align:center;padding:10px 4px 0}
+.asbar{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:2px;padding:4px;
+  background:var(--page);color:var(--ink);border:1px solid var(--rule);border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.22);font-family:var(--f-serif);font-size:15.5px;white-space:nowrap}
+.asbar button{min-height:40px;padding:0 12px}
+.asbar button:active{background:var(--page2)}
+.asbar span{padding:0 8px;color:var(--mute);font-size:13.5px}
+
+.askbox{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);z-index:42;width:min(90vw,420px);background:var(--page);color:var(--ink);font-family:var(--f-ui);
+  border-radius:18px;box-shadow:var(--shadow2);
+  padding:16px 16px 12px;opacity:0;pointer-events:none;transition:.18s}
+.askbox.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.askbox p{margin:0 0 14px;font-size:15.5px;line-height:1.7}
+.askbtns{display:flex;gap:8px;flex-wrap:wrap}
+.askbtns button{flex:1;min-width:92px;padding:12px 8px;border:1px solid var(--rule);background:var(--page);font-size:15px;text-align:center}
+.askbtns button.main{background:var(--gold);color:var(--gold-ink);font-weight:700}
+/* ---------- navigate to a synagogue ---------- */
+#scrimShul{z-index:110}
+.shulbox{z-index:111;max-height:88vh;overflow-y:auto}
+.shulbox h3{margin:0 0 4px;font-family:var(--f-disp);font-weight:400;font-size:23px}
+.shulbox p{margin:0 0 12px;font-size:14.5px;line-height:1.6;color:var(--mute)}
+.shulrow{display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 12px;margin-bottom:8px;border:1px solid var(--hair);background:var(--page)}
+.shulrow[aria-checked="true"]{border:2px solid var(--gold-mk);padding:10px 11px}
+.shulrow .dot{flex:none;width:11px;height:11px;margin-top:6px;transform:rotate(45deg);border:1px solid var(--rule)}
+.shulrow[aria-checked="true"] .dot{background:var(--gold-mk);border-color:var(--gold-mk)}
+.shulrow .tx{flex:1;min-width:0;font-size:14.5px;line-height:1.55}
+.shulrow .tx b{display:block;font-family:var(--f-serif);font-weight:400;font-size:19px}
+.shulrow .near{flex:none;font-size:12.5px;color:var(--ins);white-space:nowrap}
+.shulnote{font-size:12.5px;color:var(--mute);line-height:1.6;margin:2px 2px 12px}
+.errbox{margin:18px 0;padding:14px 16px;border:1px solid var(--add);color:var(--add);font-size:14px;line-height:1.7;font-family:var(--f-ui)}
+
+/* ---------- soft corners (design "א") ---------- */
+.pbtn,.sel,.findbar input,.askbtns button,.aboutbody .ab-ded,.shulrow,.abgive .b{border-radius:var(--r)}
+.chipb,.com .c{border-radius:999px}
+
+/* ---------- wide screens: tablets in landscape, desktop windows ---------- */
+@media (min-width:900px){
+  #home .frame{max-width:1040px}
+  #home .plate{max-width:992px}
+  #home .leaf{display:grid;grid-template-columns:1.15fr 1fr;column-gap:40px;align-content:start;padding-inline:26px;
+    grid-template-areas:"now zm" "toc zm" "toc foot" "col col" "ded ded";grid-template-rows:auto auto 1fr auto auto}
+  #home .now{grid-area:now} #home .toc{grid-area:toc} #home .side{grid-area:zm;margin-top:12px;align-self:start} #home .foot{grid-area:foot;align-self:end} #home .col{grid-area:col} #home .ded{grid-area:ded} #home .zm .lnk{display:block}
+  .hd .ttl{max-width:460px}
+}
+@media (min-width:600px){
+  .leaf{padding-inline:28px}
+  .steps{margin-inline:-28px;padding-inline:28px}
+  .sheet{border-inline:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important}.comstrip{animation:none}.sheet{transition:opacity .2s ease!important}}
+@media (prefers-reduced-transparency:reduce){.hd{background:var(--velvet);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media (prefers-contrast:more){:root{--hair:var(--rule)}.hd{background:var(--velvet2);-webkit-backdrop-filter:none;backdrop-filter:none}}
+</style>
+</head>
+<body>
+<div id="splash"><div class="art"><img src="splash.jpeg" alt="סידור וחומש בית אהרן וישראל - קרלין סטולין"><span class="month" id="spMonth"></span><button class="shulhit" id="spShul" aria-label="ניווט לבית כנסת הקרוב"></button></div></div>
+
+<!-- ============ HOME ============ -->
+<section id="home" class="view">
+  <button class="homefind" id="homeFind" aria-label="חיפוש תפילה"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg></button>
+  <div class="plate" id="plate" role="button" tabindex="0" aria-label="לוח זמני היום">
+    <span class="d"><span id="dHeb">…</span> · <button id="dLoc" aria-label="החלפת עיר">…</button></span>
+    <span class="hl" id="hlLine">סידור וחומש</span>
+    <span class="plrow"><span class="tm" id="tmLine"></span><span class="more">כל הזמנים<i class="go"></i></span></span>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div class="box now hide" id="nowBox"><span class="cap">עכשיו אומרים</span></div>
+    <ol class="toc" id="mainlist"></ol>
+    <div class="side">
+      <div class="box zm" id="zmBox"><span class="cap">היום</span><div id="zmRows"></div><button class="lnk" id="zmFull">לוח הזמנים המלא</button></div>
+      <div class="box zm hide" id="shabBox"><span class="cap">שבת קודש</span><div id="shabRows"></div></div>
+    </div>
+    <div class="foot" id="infoBar"></div>
+    <nav class="col" id="colophon"><button data-go="#settings">הגדרות</button><button data-go="#rem">תזכורות</button><button data-go="#guide">מדריך</button><button data-go="#about">אודות</button></nav>
+    <p class="ded">אשר ניסן בן לאה מליא לברכה ולהצלחה</p>
+  </div></div>
+</section>
+
+<!-- ============ MENU (built by the original logic) ============ -->
+<section id="listview" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl" id="listTitle"></div>
+    <div class="en"><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="sub hide" id="listSub"></div>
+  <div class="frame"><main class="leaf" id="list"></main></div>
+</section>
+
+<!-- ============ READER ============ -->
+<section id="reader" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl" id="rtitle"></div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <nav class="steps hide" id="steps" aria-label="מעבר לחלק בתפילה"></nav>
+    <article class="rbody" id="rbody"></article>
+  </div></div>
+  <div class="combar hide" id="comBar">
+    <button class="combtn" id="comBtn" aria-pressed="false"><i></i>פירושים</button>
+    <div class="comstrip" id="comStrip" role="group" aria-label="הספרים שמפרשים את הדף"></div>
+  </div>
+</section>
+
+<!-- ============ ZMANIM ============ -->
+<section id="luach" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button></div>
+    <div class="ttl">זמני היום</div>
+    <div class="en"><button class="ib" data-settings aria-label="החלפת עיר והגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div class="luhead"><div class="d1" id="luDate">…</div><div class="d2" id="luLoc">…</div></div>
+    <div class="lunotes" id="luNotes"></div>
+    <div id="luTable"></div>
+    <div class="luwarn" id="luWarn"></div>
+  </div></div>
+</section>
+
+<!-- ============ CALENDAR, with the general yahrzeit list ============ -->
+<section id="cal" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl">לוח שנה</div>
+    <div class="en"><button class="ib" id="calFind" aria-label="חיפוש ברשימת היארצייט"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div class="calnav"><button id="calPrev" aria-label="החודש הקודם"><i class="chev"></i></button><div class="mt"><span id="calMonth"></span><span class="gm" id="calGreg"></span></div><button id="calNext" aria-label="החודש הבא"><i class="chev" style="transform:rotate(45deg)"></i></button></div>
+    <div class="calyr"><button class="lnk" id="calPrevY">שנה קודמת</button><button class="lnk" id="calToday">היום</button><button class="lnk" id="calNextY">שנה הבאה</button></div>
+    <nav class="steps" id="calMonths" aria-label="חודשי השנה"></nav>
+    <div class="calgrid" id="calGrid"></div>
+    <div class="calinfo" id="calInfo"></div>
+    <div class="cap2" id="calDay" style="margin-top:22px"></div>
+    <div class="callabels" id="calLabels"></div>
+    <div class="calorig" id="calOrig"></div>
+    <p style="text-align:center;margin:8px 0 0"><button class="lnk" id="calOrigList">לוח היארצייט של הסידור</button></p>
+    <div class="box calbox"><span class="cap">יארצייט צדיקים<span id="calYzCount"></span></span><ul class="yz" id="calYz"></ul>
+      <button class="pbtn hide" id="calCopy" style="margin:8px 0 2px">העתקת הרשימה</button><button class="pbtn" id="calFind2" style="margin:8px 8px 2px">חיפוש ברשימה</button>
+      <p class="yznote">רשימה כללית של צדיקים מכל הדורות. היא מוצגת לידיעה בלבד ואינה קובעת אמירת תחנון; "לוח תחנון" שלמעלה הוא של הסידור.</p></div>
+    <div class="box calbox"><span class="cap">זמני היום · <span id="calZmCity"></span></span><div id="calZm"></div>
+      <p class="yznote">הזמנים מחושבים בסידור עצמו, לפי העיר שבהגדרות.</p><button class="pbtn" id="calPrayers" style="margin:4px 0 6px">לתפריט התפילות</button></div>
+  </div></div>
+</section>
+
+<!-- ============ CHUMASH: Shnayim Mikra, Rashi and the commentaries on Rashi ============ -->
+<section id="smv" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl" id="smvTitle">חומש</div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="sub" id="smvSub"></div>
+  <div class="frame"><div class="leaf" style="padding-top:0">
+    <nav class="steps" id="smvAl" aria-label="עליות"></nav>
+    <div class="smvtools">
+      <div class="row1"><label class="smvnote" for="smvSel">פרשה</label><select class="sel" id="smvSel"></select></div>
+      <div class="smvnote hide" id="smvWeek"></div>
+      <button class="pbtn hide" id="smvResume"></button>
+      <div class="smvopts"><button class="chipb" id="smvAll" aria-pressed="false">כל רש"י פתוח</button><button class="chipb" id="smvAuto" aria-pressed="false">גלילה אוטומטית</button><button class="chipb" id="smvStudy" aria-pressed="false">מצב לימוד</button></div>
+      <p class="smvnote">לחיצה על מילה מסומנת פותחת את רש"י עליה, במקום. טעמים, תרגום, מקרא פעמיים וכתב רש"י: בהגדרות.</p>
+    </div>
+    <div id="smvBody"></div>
+    <div class="smvfoot hide" id="smvFoot"><button class="pbtn main" id="smvDone"></button><button class="pbtn" id="smvNext"></button></div>
+    <p class="smvcred">מקרא ותרגום אונקלוס: נחלת הכלל. רש"י ושפתי חכמים: Metsudah Publications 2009, רישיון CC-BY. גור אריה, מזרחי, ברטנורא ומשכיל לדוד: נחלת הכלל. הטקסטים הדיגיטליים מתוך ספריא (sefaria.org).</p>
+  </div></div>
+  <div class="asbar hide" id="asBar"><button id="asSlow">לאט</button><span id="asSpeed"></span><button id="asFast">מהר</button><button id="asPause">עצירה</button><button id="asStop">ביטול</button></div>
+</section>
+
+<!-- ============ CHOK LEYISRAEL ============ -->
+<section id="chok" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl">חוק לישראל</div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="sub" id="chokSub"></div>
+  <div class="frame"><div class="leaf" style="padding-top:0">
+    <nav class="steps" id="chokDays" aria-label="ימי השבוע"></nav>
+    <div class="choktools"><label class="smvnote" for="chokSel">פרשה</label><select class="sel" id="chokSel"></select></div>
+    <p class="smvnote">סדר הלימוד היומי כפי שהוא בספר, מיום ראשון עד יום שישי (לסדר עצמו אין חלק לשבת): מקרא עם תרגום ורש"י, משנה, גמרא, זוהר, הלכה ומוסר.</p>
+    <div id="chokBody"></div>
+    <div class="smvfoot"><button class="pbtn main hide" id="chokDone"></button></div>
+  </div></div>
+</section>
+
+<!-- ============ REMINDERS ============ -->
+<section id="rem" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl">תזכורות</div>
+    <div class="en"><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div class="remstate" id="remState"></div>
+    <ul class="remlist" id="remList"></ul>
+    <p style="margin:18px 0 6px"><button class="pbtn main" id="remNew">תזכורת חדשה</button></p>
+  </div></div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button></div>
+    <div class="ttl">אודות</div>
+    <div class="en"></div>
+  </div>
+  <div class="frame"><div class="leaf">
+  <div class="aboutbody">
+    <h3>סידור וחומש בית אהרן וישראל</h3>
+    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.19</span> · ניתן בחינם</p>
+    <p class="ab-lead">הסידור, החומש, חוק לישראל, ספר תהילים ולוח השנה במקום אחד, בנוסח חסידות קארלין סטאלין.</p>
+    <div class="abthanks">
+      <h4>תודות</h4>
+      <p>הסידור מבוסס על תוכנת הסידור החינמי "תפילון" של <b>אורי הולנדר</b>, שנתן וחזר ונתן את הסכמתו ועזרתו.</p>
+      <p>את אפליקציית הסידור של קרלין סטולין יצר <b>שלמה ווגשל</b>, באישורו של אורי הולנדר. תודתנו נתונה לשניהם.</p>
+    </div>
+    <p class="ab-ded">לכבוד ולזכר נשמת רבותינו הקדושים והטהורים מסטאלין קארלין נבג"מ ת.נ.צ.ב.ה.<br>
+       ולזכות אשר ניסן בן לאה מליא לברכה ולהצלחה.</p>
+    <a class="abgive" href="https://www.matara.pro/nedarimplus/online/?mosad=7000243">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.2-4.5-7.2-10.1A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.2 2.5c0 5.6-7.2 10.1-7.2 10.1z"/></svg>
+      <span class="t">תרומה למוסדות קרלין סטולין</span>
+      <span class="x">הסידור ניתן בחינם. מי שנהנה ממנו מוזמן לתרום למרכז המוסדות.</span>
+      <span class="b">לתרומה</span>
+    </a>
+    <div class="abver">
+      <h4>מה יש בגרסה הזו</h4>
+      <ul>
+        <li><b>הסידור.</b> תפילות ימות החול בנוסח בית אהרן וישראל. הנוסח, סדר התפילות לפי התאריך, התפריטים וזמני היום מחושבים בלוגיקה של תפילון עצמה, ולכן הם זהים לה.</li>
+        <li><b>ספר תהילים.</b> לפי ספרים, לפי ימי השבוע, לפי ימי החודש, ותהילים לעת רצון.</li>
+        <li><b>פירושים במקום.</b> שנים עשר ספרים על התפילה ושישה מפרשים על תהילים, נפתחים בלחיצה בלי לצאת מהדף. רק לשון הספרים, עם ציון המקור.</li>
+        <li><b>חומש.</b> שניים מקרא ואחד תרגום לפי פרשת השבוע והעלייה של היום, עם רש"י וחמישה ממפרשיו.</li>
+        <li><b>חוק לישראל.</b> סדר הלימוד היומי כולו, עם ההקדמות והתפילות שלפני הלימוד.</li>
+        <li><b>לוח שנה.</b> לוח עברי עם התאריך הלועזי, זמני כל יום, מולד וקידוש לבנה, ורשימת יארצייט צדיקים עם חיפוש.</li>
+        <li><b>זמני היום.</b> לפי העיר שנבחרה, כולל הדלקת נרות ומוצאי שבת.</li>
+        <li><b>תזכורות.</b> לפני זמן מזמני היום או בשעה קבועה, עם תפילה או לימוד שנפתחים בלחיצה.</li>
+        <li><b>בזמן התפילה.</b> "אל תפריע לי בעת תפילה", הסתרת הכותרת בגלילה, ומעבר מהיר בין חלקי התפילה.</li>
+        <li><b>ועוד.</b> חלון למסך הבית, חיפוש ומועדפים, ניווט לבית הכנסת הקרוב, ערכות נושא, גופנים וגודל כתב.</li>
+      </ul>
+    </div>
+    <div class="abcontact">
+      <h4>יצירת קשר</h4>
+      <p class="nm">אשר בוקשפן</p>
+      <div class="abrow">
+        <a class="pbtn" href="tel:0525640054"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4h3l1.4 4-2 1.4a11 11 0 0 0 5.7 5.7l1.4-2 4 1.4v3c0 1-.8 1.7-1.8 1.6C11.400 18.400 5.600 12.600 4.900 5.800 4.800 4.800 5.500 4 6.500 4z"/></svg><span dir="ltr">052-5640054</span></a>
+        <a class="pbtn" href="mailto:asher205@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.500h16v11H4zM4.500 7l7.500 6 7.500-6"/></svg><span dir="ltr">asher205@gmail.com</span></a>
+      </div>
+      <p class="sm">להערות, לתיקונים ולהצעות.</p>
+    </div>
+    <a class="abhouse" href="https://bscale.co.il">מוצר מבית <b>BSCALE</b></a>
+    <div class="abcred" id="abCredits"></div>
+    <p class="ab-note">כל הזכויות שמורות.</p>
+  </div>
+  </div></div>
+</section>
+
+<!-- ============ GUIDE ============ -->
+<section id="guide" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button></div>
+    <div class="ttl">מדריך</div>
+    <div class="en"><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="frame"><div class="leaf"><div class="guide" id="guideBody">
+    <p class="g-lead">כל מה שיש בסידור, בקצרה. לחיצה על נושא פותחת את ההסבר שלו.</p>
+    <div class="box gkit"><span class="cap">ערכה למשתמש החדש</span>
+      <p>ארבעה צעדים קצרים שמכינים את הסידור בשבילך: העיר, התצוגה, זמן התפילה ותזכורות מומלצות. אפשר לחזור לערכה בכל עת.</p>
+      <button class="pbtn main" id="kitOpen">פתיחת הערכה</button></div>
+    <details class="gsec"><summary><span class="n">א</span><span class="t">התפילות</span><i class="chev"></i></summary><div class="gb"><ul><li>"תפריט תפילות" בעמוד הראשי פותח את תפילות היום לפי הסדר, ואחריהן את התפילות שנאמרות בכל שעה: ברכת המזון, תפילת הדרך ועוד.</li><li>התיבה "עכשיו אומרים" שבראש העמוד הראשי מציעה את התפילה של השעה. לחיצה אחת ואתה בתוך התפילה.</li><li>הסידור יודע לבד מה אומרים היום: יעלה ויבוא, על הניסים, תחנון, משיב הרוח ועוד. אין מה לסמן.</li><li>בראש התפילה יש פס קיצורים, למעבר מהיר בין חלקי התפילה.</li><li>שני הכפתורים "א" שבכותרת מקטינים ומגדילים את הכתב.</li></ul><button class="pbtn" data-go="menu:showTfilaMenu">לתפריט התפילות</button></div></details>
+    <details class="gsec"><summary><span class="n">ב</span><span class="t">פירושים במקום</span><i class="chev"></i></summary><div class="gb"><ul><li>בתחתית דף התפילה יש כפתור "פירושים". כשהוא פעיל, המילים שיש עליהן פירוש מסומנות, ולידו נפתח פס של הספרים שמפרשים את הדף. הפס נגלל הצידה.</li><li>בחירת ספר בפס משאירה רק את הסימונים שלו, ו"המקום הבא" מדלג למקום הבא שבו הוא מפרש. "הכול" מחזיר את כל הספרים.</li><li>לחיצה על מילים מסומנות פותחת את הפירוש בחלון תחתון, בלי לצאת מהתפילה. מושכים את החלון למטה כדי לסגור.</li><li>מובאת רק לשון הספרים עצמם, ובכל פירוש מצוינים הספר והמקור.</li><li>כך גם בספר תהילים, עם שישה מפרשים.</li></ul></div></details>
+    <details class="gsec"><summary><span class="n">ג</span><span class="t">ספר תהילים</span><i class="chev"></i></summary><div class="gb"><ul><li>לפי ספרים, לפי ימי השבוע, לפי ימי החודש, ותהילים לעת רצון.</li><li>"היום הנוכחי" פותח מיד את הפרקים של היום.</li><li>בחיפוש אפשר להגיע ישר לפרק: מקלידים "תהילים פרק" ואת מספר הפרק באותיות.</li></ul><button class="pbtn" data-go="menu:showTehilimTypeMenu">לספר תהילים</button></div></details>
+    <details class="gsec"><summary><span class="n">ד</span><span class="t">חומש ושניים מקרא</span><i class="chev"></i></summary><div class="gb"><ul><li>נפתח בפרשת השבוע ובעלייה של היום. פס העליות נמצא למעלה, ופרשה אחרת בוחרים בתיבה "פרשה".</li><li>לחיצה על מילה מסומנת פותחת את רש"י עליה, במקום. מתחת לרש"י אפשר לפתוח את מפרשיו.</li><li>בסוף כל עלייה מסמנים "סיימתי". הסידור זוכר היכן עצרת ומציע להמשיך משם.</li><li>יש גם "כל רש"י פתוח", "גלילה אוטומטית" ו"מצב לימוד".</li><li>טעמים, תרגום, מקרא פעמיים וכתב רש"י: בהגדרות.</li></ul><button class="pbtn" data-go="#smv">לחומש</button></div></details>
+    <details class="gsec"><summary><span class="n">ה</span><span class="t">חוק לישראל</span><i class="chev"></i></summary><div class="gb"><ul><li>סדר הלימוד היומי כפי שהוא בספר, מיום ראשון עד יום שישי, לפי פרשת השבוע. נפתח ביום של היום.</li><li>הלשונית "הקדמות" מביאה את הקדמות הספר ואת התפילות שלפני הלימוד.</li><li>"סיימתי את הלימוד של היום" מסמן את היום, והסימן מופיע גם בעמוד הראשי.</li></ul><button class="pbtn" data-go="#chok">לחוק לישראל</button></div></details>
+    <details class="gsec"><summary><span class="n">ו</span><span class="t">לוח שנה ויארצייט</span><i class="chev"></i></summary><div class="gb"><ul><li>לוח עברי, עם התאריך הלועזי בקטן. לחיצה על יום מציגה את פרטיו: זמני היום, לוח התחנון של הסידור, ויארצייט צדיקים.</li><li>מעל הלוח עוברים בין חודשים ושנים, וחוזרים ל"היום".</li><li>זכוכית המגדלת מחפשת ברשימת היארצייט לפי שם, עיר או ספר, ופותחת את היום בלוח.</li><li>רשימת יארצייט הצדיקים היא רשימה כללית, לידיעה בלבד. אמירת תחנון נקבעת רק לפי "לוח תחנון" של הסידור.</li></ul><button class="pbtn" data-go="#cal">ללוח השנה</button></div></details>
+    <details class="gsec"><summary><span class="n">ז</span><span class="t">זמני היום והעיר</span><i class="chev"></i></summary><div class="gb"><ul><li>הזמנים מחושבים לפי העיר שבהגדרות. לחיצה על שם העיר, בראש העמוד הראשי, מחליפה עיר.</li><li>"לפי המיקום שלי" בהגדרות: המכשיר מזהה היכן אתה, והזמנים מחושבים למקום עצמו. המיקום נשאר במכשיר, והעיר שנבחרה משמשת כשאין מיקום.</li><li>העמוד הראשי מציג את הזמנים הקרובים, ו"לוח הזמנים המלא" מציג את כולם.</li><li>בערב שבת מופיעים גם הדלקת נרות ומוצאי שבת.</li><li>אין להשתמש בזמנים הלכה למעשה בלי לקחת בחשבון סטייה אפשרית של כמה דקות.</li></ul><button class="pbtn" data-go="#luach">לזמני היום</button></div></details>
+    <details class="gsec"><summary><span class="n">ח</span><span class="t">תזכורות</span><i class="chev"></i></summary><div class="gb"><ul><li>תזכורת לפני זמן מזמני היום, למשל רבע שעה לפני סוף זמן קריאת שמע, או בשעה קבועה.</li><li>אפשר להצמיד לתזכורת תפילה או לימוד. לחיצה על ההתראה פותחת את הסידור ישר שם.</li><li>תזכורת לפי זמן זזה מעצמה עם העונה ועם העיר.</li><li>בפעם הראשונה המכשיר מבקש אישור להציג התראות. בלי האישור התזכורות לא יופיעו.</li></ul><button class="pbtn" data-go="#rem">לתזכורות</button></div></details>
+    <details class="gsec"><summary><span class="n">ט</span><span class="t">בזמן התפילה</span><i class="chev"></i></summary><div class="gb"><ul><li>"אל תפריע לי בעת תפילה": הטלפון מושתק כשתפילה פתוחה, וחוזר לקדמותו כשיוצאים ממנה. בהפעלה הראשונה נפתח מסך של המכשיר שבו מאשרים זאת. באנדרואיד בלבד.</li><li>הכותרת נעלמת כשגוללים את התפילה למטה וחוזרת כשגוללים למעלה, כדי שהדף כולו יהיה לתפילה.</li><li>שתי האפשרויות נמצאות בהגדרות, תחת "כללי".</li></ul><button class="pbtn" data-go="#settings">להגדרות</button></div></details>
+    <details class="gsec"><summary><span class="n">י</span><span class="t">חלון למסך הבית</span><i class="chev"></i></summary><div class="gb"><p class="only">בטלפון ובטאבלט של אנדרואיד</p><ul><li>לחיצה ארוכה על מקום ריק במסך הבית של הטלפון, "ווידג'טים", ובוחרים "סידור".</li><li>החלון מציג את התאריך העברי, את הזמן הקרוב ומה אומרים עכשיו. לחיצה עליו פותחת את הסידור.</li></ul></div></details>
+    <details class="gsec"><summary><span class="n">כ</span><span class="t">חיפוש ומועדפים</span><i class="chev"></i></summary><div class="gb"><ul><li>זכוכית המגדלת שבפינת העמוד הראשי מחפשת תפילה, פרק תהילים, פרשה או מסך.</li><li>הכוכב שליד תוצאה שומר אותה למועדפים. המועדפים מופיעים מיד כשפותחים את החיפוש.</li></ul><button class="pbtn" data-go="#find">לחיפוש</button></div></details>
+    <details class="gsec"><summary><span class="n">ל</span><span class="t">ניווט לבית כנסת</span><i class="chev"></i></summary><div class="gb"><ul><li>"ניווט לבית כנסת הקרוב" בעמוד הראשי, או הלחצן המוזהב שבמסך הפתיחה.</li><li>הסידור מציע את בית הכנסת הקרוב אליך ופותח את הניווט של המכשיר.</li><li>אישור גישה למיקום מדייק את הבחירה. בלי אישור, הבחירה היא לפי העיר שבהגדרות.</li></ul><button class="pbtn" data-go="#shul">לניווט</button></div></details>
+    <details class="gsec"><summary><span class="n">מ</span><span class="t">הגדרות ותצוגה</span><i class="chev"></i></summary><div class="gb"><ul><li>גודל כתב, גופן, ערכת נושא (יום, ספיה, לילה) וצבעי ההנחיות, עם דוגמה חיה בראש המסך.</li><li>נוסח התפילה: שמות ה', ועננו בורא עולם, יהי רצון לחולים ויום הפורים.</li><li>כל שינוי נשמר מיד וחל בכל המסכים.</li></ul><button class="pbtn" data-go="#settings">להגדרות</button></div></details>
+    <p style="text-align:center;margin:20px 0 0"><button class="lnk" data-go="page:help" data-label="עזרה">ההנחיות של התוכנה המקורית</button></p>
+  </div></div></div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<div class="scrim" id="scrim"></div>
+<div class="sheet setsheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="sheethd"><h4 id="setTitle">הגדרות</h4><button class="done" id="setDone">סיום</button></div>
+  <div class="setbody">
+    <h5>תצוגת הטקסט</h5>
+    <div class="grp">
+      <div class="previewbox" id="preview"></div>
+      <div class="srw stack"><span>גודל כתב</span><div class="sizer"><span class="sa">א</span><input type="range" min="16" max="44" step="1" data-cfg="size" id="rngSize" aria-label="גודל כתב"><span class="la">א</span></div></div>
+      <div class="srw stack"><span>גופן</span><div class="segc fonts" data-cfg="font" role="group"><button data-v="Ezra" style="font-family:'Ezra'">עזרא</button><button data-v="Hadasim" style="font-family:'Hadasim'">הדסים</button><button data-v="Shofar" style="font-family:'Shofar'">שופר</button><button data-v="Alef" style="font-family:'Alef'">אלף</button><button data-v="Frank" style="font-family:'Frank'">פרנק</button></div></div>
+      <div class="srw stack"><span>ערכת נושא</span><div class="segc themes" data-cfg="theme" role="group"><button data-v="light" class="t-light"><i></i>יום</button><button data-v="sepia" class="t-sepia"><i></i>ספיה</button><button data-v="dark" class="t-dark"><i></i>לילה</button></div></div>
+      <div class="srw stack"><span>יישור הטקסט</span><div class="segc" data-cfg="align" role="group"><button data-v="justify">לשני הצדדים</button><button data-v="start">לימין</button></div></div>
+      <div class="srw"><span>צבע טקסט מיוחד</span><div class="segc dots" data-cfg="specialText" role="group"><button data-v="red" aria-label="אדום" style="--d:var(--add)"></button><button data-v="blue" aria-label="כחול" style="--d:var(--ins)"></button><button data-v="green" aria-label="ירוק" style="--d:var(--c-green)"></button><button data-v="purple" aria-label="סגול" style="--d:var(--c-purple)"></button></div></div>
+      <div class="srw"><span>צבע הנחיות וכותרות</span><div class="segc dots" data-cfg="koteretText" role="group"><button data-v="red" aria-label="אדום" style="--d:var(--add)"></button><button data-v="blue" aria-label="כחול" style="--d:var(--ins)"></button><button data-v="green" aria-label="ירוק" style="--d:var(--c-green)"></button><button data-v="purple" aria-label="סגול" style="--d:var(--c-purple)"></button></div></div>
+    </div>
+    <h5>מקום וזמן</h5>
+    <div class="grp">
+      <label class="srw"><span>לפי המיקום שלי<small>המכשיר מזהה היכן אתה, והזמנים מחושבים לשם. המיקום נשאר במכשיר.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoLoc"></button></label>
+      <label class="srw"><span>עיר<small class="cityalt">כשאין מיקום</small></span><select data-cfg="city" id="selCity"></select></label>
+      <div class="srw stack"><span>שעון קיץ</span><div class="segc" data-cfg="dst" role="group"><button data-v="auto">אוטומטי</button><button data-v="on">פעיל</button><button data-v="off">כבוי</button></div></div>
+    </div>
+    <p class="hint locnote">העיר קובעת את זמני היום, את הלוח ואת מנהג ארץ ישראל או חוץ לארץ, בכל המסכים.</p>
+    <h5>נוסח התפילה</h5>
+    <div class="grp">
+      <label class="srw"><span>מצנזר שמות ה'<small>כותב י-הוה</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="censor"></button></label>
+      <label class="srw"><span>ועננו בורא עולם</span><button class="sw" role="switch" aria-checked="false" data-cfg="vaanenu"></button></label>
+      <label class="srw"><span>יהי רצון לחולים</span><button class="sw" role="switch" aria-checked="false" data-cfg="doctor"></button></label>
+      <label class="srw" id="rowDoctor"><span>שמות החולים</span><input type="text" data-cfg="doctorNames" id="inDoctor" placeholder="פלוני בן פלונית" autocomplete="off" enterkeyhint="done"></label>
+      <div class="srw stack"><span>יום הפורים שלך</span><div class="segc" data-cfg="purimDay" role="group"><button data-v="1">י"ד בלבד</button><button data-v="2">ט"ו בלבד</button><button data-v="3">שני הימים</button></div></div>
+    </div>
+    <h5>פירושים</h5>
+    <div class="grp">
+      <label class="srw"><span>סימון פירושים בזמן הקריאה<small>בתפילה ובתהילים. לחיצה על מילים מסומנות פותחת את הפירוש.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="com"></button></label>
+    </div>
+    <h5>חומש</h5>
+    <div class="grp">
+      <label class="srw"><span>טעמי המקרא</span><button class="sw" role="switch" aria-checked="false" data-cfg="smvTaamim"></button></label>
+      <label class="srw"><span>תרגום אונקלוס</span><button class="sw" role="switch" aria-checked="false" data-cfg="smvTargum"></button></label>
+      <label class="srw"><span>מקרא פעמיים</span><button class="sw" role="switch" aria-checked="false" data-cfg="smvTwice"></button></label>
+      <label class="srw"><span>רש"י בכתב רש"י</span><button class="sw" role="switch" aria-checked="false" data-cfg="smvRashiFont"></button></label>
+    </div>
+    <h5>כללי</h5>
+    <div class="grp">
+      <label class="srw"><span>אל תפריע לי בעת תפילה<small>כמו בסידור המקורי: הטלפון מושתק כשתפילה פתוחה, וחוזר בסיום. באנדרואיד בלבד.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoDnd"></button></label>
+      <label class="srw"><span>הסתרת הכותרת בזמן גלילה<small>כמו בסידור המקורי: הכותרת נעלמת כשגוללים את התפילה למטה, וחוזרת כשגוללים למעלה.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoHide"></button></label>
+      <label class="srw"><span>מסך פתיחה</span><button class="sw" role="switch" aria-checked="false" data-cfg="splashOn"></button></label>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COMMENTARY, OPENED IN PLACE ============ -->
+<div class="scrim" id="scrimCom"></div>
+<div class="sheet comsheet" id="sheetCom" role="dialog" aria-labelledby="comTitle">
+  <div class="comhd"><h4 id="comTitle"></h4><button id="comClose">סגירה</button></div>
+  <div id="comBody"></div>
+</div>
+
+<!-- ============ SEARCH ============ -->
+<div class="scrim" id="scrimFind"></div>
+<div class="sheet findsheet" id="sheetFind" role="dialog" aria-modal="true" aria-label="חיפוש">
+  <div class="findbar"><input id="findQ" type="search" placeholder="חיפוש תפילה, פרק או פרשה" enterkeyhint="search" autocomplete="off"><button id="findClose">סגירה</button></div>
+  <div class="findbody"><p class="findnote" id="findNote"></p><ul class="findres" id="findRes"></ul></div>
+</div>
+
+<!-- ============ SEARCH IN THE YAHRZEIT LIST ============ -->
+<div class="scrim" id="scrimYz"></div>
+<div class="sheet findsheet" id="sheetYz" role="dialog" aria-modal="true" aria-label="חיפוש ברשימת היארצייט">
+  <div class="findbar"><input id="calQ" type="search" placeholder="שם, עיר או ספר" enterkeyhint="search" autocomplete="off"><button id="calFindClose">סגירה</button></div>
+  <div class="findbody"><p class="findnote" id="calFindNote">חיפוש ברשימה הכללית של יארצייט הצדיקים. לחיצה על תוצאה פותחת את היום שלה בלוח.</p><div id="calRes"></div></div>
+</div>
+
+<!-- ============ A REMINDER ============ -->
+<div class="scrim" id="scrimRem"></div>
+<div class="sheet setsheet" id="sheetRem" role="dialog" aria-modal="true" aria-labelledby="reHead">
+  <div class="sheethd"><h4 id="reHead">תזכורת</h4><button class="done" id="reCancel">ביטול</button></div>
+  <div class="setbody">
+    <h5>מה להזכיר</h5>
+    <div class="grp">
+      <label class="srw"><span>כותרת</span><input type="text" id="reTitle" placeholder="לדוגמה: לומר פרשת המן" autocomplete="off" enterkeyhint="done"></label>
+      <label class="srw"><span>מה ייפתח בלחיצה</span><select id="reAttach"></select></label>
+    </div>
+    <p class="hint">אפשר להצמיד תפילה או לימוד. לחיצה על ההתראה פותחת את הסידור ישר שם.</p>
+    <h5>מתי</h5>
+    <div class="grp">
+      <label class="srw"><span>סוג</span><select id="reKind"><option value="time">בשעה קבועה</option><option value="zman">לפי זמן מזמני היום</option></select></label>
+      <label class="srw" id="reRowTime"><span>שעה</span><input type="time" id="reTime"></label>
+      <label class="srw hide" id="reRowZman"><span>זמן</span><select id="reZman"></select></label>
+      <label class="srw hide" id="reRowBefore"><span>כמה לפני</span><select id="reBefore"></select></label>
+    </div>
+    <h5>באילו ימים</h5>
+    <div class="grp"><div class="remdays" id="reDays"></div></div>
+    <p class="hint">הזמנים מחושבים בסידור לפי העיר שבהגדרות, ולכן תזכורת לפי זמן זזה עם העונה.</p>
+    <div class="rembtns"><button class="pbtn del hide" id="reDel">מחיקה</button><button class="pbtn main" id="reSave">שמירה</button></div>
+  </div>
+</div>
+
+<!-- ============ THE NEW USER'S KIT ============ -->
+<div class="scrim" id="scrimKit"></div>
+<div class="sheet setsheet" id="sheetKit" role="dialog" aria-modal="true" aria-labelledby="kitHead">
+  <div class="sheethd"><h4 id="kitHead">ברוך הבא</h4><button class="done" id="kitSkip">דילוג</button></div>
+  <div class="kitsteps" id="kitSteps"><i></i><i></i><i></i><i></i><span id="kitCount"></span></div>
+  <div class="setbody" id="kitBody">
+    <div class="kitp" data-title="ברוך הבא">
+      <p>זהו סידור וחומש בית אהרן וישראל, בנוסח קרלין סטולין. ארבעה צעדים קצרים והסידור מוכן בשבילך. אפשר לדלג, ואפשר לשנות הכל אחר כך בהגדרות.</p>
+      <h5>היכן אתה מתפלל</h5>
+      <div class="grp"><label class="srw"><span>לפי המיקום שלי<small>המכשיר מזהה היכן אתה, והזמנים מחושבים לשם. המיקום נשאר במכשיר.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoLoc"></button></label><label class="srw"><span>עיר<small class="cityalt">כשאין מיקום</small></span><select data-cfg="city" id="kitCity"></select></label></div>
+      <p class="hint locnote">העיר קובעת את זמני היום, את הלוח ואת מנהג ארץ ישראל או חוץ לארץ, בכל המסכים.</p>
+    </div>
+    <div class="kitp" data-title="התצוגה">
+      <p>כך ייראה דף התפילה. בוחרים מה שנוח לעין.</p>
+      <div class="grp">
+        <div class="previewbox"></div>
+        <div class="srw stack"><span>גודל כתב</span><div class="sizer"><span class="sa">א</span><input type="range" min="16" max="44" step="1" data-cfg="size" aria-label="גודל כתב"><span class="la">א</span></div></div>
+        <div class="srw stack"><span>גופן</span><div class="segc fonts" data-cfg="font" role="group"><button data-v="Ezra" style="font-family:'Ezra'">עזרא</button><button data-v="Hadasim" style="font-family:'Hadasim'">הדסים</button><button data-v="Shofar" style="font-family:'Shofar'">שופר</button><button data-v="Alef" style="font-family:'Alef'">אלף</button><button data-v="Frank" style="font-family:'Frank'">פרנק</button></div></div>
+        <div class="srw stack"><span>ערכת נושא</span><div class="segc themes" data-cfg="theme" role="group"><button data-v="light" class="t-light"><i></i>יום</button><button data-v="sepia" class="t-sepia"><i></i>ספיה</button><button data-v="dark" class="t-dark"><i></i>לילה</button></div></div>
+      </div>
+    </div>
+    <div class="kitp" data-title="בזמן התפילה">
+      <p>שלוש אפשרויות שכדאי להכיר כבר עכשיו.</p>
+      <div class="grp">
+        <label class="srw"><span>סימון פירושים בזמן הקריאה<small>לחיצה על מילים מסומנות פותחת את הפירוש, בלי לצאת מהתפילה.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="com"></button></label>
+        <label class="srw"><span>הסתרת הכותרת בזמן גלילה<small>הכותרת נעלמת כשגוללים למטה וחוזרת כשגוללים למעלה.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoHide"></button></label>
+        <label class="srw" id="kitDndRow"><span>אל תפריע לי בעת תפילה<small>הטלפון מושתק כשתפילה פתוחה, וחוזר בסיום. המכשיר יבקש את אישורך.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoDnd"></button></label>
+      </div>
+    </div>
+    <div class="kitp" data-title="תזכורות מומלצות">
+      <p>מסמנים את התזכורות הרצויות. אפשר לשנות או למחוק כל אחת מהן אחר כך, במסך "תזכורות".</p>
+      <div class="grp" id="kitRems"></div>
+      <p class="hint" id="kitRemNote"></p>
+    </div>
+  </div>
+  <div class="kitnav"><button class="pbtn" id="kitPrev">הקודם</button><button class="pbtn main" id="kitNext">הבא</button></div>
+</div>
+
+<!-- ============ NAVIGATE TO A SYNAGOGUE ============ -->
+<div class="scrim" id="scrimShul"></div>
+<div class="askbox shulbox" id="shulbox" role="dialog" aria-modal="true" aria-labelledby="shulTitle">
+  <h3 id="shulTitle">ניווט לבית כנסת</h3>
+  <p id="shulQ"></p>
+  <div id="shulList" role="radiogroup" aria-labelledby="shulTitle"></div>
+  <div class="shulnote" id="shulNote"></div>
+  <div class="askbtns" id="shulBtns"></div>
+</div>
+
+<script src="hebcal.js?v=mv6u4kry"></script>
+<script src="shuls.js?v=mv6u4kry"></script>
+<script src="calcore.js?v=mv6u4kry"></script>
+<script src="rt.js?v=mv6u4kry"></script>
+<script src="orig.js?v=mv6u4kry"></script>
+<script src="engine.js?v=mv6u4kry"></script>
+<script src="commentary.js?v=mv6u4kry"></script>
+<script src="app.js?v=mv6u4kry"></script>
+<script src="luach.js?v=mv6u4kry"></script>
+<script src="extras.js?v=mv6u4kry"></script>
+<script src="guide.js?v=mv6u4kry"></script>
+</body>
+</html>

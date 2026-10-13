@@ -1,0 +1,15 @@
+{
+  "name": "סידור וחומש בית אהרן וישראל",
+  "short_name": "חומש - סידור",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#00011f",
+  "theme_color": "#111c6e",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
