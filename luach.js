@@ -122,12 +122,17 @@
 
   /* search in the general list */
   const normalize = s => s.replace(/["'׳״`*()\[\],.:;-]/g, '').replace(/\s+/g, ' ').trim();
+  const yzBuild = () => { if (!yzIndex && YZ) { yzIndex = []; for (let m = 0; m < 12; m++) for (let d = 1; d <= 30; d++) for (const x of (YZ[m][d] || [])) yzIndex.push({ m, d, t: x[0], b: !!x[2], n: normalize(x[0]) }); } return yzIndex || []; };
+  /* for the app's search: the names that hold every term, with the day each one falls on */
+  function yzFind(q) { const terms = normalize(q).split(' ').filter(Boolean); if (!terms.length) return [];
+    return yzBuild().filter(x => terms.every(t => x.n.indexOf(t) !== -1)).map(x => ({ t: x.t, m: x.m, d: x.d, when: C.heNum(x.d) + ' ' + SRC_NAMES[x.m] })); }
+  function showYz(m, d) { setDay(todayNum()); nav('cal', { depth: depth() }); S.mi = C.monthIndex(S.y, m, true); S.d = Math.min(d, C.months(S.y)[S.mi].len); drawCal();
+    $('#calDay').scrollIntoView({ block: 'start' }); window.scrollBy(0, -70); }
   function runSearch(q) {
     const terms = normalize(q).split(' ').filter(Boolean), box = $('#calRes');
     $('#calFindNote').classList.toggle('hide', terms.length > 0);
     if (!YZ || !terms.length || normalize(q).length < 2) { box.innerHTML = ''; return; }
-    if (!yzIndex) { yzIndex = []; for (let m = 0; m < 12; m++) for (let d = 1; d <= 30; d++) for (const x of (YZ[m][d] || [])) yzIndex.push({ m, d, t: x[0], b: !!x[2], n: normalize(x[0]) }); }
-    const hits = yzIndex.filter(x => terms.every(t => x.n.indexOf(t) !== -1)), MAX = 60;
+    const hits = yzBuild().filter(x => terms.every(t => x.n.indexOf(t) !== -1)), MAX = 60;
     box.innerHTML = `<p class="rescount">${hits.length === 0 ? 'לא נמצא. אפשר לנסות כתיב אחר או מילה אחת בלבד.' : hits.length > MAX ? hits.length + ' רשומות, מוצגות ' + MAX + ' הראשונות לפי סדר השנה.' : hits.length === 1 ? 'רשומה אחת' : hits.length + ' רשומות לפי סדר השנה'}</p>` +
       '<ol class="yzres">' + hits.slice(0, MAX).map(x => `<li><button data-m="${x.m}" data-day="${x.d}"><span class="x">${C.heNum(x.d)} ${SRC_NAMES[x.m]}</span><span class="t${x.b ? ' em' : ''}">${esc(x.t)}</span></button></li>`).join('') + '</ol>';
   }
@@ -276,5 +281,5 @@
   $('#asFast').onclick = () => { AS.speed = Math.min(10, AS.speed + 1); mem.scroll = AS.speed; saveMem(); asPaint(); };
   $('#smvStudy').onclick = () => { const on = $('#smv').classList.toggle('study'); $('#smvStudy').setAttribute('aria-pressed', String(on)); syncAwake(); };
 
-  window.Luach = { openCal, drawCal, openSmv, drawSmv, todayCount, todayPanel, weekly, todayNum, leave() { asStop(); $('#smv').classList.remove('study'); $('#smvStudy').setAttribute('aria-pressed', 'false'); syncAwake(); }, yzReady };
+  window.Luach = { yzFind, showYz, openCal, drawCal, openSmv, drawSmv, todayCount, todayPanel, weekly, todayNum, leave() { asStop(); $('#smv').classList.remove('study'); $('#smvStudy').setAttribute('aria-pressed', 'false'); syncAwake(); }, yzReady };
 })();

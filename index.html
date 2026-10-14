@@ -338,6 +338,20 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .findres .star{flex:none;width:44px;font-size:21px;color:var(--mute);text-align:center}
 .findres .star[aria-pressed="true"]{color:var(--gold-mk)}
 .findres .fr:active{background:var(--page2)}
+/* the search by kinds: a strip of the kinds found (with how many), and a head over each kind */
+.fcats{flex:none;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:10px 14px 2px;white-space:nowrap}
+.fcats:empty{display:none}
+.fcats::-webkit-scrollbar{display:none}
+.fcats button{flex:none;height:34px;padding:0 13px;border-radius:999px;background:var(--card);box-shadow:var(--sh1);color:var(--ink);font-size:14px;font-family:var(--f-app)}
+.fcats button small{font-size:11.5px;color:var(--mute);margin-inline-start:3px;font-variant-numeric:tabular-nums}
+.fcats button[aria-pressed="true"]{background:var(--deep);color:var(--on-pri)}
+.fcats button[aria-pressed="true"] small{color:inherit;opacity:.8}
+.findres li.fgrp{display:flex;align-items:center;gap:8px;border:0;margin:16px 2px 2px;font-family:var(--f-app);font-size:12.5px;font-weight:600;color:var(--gold-mk);letter-spacing:.02em}
+.findres li.fgrp small{font-size:11.5px;color:var(--mute);font-weight:500}
+.findres li.fgrp::after{content:"";flex:1;height:1px;background:var(--hair)}
+.findres li.fmore{border:0}
+.findres li.fmore button{padding:10px 2px;font-family:var(--f-app);font-size:14px;font-weight:600;color:var(--ins)}
+.findres .fr{flex-direction:column;align-items:stretch;gap:1px}
 .remstate{font-family:var(--f-ui);font-size:13.5px;line-height:1.6;color:var(--mute);padding:10px 2px 4px}
 .remstate p{margin:0 0 8px}
 .remlist{list-style:none;margin:6px 0 0;padding:0}
@@ -967,7 +981,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="frame"><div class="leaf">
   <div class="aboutbody">
     <h3>סידור וחומש בית אהרן וישראל</h3>
-    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.37</span> · ניתן בחינם</p>
+    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.38</span> · ניתן בחינם</p>
     <p class="ab-lead">הסידור, החומש, חוק לישראל, ספר תהילים ולוח השנה במקום אחד, בנוסח חסידות קארלין סטאלין.</p>
     <div class="abthanks">
       <h4>תודות</h4>
@@ -1103,7 +1117,8 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 <!-- ============ SEARCH ============ -->
 <div class="scrim" id="scrimFind"></div>
 <div class="sheet findsheet" id="sheetFind" role="dialog" aria-modal="true" aria-label="חיפוש">
-  <div class="findbar"><input id="findQ" type="search" placeholder="חיפוש תפילה, פרק או פרשה" enterkeyhint="search" autocomplete="off"><button id="findClose">סגירה</button></div>
+  <div class="findbar"><input id="findQ" type="search" placeholder="חיפוש תפילה, פרק, פרשה, זמן או צדיק" enterkeyhint="search" autocomplete="off"><button id="findClose">סגירה</button></div>
+  <div class="fcats" id="findCats"></div>
   <div class="findbody"><p class="findnote" id="findNote"></p><ul class="findres" id="findRes"></ul></div>
 </div>
 
@@ -1200,17 +1215,17 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="askbtns" id="shulBtns"></div>
 </div>
 
-<script src="hebcal.js?v=mv8b3bva"></script>
-<script src="shuls.js?v=mv8b3bva"></script>
-<script src="calcore.js?v=mv8b3bva"></script>
-<script src="rt.js?v=mv8b3bva"></script>
-<script src="orig.js?v=mv8b3bva"></script>
-<script src="engine.js?v=mv8b3bva"></script>
-<script src="commentary.js?v=mv8b3bva"></script>
-<script src="sizes.js?v=mv8b3bva"></script>
-<script src="app.js?v=mv8b3bva"></script>
-<script src="luach.js?v=mv8b3bva"></script>
-<script src="extras.js?v=mv8b3bva"></script>
-<script src="guide.js?v=mv8b3bva"></script>
+<script src="hebcal.js?v=mv8bofzd"></script>
+<script src="shuls.js?v=mv8bofzd"></script>
+<script src="calcore.js?v=mv8bofzd"></script>
+<script src="rt.js?v=mv8bofzd"></script>
+<script src="orig.js?v=mv8bofzd"></script>
+<script src="engine.js?v=mv8bofzd"></script>
+<script src="commentary.js?v=mv8bofzd"></script>
+<script src="sizes.js?v=mv8bofzd"></script>
+<script src="app.js?v=mv8bofzd"></script>
+<script src="luach.js?v=mv8bofzd"></script>
+<script src="extras.js?v=mv8bofzd"></script>
+<script src="guide.js?v=mv8bofzd"></script>
 </body>
 </html>

@@ -39,6 +39,11 @@
     }
     if (t.startsWith('ps:')) return openPsalm(+t.slice(3));
     if (t.startsWith('smv:')) return Luach.openSmv(+t.slice(4));
+    if (t.startsWith('yz:')) { const [m, d] = t.slice(3).split(':').map(Number); return Luach.showYz(m, d); }
+    if (t.startsWith('part:')) {                       /* a part inside a prayer: open the prayer, then go to the part, as the strip does */
+      const at = t.lastIndexOf('|'); goTarget(t.slice(5, at), label);
+      const a = document.getElementById('sk' + t.slice(at + 1)); if (curView === 'reader' && a) a.scrollIntoView({ block: 'start' }); return;
+    }
     if (t === '#chok') return openChok();
     if (t === '#rem') return openRem();
     return go(t, label);
@@ -55,24 +60,52 @@
     const out = [], add = (label, target, group) => out.push({ label, target, group, n: norm(label) });
     const walk = (root, group, m, path, depth) => { for (const b of m.buttons) { if (!b.visible || !b.text) continue; const p = path.concat(b.text), label = p.join(' · ');
       let r = null; try { r = ENG.click(b); } catch (e) { continue; }
-      add(label, 'path:' + root + '>' + p.join('>'), group); if (r.menu && depth < 2) walk(root, group, r.menu, p, depth + 1); } };
+      const target = 'path:' + root + '>' + p.join('>'); add(label, target, group);
+      /* the parts of a prayer, by the names of its own strip (שחרית · ברוך שאמר) */
+      if (root === 'showTfilaMenu' && r.pages && r.pages.length) { let pg = null; try { pg = ENG.page(r.pages[0].file, r.pages[0].forceDay); } catch (e) { }
+        for (const s of (pg && pg.skips) || []) { const pl = p.concat(s.title).join(' · '); if (s.title && !out.some(x => x.label === pl)) add(pl, 'part:' + target + '|' + s.line, 'חלקי התפילה'); } }
+      if (r.menu && depth < 2) walk(root, group, r.menu, p, depth + 1); } };
     try { walk('showTfilaMenu', 'תפילות', ENG.menu('showTfilaMenu'), [], 0); walk('showTehilimTypeMenu', 'תהילים', ENG.menu('showTehilimTypeMenu'), [], 0); } catch (e) { }
     for (let n = 1; n <= 150; n++) add('תהילים פרק ' + C.heNum(n), 'ps:' + n, 'תהילים');
     C.PARSHA.concat(['וזאת הברכה']).forEach((p, i) => add('חומש · פרשת ' + p, 'smv:' + i, 'חומש'));
-    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['פרשת המן (שניים מקרא ואחד תרגום)', '#haman'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
+    add('פרשת המן · שניים מקרא ואחד תרגום', '#haman', 'תפילות');
+    try { for (const z of dayInfo(sync(NOW())).times) add(z.name + ' · היום ' + z.text, '#luach', 'זמני היום'); } catch (e) { }
+    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
     sync(NOW()); return (findIndex = out);
   }
   const isFav = t => favs.some(f => f.target === t);
+  /* every result, grouped by kind in a fixed order; a strip of the kinds found filters to one of them */
+  const GROUPS = ['תפילות', 'חלקי התפילה', 'תהילים', 'חומש', 'זמני היום', 'יארצייט צדיקים', 'מסכים'], SHOW = 8;
+  let findCat = '', findOpen = {};
+  const row = (x, i) => `<li><button class="fr" data-i="${i}"><span class="t">${esc(x.label)}</span>${x.sub ? `<span class="x">${esc(x.sub)}</span>` : ''}</button><button class="star" data-s="${i}" aria-pressed="${isFav(x.target)}" aria-label="מועדף">${isFav(x.target) ? '★' : '☆'}</button></li>`;
   function drawFind() {
-    const q = norm($('#findQ').value), idx = buildIndex(), terms = q.split(' ').filter(Boolean);
-    const hits = terms.length ? idx.filter(x => terms.every(t => x.n.indexOf(t) !== -1)).slice(0, 40) : favs.map(f => ({ label: f.label, target: f.target, group: 'מועדפים' }));
-    $('#findNote').textContent = terms.length ? (hits.length ? '' : 'לא נמצא. אפשר לנסות מילה אחת בלבד.') : (favs.length ? 'המועדפים שלך' : 'אפשר לחפש תפילה, פרק תהילים, פרשה או מסך. הכוכב שומר תוצאה למועדפים.');
-    $('#findRes').innerHTML = hits.map((x, i) => `<li><button class="fr" data-i="${i}"><span class="t">${esc(x.label)}</span><span class="x">${esc(x.group)}</span></button><button class="star" data-s="${i}" aria-pressed="${isFav(x.target)}" aria-label="מועדף">${isFav(x.target) ? '★' : '☆'}</button></li>`).join('');
-    $('#findRes')._hits = hits;
+    const q = norm($('#findQ').value), terms = q.split(' ').filter(Boolean);
+    if (!terms.length) {
+      const hits = favs.map(f => ({ label: f.label, target: f.target, group: 'מועדפים' }));
+      $('#findCats').innerHTML = ''; $('#findNote').textContent = favs.length ? 'המועדפים שלך' : 'אפשר לחפש תפילה, חלק בתפילה, פרק תהילים, פרשה, זמן מזמני היום, צדיק ברשימת היארצייט או מסך. התוצאות מסודרות לפי סוג. הכוכב שומר תוצאה למועדפים.';
+      $('#findRes').innerHTML = hits.map((x, i) => row(x, i)).join(''); $('#findRes')._hits = hits; return;
+    }
+    const last = x => x.n.slice(x.n.lastIndexOf('·') + 1).trim();
+    const found = buildIndex().filter(x => terms.every(t => x.n.indexOf(t) !== -1))
+      .concat(window.Luach && Luach.yzFind ? Luach.yzFind(q).map(y => ({ label: y.t, sub: y.when, target: 'yz:' + y.m + ':' + y.d, group: 'יארצייט צדיקים', n: norm(y.t) })) : []);
+    const by = {}; for (const x of found) (by[x.group] = by[x.group] || []).push(x);
+    for (const g in by) by[g].sort((a, b) => (last(b).startsWith(terms[0]) ? 1 : 0) - (last(a).startsWith(terms[0]) ? 1 : 0));
+    const cats = GROUPS.filter(g => by[g]); if (findCat && !by[findCat]) findCat = '';
+    $('#findCats').innerHTML = cats.length > 1 ? `<button data-c="" aria-pressed="${!findCat}">הכול <small>${found.length}</small></button>` + cats.map(g => `<button data-c="${g}" aria-pressed="${findCat === g}">${g} <small>${by[g].length}</small></button>`).join('') : '';
+    $('#findNote').textContent = found.length ? '' : 'לא נמצא. אפשר לנסות מילה אחת בלבד, או כתיב אחר.';
+    const hits = []; let html = '';
+    for (const g of (findCat ? [findCat] : cats)) {
+      const all = by[g], cut = findCat || findOpen[g] ? all.length : SHOW;
+      html += `<li class="fgrp">${g}<small>${all.length}</small></li>` + all.slice(0, cut).map(x => { hits.push(x); return row(x, hits.length - 1); }).join('');
+      if (all.length > cut) html += `<li class="fmore"><button data-more="${g}">עוד ${all.length - cut} ב${g}</button></li>`;
+    }
+    $('#findRes').innerHTML = html; $('#findRes')._hits = hits;
   }
-  function openFind() { $('#findQ').value = ''; drawFind(); openSheet('Find'); }
-  $('#findQ').oninput = drawFind;
+  $('#findCats').onclick = e => { const b = e.target.closest('[data-c]'); if (!b) return; findCat = b.dataset.c; drawFind(); $('#findRes').parentNode.scrollTop = 0; };
+  function openFind() { $('#findQ').value = ''; findCat = ''; findOpen = {}; drawFind(); openSheet('Find'); if (window.Luach && Luach.yzReady) Luach.yzReady.then(() => { if ($('#findQ').value) drawFind(); }); }
+  $('#findQ').oninput = () => { findOpen = {}; drawFind(); };
   $('#findRes').onclick = e => {
+    const more = e.target.closest('[data-more]'); if (more) { findOpen[more.dataset.more] = 1; return drawFind(); }
     const hits = $('#findRes')._hits || [], s = e.target.closest('.star');
     if (s) { const x = hits[+s.dataset.s], at = favs.findIndex(f => f.target === x.target); if (at >= 0) favs.splice(at, 1); else favs.push({ label: x.label, target: x.target }); store.set('favs', favs); return drawFind(); }
     const b = e.target.closest('.fr'); if (!b) return; const x = hits[+b.dataset.i]; closeSheet('Find'); goTarget(x.target, x.label);
@@ -88,7 +121,7 @@
     const out = [['', 'בלי']]; if (!ENG) return out; sync();
     for (const b of ENG.menu('showTfilaMenu').buttons) if (b.visible && b.text) { const base = DAYSEQ.find(n => b.text.startsWith(n)) || b.text; out.push(['tfila:' + base, 'תפילה · ' + base]); }
     out.push(['path:showTehilimTypeMenu>לפי ימי החודש>היום הנוכחי', 'תהילים · של היום בחודש'], ['path:showTehilimTypeMenu>לפי ימי השבוע>היום הנוכחי', 'תהילים · של היום בשבוע'],
-      ['smv:-1', 'חומש · העלייה של היום'], ['#chok', 'חוק לישראל · של היום'], ['#cal', 'לוח שנה ויארצייט'], ['#luach', 'זמני היום']);
+      ['smv:-1', 'חומש · העלייה של היום'], ['#haman', 'פרשת המן · שניים מקרא ואחד תרגום'], ['#chok', 'חוק לישראל · של היום'], ['#cal', 'לוח שנה ויארצייט'], ['#luach', 'זמני היום']);
     return out;
   }
   const whenText = r => (r.kind === 'zman' ? (r.before ? r.before + " דק' לפני " : 'ב') + r.zman : 'בשעה ' + r.time) + ' · ' + (r.days.length === 7 ? 'כל יום' : r.days.length ? 'ימים ' + r.days.map(d => DAYS[d]).join(' ') : 'אף יום');

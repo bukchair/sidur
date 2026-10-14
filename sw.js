@@ -1,5 +1,5 @@
 /* Offline cache for the Tfilon reader (personal-use PWA). */
-const CACHE = 'sidur-mv8b3bva';
+const CACHE = 'sidur-mv8bofzd';
 const ASSETS = [
   './', './index.html', './app.js', './hebcal.js', './calcore.js', './luach.js', './extras.js', './guide.js', './sizes.js', './haman.json', './yahrzeits.json', './shuls.js', './commentary.js', './commentary/index.json', './rt.js', './orig.js', './engine.js',
   './cities.json', './content.json', './manifest.webmanifest', './icon-maskable.png', './icon.png', './splash.jpeg',
