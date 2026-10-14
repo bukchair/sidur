@@ -406,6 +406,7 @@ const MORE_CREDITS = '<h4>חומש ולוח</h4><ul><li>מקרא עם טעמים
   + '<li>רש"י על התורה ושפתי חכמים: Metsudah Publications, 2009. רישיון CC-BY, מתוך ספריא.</li>'
   + '<li>גור אריה, מזרחי, ברטנורא על התורה, משכיל לדוד: נחלת הכלל, מתוך ספריא.</li>'
   + `<li>חק לישראל, מהדורת "תורת אמת" (www.toratemetfreeware.com). כל הזכויות שמורות לר' פנחס ראובן, לר' שגיב מחפוד ול-J. Alan Groves Center, בכפוף לתנאי רישיון CC BY-NC-SA 2.5 - אסור בשימוש מסחרי.</li>`
+  + '<li>פרשת המן: הפסוקים והתפילות מנוסח הסידור; תרגום יונתן בן עוזיאל על התורה: מהדורת תורת אמת, נחלת הכלל (Public Domain), מתוך ספריא.</li>'
   + '<li>אותיות הכותרות והתפריטים: Frank Ruhl Libre ו-Heebo, ברישיון SIL Open Font License 1.1.</li>'
   + '<li>רשימת יארצייט הצדיקים: רשימה כללית שנאספה מלוח יארצייט יומי. היא מוצגת לידיעה ואינה קובעת את נוסח התפילה.</li></ul>';
 /* ---------------- menus: buttons and targets are the original's ---------------- */
@@ -421,6 +422,7 @@ function go(target, label) {
   if (target === '#find') return SidurExtras.openFind();
   if (target === '#share') return openShare();
   if (target === '#guide') return nav('guide', { depth: depth() });
+  if (target === '#haman') return openHaman();
   if (target === '#about') { if (window.SidurCom) SidurCom.ready.then(() => { $('#abCredits').innerHTML = SidurCom.credits() + MORE_CREDITS; }); return nav('about', { depth: depth() }); }
   if (target.startsWith('url:')) { location.href = target.slice(4); return; }
   sync();
@@ -446,13 +448,15 @@ function renderMenu() {
     $('#list').innerHTML = '<div class="mcap">לאורך היום</div><ol class="tl">' + day.map(x => {
       const isNow = nowName && x.b.text.startsWith(nowName), isDay = DAYSEQ.some(n => x.b.text.startsWith(n));
       return row(x, isNow ? 'is-now' : isDay ? '' : 'is-sp', isNow ? 'עכשיו' : isDay ? '' : 'לפי התאריך');
-    }).join('') + '</ol>' + (any.length ? '<div class="mcap">בכל שעה</div><ol class="idx">' + any.map(x => row(x, '', '')).join('') + '</ol>' : '');
+    }).join('') + '</ol>' + (any.length ? '<div class="mcap">בכל שעה</div><ol class="idx">' + any.map(x => row(x, '', '')).join('') + '</ol>' : '')
+      + '<div class="mcap">מקרא ותרגום</div><ol class="tl one"><li><button data-go="#haman"><span class="t">פרשת המן</span><i class="ld"></i><span class="x">שניים מקרא ואחד תרגום</span><i class="go"></i></button></li></ol>';
     return;
   }
   const two = items.length > 8 && items.every(x => x.b.text.length <= 14);
   $('#list').innerHTML = `<ol class="tl${two ? ' two' : ''}">` + items.map(x => row(x, '', '')).join('') + '</ol>';
 }
 $('#list').onclick = e => {
+  const g = e.target.closest('button[data-go]'); if (g) return go(g.dataset.go);
   const c = e.target.closest('button[data-i]'); if (!c) return; const m = menus[menus.length - 1].menu, b = m.buttons[+c.dataset.i];
   sync(); clickButton(b);
 };
@@ -482,6 +486,7 @@ function toWeb(h) {
 const bareHeb = s => s.replace(/[\u0591-\u05C7]/g, '');
 const ACRONYM = /\s*\(([א-ת"]{3,5} [א-ת"]{3,5})\)\.?\s*$/;
 function firstWord(box) {
+  if (box.querySelector('.tg')) return;
   const w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
   for (let n = w.nextNode(); n; n = w.nextNode()) {
     if (n.parentNode.closest('.vs,.nt,small')) continue;
@@ -559,9 +564,22 @@ function layPrinted(body, skips, file) {
   }
   flush(); markSizes([...out.children], file); body.replaceChildren(out);
 }
+/* פרשת המן, שניים מקרא ואחד תרגום: the verses and the prayers before and after are the siddur's own ("תפילות והוספות"),
+   the Targum is Targum Jonathan (haman.json, built by haman/build.mjs). Each verse twice, then its Targum. */
+function openHaman() {
+  const put = j => {
+    const head = t => `<font color='#00000ff'>${esc(t)}<br></font><br>`;
+    const html = '<skip>||1</skip>' + head('פרשת המן') + head('שניים מקרא ואחד תרגום') + esc(j.before) + '<br><br>'
+      + '<skip>||2</skip>' + j.verses.map(v => `<small class="vn">${v.n}</small> ${esc(v.he)}<br>${esc(v.he)}<br><span class="tg">${esc(v.tg)}</span><br><br>`).join('')
+      + '<skip>||3</skip>' + j.after.map(t => esc(t) + '<br><br>').join('');
+    openPage({ file: 'haman', title: 'פרשת המן', html, skips: [{ title: 'פרשת המן', line: 1 }, { title: 'הפסוקים', line: 2 }, { title: 'אחרי הפרשה', line: 3 }] });
+  };
+  if (openHaman.j) return put(openHaman.j);
+  fetch('haman.json').then(r => r.json()).then(j => { openHaman.j = j; put(j); }).catch(() => {});
+}
 function openPage(p) { curPage = p; nav('reader', { depth: depth() }); drawPage(); }
 function drawPage() {
-  if (!curPage) return; const pg = ENG.page(curPage.file, curPage.forceDay);
+  if (!curPage) return; const pg = curPage.html ? { html: curPage.html, skips: curPage.skips || [] } : ENG.page(curPage.file, curPage.forceDay);
   $('#rtitle').textContent = curPage.title;
   const Com = window.SidurCom;
   $('#rbody').innerHTML = Com ? Com.markVerses(toWeb(pg.html)) : toWeb(pg.html);

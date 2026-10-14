@@ -59,7 +59,7 @@
     try { walk('showTfilaMenu', 'תפילות', ENG.menu('showTfilaMenu'), [], 0); walk('showTehilimTypeMenu', 'תהילים', ENG.menu('showTehilimTypeMenu'), [], 0); } catch (e) { }
     for (let n = 1; n <= 150; n++) add('תהילים פרק ' + C.heNum(n), 'ps:' + n, 'תהילים');
     C.PARSHA.concat(['וזאת הברכה']).forEach((p, i) => add('חומש · פרשת ' + p, 'smv:' + i, 'חומש'));
-    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
+    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['פרשת המן (שניים מקרא ואחד תרגום)', '#haman'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
     sync(NOW()); return (findIndex = out);
   }
   const isFav = t => favs.some(f => f.target === t);
