@@ -4,7 +4,7 @@
     "appStore": null,
     "googlePlay": null,
     "microsoftStore": null,
-    "apk": null,
+    "apk": "https://github.com/bukchair/sidur/releases/latest/download/Sidur.apk",
     "windows": null,
     "mac": null
   }

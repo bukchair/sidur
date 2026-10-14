@@ -14,6 +14,7 @@ const cfg = Object.assign({
   theme: 'light', font: 'Ezra', size: 22, align: 'justify', com: 0, autoDnd: 0, autoHide: 1, smvTaamim: 1, smvTargum: 1, smvTwice: 0, smvRashiFont: 0, splashOn: 1, splashMs: 1500, autoLoc: 0
 }, store.get('cfg', {}));
 if (cfg.com === 'on' || cfg.com === 'off') cfg.com = cfg.com === 'on' ? 1 : 0;
+if (!store.get('printLook', 0)) { cfg.font = 'Frank'; store.set('printLook', 1); }
 let ENG = null, CITIES = [];
 /* the clock; tests and demos can pin it with window.__sidurNow = '2026-12-06T18:30:00' */
 const NOW = () => window.__sidurNow ? new Date(window.__sidurNow) : new Date();
@@ -96,6 +97,11 @@ function applyCfg() {
   document.querySelectorAll('.previewbox').forEach(b => { b.innerHTML = sample; });
   store.set('cfg', cfg);
 }
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-night]')) return;
+  if (cfg.theme === 'dark') cfg.theme = cfg.dayTheme || 'light'; else { cfg.dayTheme = cfg.theme; cfg.theme = 'dark'; }
+  changed();
+});
 function changed() { applyCfg(); applyLive(); drawLocNote(); if (ENG) redraw(); }
 /* the settings sheet, and the new user's kit, which holds a few of the same controls */
 [$('#sheet'), $('#sheetKit')].forEach(sh => {
@@ -189,6 +195,18 @@ window.onpopstate = e => {
   if (st.view === 'rem' && window.SidurExtras) SidurExtras.drawRem();
   show(st.view || 'home');
 };
+/* The device's back key, asked by the Android shell: the page itself knows whether there is a step to go back.
+   True = the app went a step back (a sheet closed, or the screen before); false = this is the home page, and the shell
+   puts the app aside. A sheet that is open without a step of its own in the history is simply closed. */
+window.SidurBack = () => {
+  /* the two small dialogs (the synagogue, the question near sunset) are not steps of their own: back closes them */
+  if ($('#shulbox').classList.contains('show')) { closeShul(); return true; }
+  if ($('#askbox').classList.contains('show')) { $('#scrimAsk').classList.remove('show'); $('#askbox').classList.remove('show'); return true; }
+  const st = history.state || {}, open = [...document.querySelectorAll('.sheet.show')];
+  if (open.length && st.sheet === undefined) { open.forEach(el => hideSheet(el.id.slice(5))); return true; }
+  if (open.length || st.sheet !== undefined || st.depth || curView !== 'home') { history.back(); return true; }
+  return false;
+};
 const depth = () => ((history.state && history.state.depth) || 0) + 1;
 
 /* ---------------- the day, as the original states it ---------------- */
@@ -223,21 +241,19 @@ function relTime(min, now) {
 }
 /* the weekly reading: one table for the whole app (CalCore), the same one the calendar and the chumash use */
 /* The coming Shabbat, in the times the original gives for its Friday: candle lighting and the end of Shabbat.
-   On Shabbat itself it is the Shabbat we are in, until it is out. The box is extra: it shows only where the page has room. */
-function drawShabbat(now) {
-  const box = $('#shabBox'), at = k => new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, 12), wd = now.getDay();
-  let rows = '';
+   On Shabbat itself it is the Shabbat we are in, until it is out. */
+function shabbatTimes(now) {
+  const at = k => new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, 12), wd = now.getDay();
+  let res = null;
   try {
     let fri = dayInfo(sync(at(wd === 6 ? -1 : (5 - wd + 7) % 7)));
     const t = (i, n) => i.times.find(z => z.name === n);
     if (wd === 6) { const out = t(fri, 'מוצ"ש'); if (!out || now.getHours() * 60 + now.getMinutes() > out.min) fri = dayInfo(sync(at(6))); }
     const light = t(fri, 'הדלקת נרות'), out = t(fri, 'מוצ"ש'), rt = t(fri, 'מוצ"ש (רבינו תם)');
-    if (light && out) rows = `<div class="r"><span>הדלקת נרות</span><i class="ld"></i><b>${light.text}</b></div>`
-      + `<div class="r"><span>מוצאי שבת${rt ? ' · רבינו תם ' + rt.text : ''}</span><i class="ld"></i><b>${out.text}</b></div>`;
+    if (light && out) res = { light: light.text, out: out.text, rt: rt ? rt.text : '' };
   } catch (e) { }
   sync(now);
-  $('#shabRows').innerHTML = rows; box.classList.toggle('hide', !rows);
-  if (rows && !WIDE.matches && document.documentElement.scrollHeight > window.innerHeight + 1) box.classList.add('hide');
+  return res;
 }
 function parshaName(d) {
   const C = window.CalCore; if (!C) return '';
@@ -249,19 +265,17 @@ function parshaName(d) {
 /* ---------------- home ---------------- */
 const TOC = [
   ['תפריט תפילות', 'menu:showTfilaMenu', 'tfila'], ['ספר תהילים', 'menu:showTehilimTypeMenu', 'teh'],
-  ['חומש - שניים מקרא', '#smv', 'chumash'], ['חוק לישראל', '#chok', 'chok'],
-  ['לוח שנה ויארצייט', '#cal', 'yor'], ['זמני היום', '#luach', 'zm'], ['ניווט לבית כנסת הקרוב', '#shul', 'shul']
-];
+  ['חומש - שניים מקרא', '#smv', 'chumash'], ['חוק לישראל', '#chok', 'chok']
+];                                                    /* the books; the tools are the buttons under the day panel */
 const LETTERS = 'אבגדהוזחטיכלמנסעפצקרשת';
 function renderToc(x) {
   x = x || {};
   $('#mainlist').innerHTML = TOC.map(([label, target, k], i) =>
-    `<li><button class="row${i ? '' : ' first'}" data-go="${target}" data-label="${esc(label)}"><span class="n">${LETTERS[i]}</span><span class="t">${esc(label)}</span><i class="ld"></i><span class="x${k === 'yor' && x.yorAdd ? ' add' : ''}">${esc(x[k] || '')}</span><i class="go"></i></button></li>`).join('');
+    `<li><button class="row${i ? '' : ' first'}" data-go="${target}" data-label="${esc(label)}"><span class="t">${esc(label)}</span><i class="ld"></i><span class="x">${esc(x[k] || '')}</span><i class="go"></i></button></li>`).join('');
 }
 $('#mainlist').onclick = e => { const t = e.target.closest('.row'); if (t) go(t.dataset.go, t.dataset.label); };
-$('#colophon').onclick = e => { const t = e.target.closest('button'); if (t) go(t.dataset.go, t.dataset.label); };
-$('#plate').onclick = e => { if (e.target.closest('#dLoc')) return openSheet(''); if (ENG) openLuach(); };
-$('#zmFull').onclick = () => openLuach();
+$('#colophon').onclick = $('#tiles').onclick = e => { const t = e.target.closest('button'); if (t) go(t.dataset.go, t.dataset.label); };
+$('#plate').onclick = e => { if (e.target.closest('[data-night]')) return; if (e.target.closest('#dLoc')) return openSheet(''); if (ENG) openLuach(); };
 /* "said now": only a pointer by the hour of the day. The buttons themselves, and what opens, are the original's. */
 function nowPair(info, nowMin) {
   const t = n => { const z = info.times.find(z => z.name.startsWith(n)); return z ? z.min : null; };
@@ -294,9 +308,12 @@ function renderHome() {
   const nowMin = now.getHours() * 60 + now.getMinutes();
   const pair = nowPair(info, nowMin), menu = ENG.menu('showTfilaMenu');
   const said = pair.map(n => tfilaButton(menu, n)).filter(Boolean);
-  $('#nowBox').classList.toggle('hide', !said.length); $('#nowBox').classList.toggle('one', said.length === 1);
-  $('#nowBox').innerHTML = '<span class="cap">עכשיו אומרים</span>' + said.map((b, i) =>
-    `<button class="nbtn${i ? '' : ' pri'}" data-name="${esc(pair.find(n => b.text.startsWith(n)))}">${esc(b.text)}</button>`).join('');
+  /* the two stand in the order of the day, from right to left; the one of this hour is the filled one */
+  const seq = n => { const k = DAYSEQ.indexOf(n); return k < 0 ? DAYSEQ.length : k; };
+  const two = said.map((b, i) => ({ b, pri: !i, name: pair.find(n => b.text.startsWith(n)) })).sort((a, b) => seq(a.name) - seq(b.name));
+  $('#nowBox').classList.toggle('hide', !said.length);
+  $('#nowBox').innerHTML = '<span class="cap">עכשיו אומרים</span>' + two.map(x =>
+    `<button class="nbtn${x.pri ? ' pri' : ''}${x.b.text.length > 13 ? ' long' : ''}" data-name="${esc(x.name)}">${esc(x.b.text)}</button>`).join('');
   const nUp = WIDE.matches ? 8 : 3;                    /* a wide screen has room for more of the day's times */
   let up = upcoming(info, now).slice(0, nUp);
   if (up.length < 3) { const t = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 1); const ti = dayInfo(sync(t)); up = up.concat(upcoming(ti, t).slice(0, 3 - up.length).map(z => Object.assign({ tomorrow: true }, z))); sync(now); }
@@ -304,21 +321,86 @@ function renderHome() {
   $('#hlLine').textContent = n0 ? n0.name + ' ' + n0.text : 'סידור וחומש';
   $('#tmLine').textContent = greg + (n0 ? ' · ' + (n0.tomorrow ? 'מחר' : relTime(n0.min, now)) : '');
   const parsha = parshaName(eff), noYor = info.tachanun === 'אין יארצייט';
-  const yz = window.Luach ? Luach.todayCount() : null;      /* the general list: a count only, it decides nothing */
-  /* The nearest time is said once, on top. The box under the menu tells the day itself, in the original's own words:
-     its yahrzeit line, what the day adds to the prayers, the daf and the parsha. A wide screen has room for the times after it too. */
-  const n1 = up[1];
-  $('#zmBox').classList.remove('hide');
-  $('#zmRows').innerHTML = info.hilula.map(h => `<div class="r"><em>${esc(h)}</em></div>`).join('')
-    + `<div class="r big"><span>לוח תחנון: ${noYor ? esc(info.tachanun) : `<em>${esc(info.tachanun)}</em>`}</span></div>`
-    + (info.notes.length ? `<div class="r"><span>${info.notes.map(esc).join(' · ')}</span></div>` : '')
-    + `<div class="r"><span>דף יומי: ${esc(info.daf)}</span></div>`
-    + (WIDE.matches ? up.slice(1).map(z => `<div class="r"><span>${esc(z.name)}${z.tomorrow ? ' (מחר)' : ''}</span><i class="ld"></i><b>${z.text}</b></div>`).join('') : '');
-  renderToc({ tfila: 'לפי סדר היום', teh: 'ק"נ מזמורים', chumash: parsha, chok: 'יום ' + DOW[eff.getDay()].replace(' קודש', '') + (window.SidurExtras && SidurExtras.chokToday() ? ' ✓' : ''),
-    yor: yz ? yz + ' היום' : now.getDate() + '.' + (now.getMonth() + 1), zm: n1 ? 'אחר כך ' + n1.name + ' ' + n1.text + (n1.tomorrow ? ' (מחר)' : '') : '' });
+  const P = window.Luach ? Luach.todayPanel() : null;        /* the calendar's own facts of the day */
+  /* The nearest time is said once, on top. Under the books, the small screen of the day: each card tells one thing in the
+     original's own words or the calendar's, and a touch opens its full screen. A wide screen has room for more times. */
+  const row = (a, b, o) => { o = o || {}; const tag = o.go ? 'button' : 'div';
+    return `<${tag} class="r${o.big ? ' big' : ''}"${o.go ? ` data-go="${o.go}"` : ''}><span>${a}</span>${o.note ? `<small>${esc(o.note)}</small>` : ''}${b ? `<i class="ld"></i><b>${esc(b)}</b>` : ''}</${tag}>`; };
+  const dayName = 'יום ' + DOW[eff.getDay()].replace(' קודש', ''), chokDone = window.SidurExtras && SidurExtras.chokToday();
+  const cards = [{ k: 'cal', cap: 'היום · ' + info.date, go: '#cal', rows: info.hilula.map(h => row(`<em>${esc(h)}</em>`)).join('')
+    + row('לוח תחנון: ' + (noYor ? esc(info.tachanun) : `<em>${esc(info.tachanun)}</em>`), '', { big: 1 })
+    + (info.notes.length ? row(info.notes.map(esc).join(' · ')) : '')
+    + (P ? row(`תהילים ליום ${esc(P.dayHe)} בחודש: ${esc(P.tehillim)}`, '', { go: 'menu:showTehilimTypeMenu' }) : '') }];
+  if (up.length) cards.push({ k: 'sun', cap: 'הזמנים הקרובים', go: '#luach', rows: up.map((z, i) =>
+    row(esc(z.name) + (z.tomorrow ? ' (מחר)' : ''), z.text, { big: !i, note: !i && !z.tomorrow ? relTime(z.min, now) : '' })).join('') });
+  const sh = shabbatTimes(now);
+  if (sh) cards.push({ k: 'flame', cap: 'שבת קודש · ' + parsha, go: '#cal', rows: row('הדלקת נרות', sh.light, { big: 1 }) + row('מוצאי שבת', sh.out) + (sh.rt ? row('רבינו תם', sh.rt) : '') });
+  cards.push({ k: 'book', cap: 'הלימוד של היום', rows: row('דף יומי', info.daf) + row('חוק לישראל', dayName + (chokDone ? ' ✓' : ''), { go: '#chok' }) + row('שניים מקרא', parsha, { go: '#smv' }) });
+  if (P && P.yzCount) cards.push({ k: 'star', cap: `יארצייט היום · ${P.yzCount} ברשימה הכללית`, go: '#cal', rows: P.yz.map(t => row(esc(t))).join('') });
+  if (P) cards.push({ k: 'moon', cap: 'חודש ' + P.month, go: '#cal', rows: row('מולד', P.molad) + row('קידוש לבנה', P.kl) + row(esc(P.rc.label), P.rc.text, { note: inDays(P.rc.in) }) });
+  drawRot(cards);
+  renderToc({ tfila: 'לפי סדר היום', teh: 'ק"נ מזמורים', chumash: parsha, chok: dayName + (chokDone ? ' ✓' : '') });
   $('#infoBar').innerHTML = '';
-  drawShabbat(now);
 }
+const inDays = n => n <= 0 ? 'היום' : n === 1 ? 'מחר' : n <= 10 ? `בעוד ${n} ימים` : `בעוד ${n} יום`;
+
+/* ---------------- the small screen of the day ---------------- */
+const ROT_ICON = {
+  cal: '<rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+  sun: '<path d="M3 18.5h18M6.5 18.5a5.5 5.5 0 0 1 11 0M12 6.5V9M5.3 9.7 7 11.4M18.7 9.7 17 11.4"/>',
+  flame: '<path d="M12 3.5c.6 3-3.5 4.6-3.5 8.6a3.5 3.5 0 0 0 7 0c0-1.6-.8-2.5-1.4-3.6M8 20.5h8"/>',
+  book: '<path d="M12 6.5C10 5.2 7.5 4.8 4.5 5v12.5c3-.2 5.5.2 7.5 1.5 2-1.3 4.5-1.7 7.5-1.5V5c-3-.2-5.5.2-7.5 1.5zM12 6.5V19"/>',
+  star: '<path d="m12 4 2.4 5 5.4.7-4 3.8 1 5.4-4.8-2.6-4.8 2.6 1-5.4-4-3.8 5.4-.7z"/>',
+  moon: '<path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/>'
+};
+let rotAt = 0, rotHold = 0;
+function drawRot(cards) {
+  const el = $('#rot'); el.classList.toggle('hide', !cards.length); if (rotAt >= cards.length) rotAt = 0;
+  el.innerHTML = cards.map((c, i) => `<div class="c${i === rotAt ? ' on' : ''}"${c.go ? ` data-go="${c.go}"` : ''}><span class="cap"><svg viewBox="0 0 24 24" aria-hidden="true">${ROT_ICON[c.k]}</svg>${esc(c.cap)}</span>${c.rows}</div>`).join('')
+    + (cards.length > 1 ? `<span class="dots" role="button" tabindex="0" aria-label="הכרטיס הבא">${cards.map((c, i) => `<i class="${i === rotAt ? 'on' : ''}"></i>`).join('')}</span>` : '');
+}
+function rotShow(k) {
+  const cs = document.querySelectorAll('#rot .c'), ds = document.querySelectorAll('#rot .dots i'); if (!cs.length) return;
+  rotAt = ((k % cs.length) + cs.length) % cs.length;
+  cs.forEach((c, i) => c.classList.toggle('on', i === rotAt)); ds.forEach((d, i) => d.classList.toggle('on', i === rotAt));
+}
+{ const el = $('#rot'); let x0 = null, swiped = false;
+  el.addEventListener('pointerdown', e => { x0 = e.clientX; swiped = false; });
+  el.addEventListener('pointercancel', () => { x0 = null; });
+  /* the cards follow one another from right to left, so a pull to the right brings the next one */
+  el.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) < 36) return; swiped = true; rotHold = 3; rotShow(rotAt + (dx > 0 ? 1 : -1)); });
+  el.addEventListener('click', e => { if (swiped) { swiped = false; return; } rotHold = 3;
+    if (e.target.closest('.dots')) return rotShow(rotAt + 1);
+    const t = e.target.closest('[data-go]'); if (t) go(t.dataset.go); });
+  el.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('.dots')) { e.preventDefault(); rotHold = 3; rotShow(rotAt + 1); } });
+  /* It changes also on a device set to "remove animations" (the owner's phone is): the change of card is the point of the
+     panel, and there the cards simply replace one another without the fade. */
+  setInterval(() => { if (rotHold) return void rotHold--; if (!ENG || curView !== 'home' || document.hidden || document.querySelector('.sheet.show')) return; rotShow(rotAt + 1); }, 6500);
+}
+
+/* ---------------- sharing the siddur ---------------- */
+const SHARE_URL = 'https://bukchair.github.io/sidur/', SHARE_NAME = 'סידור וחומש בית אהרן וישראל';
+const SHARE_TEXT = SHARE_NAME + ', נוסח קרלין סטולין. חינם, בלי פרסומות, לכל מכשיר:';
+function openShare() {
+  $('#shareMsg').innerHTML = esc(SHARE_TEXT) + `<b>${esc(SHARE_URL.replace(/^https:\/\//, ''))}</b>`;
+  $('#shareCopy span').textContent = 'העתקת הקישור'; openSheet('Share');
+}
+async function copyShare() {
+  let ok = false;
+  try { if (window.SidurNative && SidurNative.copy) { SidurNative.copy(SHARE_URL); ok = true; } else { await navigator.clipboard.writeText(SHARE_URL); ok = true; } }
+  catch (e) { try { const t = document.createElement('textarea'); t.value = SHARE_URL; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (e2) { } }
+  $('#shareCopy span').textContent = ok ? 'הקישור הועתק' : 'לא הצלחתי להעתיק';
+}
+$('#shareCopy').onclick = copyShare;
+/* the device's own "share" where there is one (the app, phones' browsers); elsewhere the link is copied */
+$('#shareSend').onclick = async () => {
+  try {
+    if (window.SidurNative && SidurNative.share) return void SidurNative.share(SHARE_TEXT + '\n' + SHARE_URL);
+    if (navigator.share) return void await navigator.share({ title: SHARE_NAME, text: SHARE_TEXT, url: SHARE_URL });
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  copyShare();
+};
+$('#scrimShare').onclick = $('#shareClose').onclick = () => closeSheet('Share');
 
 const MORE_CREDITS = '<h4>חומש ולוח</h4><ul><li>מקרא עם טעמים ותרגום אונקלוס: נחלת הכלל (Public Domain), מתוך ספריא.</li>'
   + '<li>רש"י על התורה ושפתי חכמים: Metsudah Publications, 2009. רישיון CC-BY, מתוך ספריא.</li>'
@@ -337,6 +419,7 @@ function go(target, label) {
   if (target === '#chok') return SidurExtras.openChok();
   if (target === '#rem') return SidurExtras.openRem();
   if (target === '#find') return SidurExtras.openFind();
+  if (target === '#share') return openShare();
   if (target === '#guide') return nav('guide', { depth: depth() });
   if (target === '#about') { if (window.SidurCom) SidurCom.ready.then(() => { $('#abCredits').innerHTML = SidurCom.credits() + MORE_CREDITS; }); return nav('about', { depth: depth() }); }
   if (target.startsWith('url:')) { location.href = target.slice(4); return; }
@@ -360,10 +443,10 @@ function renderMenu() {
     const now = NOW(), info = dayInfo(sync(now)), nowName = nowPair(info, now.getHours() * 60 + now.getMinutes())[0];
     $('#listSub').textContent = 'לפי סדר היום · ' + info.date;
     const any = items.filter(x => ANYTIME.includes(x.b.text)), day = items.filter(x => !ANYTIME.includes(x.b.text));
-    $('#list').innerHTML = '<div class="cap2">לאורך היום</div><ol class="tl">' + day.map(x => {
+    $('#list').innerHTML = '<div class="mcap">לאורך היום</div><ol class="tl">' + day.map(x => {
       const isNow = nowName && x.b.text.startsWith(nowName), isDay = DAYSEQ.some(n => x.b.text.startsWith(n));
       return row(x, isNow ? 'is-now' : isDay ? '' : 'is-sp', isNow ? 'עכשיו' : isDay ? '' : 'לפי התאריך');
-    }).join('') + '</ol>' + (any.length ? '<div class="cap2">בכל שעה</div><ol class="idx">' + any.map((x, k) => row(x, '', '', LETTERS[k])).join('') + '</ol>' : '');
+    }).join('') + '</ol>' + (any.length ? '<div class="mcap">בכל שעה</div><ol class="idx">' + any.map(x => row(x, '', '')).join('') + '</ol>' : '');
     return;
   }
   const two = items.length > 8 && items.every(x => x.b.text.length <= 14);
@@ -393,6 +476,89 @@ function toWeb(h) {
     .replace(/<font color='#([0-9a-fA-F]+)'>/g, (m, x) => { const c = (parseInt(x, 16) & 0xffffff).toString(16).padStart(6, '0'); return `<span class="fc" data-c="${c}" style="--fc:#${c}">`; })
     .replace(/<\/font>/g, '</span>');
 }
+/* ---------------- the page, laid out as the printed siddur lays it out ----------------
+   Works on the page as it already stands (after the commentary marked its phrases), and only moves nodes into boxes:
+   no letter is added to the text or taken from it. A blank line ends a part; inside a part every line keeps its place. */
+const bareHeb = s => s.replace(/[\u0591-\u05C7]/g, '');
+const ACRONYM = /\s*\(([א-ת"]{3,5} [א-ת"]{3,5})\)\.?\s*$/;
+function firstWord(box) {
+  const w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    if (n.parentNode.closest('.vs,.nt,small')) continue;
+    const m = n.nodeValue.match(/^(\s*)(\S+)/); if (!m) continue;
+    if (!/[\u05D0-\u05EA]/.test(m[2])) return;                 /* a part that opens with a bracket or a sign has no opening word */
+    n.splitText(m[1].length + m[2].length); const word = m[1].length ? n.splitText(m[1].length) : n;
+    const b = document.createElement('b'); b.className = 'iw'; word.parentNode.insertBefore(b, word); b.appendChild(word); return;
+  }
+}
+/* a short note in brackets inside the text ("לנקבה: ...") is set small, as in print */
+function smallNotes(box) {
+  const w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT), list = [];
+  for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentNode.closest('.vs,small,.ins') && n.nodeValue.indexOf('(') >= 0) list.push(n);
+  for (let n of list) for (;;) {
+    const m = n.nodeValue.match(/\([^()]{2,58}[ :][^()]{1,58}\)/); if (!m) break;
+    const mid = n.splitText(m.index), rest = mid.splitText(m[0].length);
+    const s = document.createElement('span'); s.className = 'nt'; mid.parentNode.insertBefore(s, mid); s.appendChild(mid); n = rest;
+  }
+}
+/* the print's three sizes of letter, from the hand-marked list (sizes.js); a run of "אנא בכח" lines takes the size of its first */
+const letters = s => s.replace(/[^א-ת]/g, '');
+function markSizes(boxes, file) {
+  const R = window.SidurSizes && SidurSizes[file]; if (!R) return;
+  const rules = R.map(r => { const [key, cond] = r.slice(2).split('@'); return { sz: r[0], key, cond }; });
+  const fits = (r, head, above) => (r.key === '*' || (r.key[0] === '^' ? head.startsWith(r.key.slice(1)) : head.includes(r.key))) && (!r.cond || above.includes(r.cond));
+  let carry = '', above = '';
+  for (const el of boxes) {
+    if (el.className === 'ins' || el.className === 'hd2') { above = letters(el.textContent); carry = ''; continue; }
+    if (!/^(par|brk|acr|chap)$/.test(el.className)) { carry = ''; continue; }
+    if (carry && el.className === 'acr') { if (carry !== 'l') el.classList.add('sz-' + carry); continue; }
+    const head = letters(el.textContent).slice(0, 90), r = rules.find(r => fits(r, head, above)), sz = r ? r.sz : '';
+    if (sz && sz !== 'l') el.classList.add('sz-' + sz);
+    carry = el.classList.contains('acr') ? sz : '';
+  }
+}
+const pointed = t => (t.match(/[\u05B0-\u05BC\u05C1\u05C2\u05C7]/g) || []).length > letters(t).length * 0.3;
+function layPrinted(body, skips, file) {
+  const titles = new Set((skips || []).map(s => bareHeb(s.title).replace(/\s*:\s*$/, '').trim()));
+  const mk = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
+  const out = document.createDocumentFragment(); let lines = [[]], brs = 0;
+  const flush = () => {
+    const ls = lines.filter(l => l.length); lines = [[]]; if (!ls.length) return;
+    let run = [], inAcr = false;
+    const emit = () => { if (!run.length) return;
+      if (!run.some(l => l.some(n => n.textContent.trim()))) { run.forEach(l => l.forEach(n => out.appendChild(n))); run = []; return; }   /* nothing to read: no box */
+      const p = mk('p', 'par');
+      run.forEach((l, i) => { if (i) p.appendChild(mk('br')); l.forEach(n => p.appendChild(n)); }); smallNotes(p); firstWord(p); out.appendChild(p); run = []; };
+    for (const l of ls) {
+      const text = l.map(n => n.textContent).join(''), b = bareHeb(text).trim(), last = l[l.length - 1];
+      const a = last.nodeType === 3 ? last.nodeValue.match(ACRONYM) : null;
+      if (a) { emit(); const p = mk('p', 'acr'), sp = mk('span'), sm = mk('small');
+        const tail = last.splitText(a.index); l.forEach(n => sp.appendChild(n)); sm.appendChild(tail);
+        if (!inAcr) firstWord(sp); p.appendChild(sp); p.appendChild(sm); out.appendChild(p); inAcr = true; continue; }
+      inAcr = false;
+      if (/^(פרק|מזמור) [א-ת"'׳״]{1,6}$/.test(b)) { emit(); const p = mk('p', 'chap'); l.forEach(n => p.appendChild(n)); out.appendChild(p); continue; }
+      if (b.startsWith('ברוך אתה') && b.length < 105) { emit(); const p = mk('p', 'brk'); l.forEach(n => p.appendChild(n)); smallNotes(p); firstWord(p); out.appendChild(p); continue; }
+      run.push(l);
+    }
+    emit();
+  };
+  for (const n of [...body.childNodes]) {
+    const el = n.nodeType === 1 ? n : null;
+    if (el && el.tagName === 'BR') { brs++; continue; }
+    if (el && (el.classList.contains('sk') || el.classList.contains('com'))) { flush(); brs = 0; out.appendChild(el); continue; }
+    /* an instruction of its own line(s): the original closes it with a line break inside its colour */
+    /* (a coloured line that carries points is prayer text the original colours by the season, "ברכנו" in summer: it stays text) */
+    if (el && el.classList.contains('fc') && el.lastChild && el.lastChild.nodeName === 'BR' && !pointed(el.textContent)) {
+      flush(); brs = 0; el.removeChild(el.lastChild);
+      const name = bareHeb(el.textContent).replace(/\s*:\s*$/, '').trim(), box = mk('div', titles.has(name) ? 'hd2' : 'ins');
+      while (el.firstChild) box.appendChild(el.firstChild); out.appendChild(box); continue;
+    }
+    if (n.nodeType === 3 && !n.nodeValue.trim() && !lines[lines.length - 1].length) continue;
+    if (brs >= 2) flush(); else if (brs === 1 && lines[lines.length - 1].length) lines.push([]);
+    brs = 0; lines[lines.length - 1].push(n);
+  }
+  flush(); markSizes([...out.children], file); body.replaceChildren(out);
+}
 function openPage(p) { curPage = p; nav('reader', { depth: depth() }); drawPage(); }
 function drawPage() {
   if (!curPage) return; const pg = ENG.page(curPage.file, curPage.forceDay);
@@ -401,11 +567,12 @@ function drawPage() {
   $('#rbody').innerHTML = Com ? Com.markVerses(toWeb(pg.html)) : toWeb(pg.html);
   /* books that comment on this page: marked in the text, shown only when the reader turns "פירושים" on */
   $('#comBar').classList.toggle('hide', !(Com && Com.decorate($('#rbody'), curPage.file, pg.skips)));
+  layPrinted($('#rbody'), pg.skips, curPage.file);
   drawComBar();
   if (Com && !Com.loaded && !drawPage.waiting) { drawPage.waiting = true; Com.ready.then(j => { if (j && curView === 'reader') drawPage(); }); }
   /* the original's jump list, as a strip that follows the reading */
   $('#steps').classList.toggle('hide', !pg.skips.length);
-  $('#steps').innerHTML = '<button data-sk="top" class="on">התחלה</button>' + pg.skips.map(s => `<button data-sk="${s.line}">${esc(s.title)}</button>`).join('');
+  $('#steps').innerHTML = '<div class="sr"><button data-sk="top" class="on">התחלה</button>' + pg.skips.map(s => `<button data-sk="${s.line}">${esc(s.title)}</button>`).join('') + '</div>';
 }
 $('#comBtn').onclick = () => { cfg.com = cfg.com ? 0 : 1; applyCfg(); };
 /* the strip beside the switch: the books that speak on this page. Choosing one leaves only its marks in the text,
@@ -431,7 +598,7 @@ function markStep() {
   const line = $('#steps').getBoundingClientRect().bottom + 12; let cur = 'top';
   for (const a of document.querySelectorAll('#rbody a.sk')) { if (a.getBoundingClientRect().top <= line) cur = a.id.slice(2); else break; }
   const on = $('#steps .on'); if (on && on.dataset.sk === cur) return; if (on) on.classList.remove('on');
-  const b = $(`#steps [data-sk="${cur}"]`); if (b) { b.classList.add('on'); const st = $('#steps'); st.scrollLeft += b.getBoundingClientRect().left + b.offsetWidth / 2 - (st.getBoundingClientRect().left + st.clientWidth / 2); }
+  const b = $(`#steps [data-sk="${cur}"]`); if (b) { b.classList.add('on'); const st = $('#steps .sr'); st.scrollLeft += b.getBoundingClientRect().left + b.offsetWidth / 2 - (st.getBoundingClientRect().left + st.clientWidth / 2); }
 }
 window.addEventListener('scroll', () => { if (!_spy) { _spy = true; requestAnimationFrame(markStep); } }, { passive: true });
 /* the original's setting: hide the bar while the prayer is scrolled down, bring it back on the way up */

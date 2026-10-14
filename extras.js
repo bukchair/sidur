@@ -59,7 +59,7 @@
     try { walk('showTfilaMenu', 'תפילות', ENG.menu('showTfilaMenu'), [], 0); walk('showTehilimTypeMenu', 'תהילים', ENG.menu('showTehilimTypeMenu'), [], 0); } catch (e) { }
     for (let n = 1; n <= 150; n++) add('תהילים פרק ' + C.heNum(n), 'ps:' + n, 'תהילים');
     C.PARSHA.concat(['וזאת הברכה']).forEach((p, i) => add('חומש · פרשת ' + p, 'smv:' + i, 'חומש'));
-    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
+    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
     sync(NOW()); return (findIndex = out);
   }
   const isFav = t => favs.some(f => f.target === t);
@@ -77,7 +77,7 @@
     if (s) { const x = hits[+s.dataset.s], at = favs.findIndex(f => f.target === x.target); if (at >= 0) favs.splice(at, 1); else favs.push({ label: x.label, target: x.target }); store.set('favs', favs); return drawFind(); }
     const b = e.target.closest('.fr'); if (!b) return; const x = hits[+b.dataset.i]; closeSheet('Find'); goTarget(x.target, x.label);
   };
-  $('#scrimFind').onclick = () => closeSheet('Find'); $('#findClose').onclick = () => closeSheet('Find'); $('#homeFind').onclick = openFind;
+  $('#scrimFind').onclick = () => closeSheet('Find'); $('#findClose').onclick = () => closeSheet('Find');
 
   /* ================= reminders ================= */
   const rems = store.get('rems', []);

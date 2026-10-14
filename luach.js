@@ -43,6 +43,20 @@
     return `<li class="${e.b ? 'em' : ''}"><i></i><span>${esc(e.t)}${ago}</span></li>`;
   }
   /* how many of the general list fall today: shown next to the calendar row of the home page */
+  /* for the day panel of the home page: the names of today in the general list, the psalms of the day of the month,
+     and the month itself (its molad, until when the moon is blessed, the Rosh Chodesh that comes) */
+  function todayPanel() {
+    const n = todayNum(), h = C.fromDays(n), ms = C.months(h.y), m = ms[h.mi];
+    const e = entriesFor(h.y, h.mi, h.d), all = e.own.concat(e.carried);
+    const mo = C.molad(h.y, h.mi), endN = Math.floor((mo.parts + 14 * 25920 + 18 * 1080 + 396) / 25920);
+    const wrap = h.mi + 1 >= ms.length, ny = wrap ? h.y + 1 : h.y, nmi = wrap ? 0 : h.mi + 1;
+    const first = C.toDays(ny, nmi, 1), last = m.len === 30 && h.d < 30 ? first - 1 : 0, short = k => WEEKDAY[C.dow(k)].replace('יום ', '');
+    return { dayHe: C.heNum(h.d), tehillim: C.tehillim(h.d, m.len), month: mName(m),
+      yz: all.filter(x => x.b).concat(all.filter(x => !x.b)).slice(0, 3).map(x => x.t), yzCount: all.length,
+      molad: short(mo.n) + (mo.hour >= 18 ? ' בערב' : '') + ', ' + mo.hour + ':' + String(mo.minute).padStart(2, '0') + (mo.chalakim ? ' ו-' + mo.chalakim + ' חלקים' : ''),
+      kl: 'עד ' + WEEKDAY[C.dow(endN)] + ' ' + gShort(endN),
+      rc: { label: wrap ? 'ראש השנה' : 'ראש חודש ' + mName(C.months(ny)[nmi]), text: (last ? gShort(last) + ' - ' : '') + gShort(first), in: (last || first) - n } };
+  }
   function todayCount() { if (!YZ) return null; const h = C.fromDays(todayNum()), e = entriesFor(h.y, h.mi, h.d); return e.own.length + e.carried.length; }
 
   /* ================= calendar ================= */
@@ -262,5 +276,5 @@
   $('#asFast').onclick = () => { AS.speed = Math.min(10, AS.speed + 1); mem.scroll = AS.speed; saveMem(); asPaint(); };
   $('#smvStudy').onclick = () => { const on = $('#smv').classList.toggle('study'); $('#smvStudy').setAttribute('aria-pressed', String(on)); syncAwake(); };
 
-  window.Luach = { openCal, drawCal, openSmv, drawSmv, todayCount, weekly, todayNum, leave() { asStop(); $('#smv').classList.remove('study'); $('#smvStudy').setAttribute('aria-pressed', 'false'); syncAwake(); }, yzReady };
+  window.Luach = { openCal, drawCal, openSmv, drawSmv, todayCount, todayPanel, weekly, todayNum, leave() { asStop(); $('#smv').classList.remove('study'); $('#smvStudy').setAttribute('aria-pressed', 'false'); syncAwake(); }, yzReady };
 })();

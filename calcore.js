@@ -221,5 +221,5 @@ function molad(y, mi) {
 }
 
 
-g.CalCore = { DAY_MS: DAY_MS, isLeap: isLeap, months: months, monthIndex: monthIndex, toDays: toDays, fromDays: fromDays, dow: dow, heNum: heNum, heYear: heYear, dayInfo: dayInfo, PARSHA: PARSHA, parshaOn: parshaOn, shabbatOf: shabbatOf, molad: molad };
+g.CalCore = { DAY_MS: DAY_MS, isLeap: isLeap, months: months, monthIndex: monthIndex, toDays: toDays, fromDays: fromDays, dow: dow, heNum: heNum, heYear: heYear, dayInfo: dayInfo, PARSHA: PARSHA, parshaOn: parshaOn, shabbatOf: shabbatOf, molad: molad, tehillim: tehillim };
 })(typeof window !== 'undefined' ? window : globalThis);

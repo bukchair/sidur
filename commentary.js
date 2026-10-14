@@ -88,19 +88,19 @@
     const chips = (links, label) => {
       const by = {}; for (const l of links) (by[l.b] = by[l.b] || []).push(l);
       const row = document.createElement('div'); row.className = 'com';
-      row.innerHTML = `<span class="lb">${label}</span>` + Object.keys(by).map(b => {
+      row.innerHTML = `<span class="lb">${label}</span><div class="cs">` + Object.keys(by).map(b => {
         const k = by[b].map(l => pg.sections.indexOf(l)).join(',');
         return `<button class="c" data-sec="${k}">${esc(INDEX.books[b] ? INDEX.books[b].he : b)}</button>`;
-      }).join('');
+      }).join('') + '</div>';
       return row;
     };
     const top = pg.sections.filter(l => l.w || l.p);
-    if (top.length) body.insertBefore(chips(top, 'ספרים על התפילה:'), body.firstChild);
+    if (top.length) body.insertBefore(chips(top, 'ספרים על התפילה'), body.firstChild);
     for (const s of secs) {
       const links = pg.sections.filter(l => l.s === s.title); if (!links.length) continue;
       let n = s.el.nextSibling; while (n && ((n.nodeType === 3 && !n.nodeValue.trim()) || n.nodeName === 'BR')) n = n.nextSibling;
       const after = n && n.nodeType === 1 && n.classList.contains('fc') ? n : s.el;
-      after.parentNode.insertBefore(chips(links, 'פירוש על הקטע:'), after.nextSibling);
+      after.parentNode.insertBefore(chips(links, 'פירוש על הקטע'), after.nextSibling);
     }
     return verses + marked + pg.sections.length;
   }

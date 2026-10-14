@@ -22,7 +22,8 @@
    white sheet with soft corners; one thin gold arch on the home page; gold only where it is needed. */
 :root{
   --fs:22px; --lh:1.95; --body:'Ezra'; --r:12px;
-  --f-ui:'Heebo','Alef',system-ui,sans-serif; --f-serif:'Frank','Hadasim','David','Times New Roman',serif; --f-disp:'Frank','Hadasim','David','Times New Roman',serif;
+  /* one letter for the whole app; the books' own text (prayers, psalms, chumash, chok, commentary) keeps the reader's choice, --body */
+  --f-app:'Heebo','Alef',system-ui,sans-serif; --f-ui:var(--f-app); --f-serif:var(--f-app); --f-disp:var(--f-app);
   --velvet:#1b2c78; --velvet2:#0f1a4d; --gold:#c7a14a; --gold-hi:#f6e5b3; --gold-lo:#b08d3c; --gold-ink:#221803; --gold-mk:#ae8a35;
   --on:#f4ecd6; --on-mute:#b9b7c9; --pri:#1b2c78; --on-pri:#f6e5b3;
   --page:#fdfcf9; --page2:#f5f2e9; --ink:#1b1b22; --mute:#7a7567; --rule:#ddd6c4; --hair:#ece8dd; --ins:#27419a; --add:#a12b2b;
@@ -53,7 +54,7 @@ select,input{touch-action:manipulation}
 .go{flex:none;align-self:center;width:.46em;height:.46em;border:solid var(--gold-mk);border-width:0 0 2px 2px;transform:rotate(45deg);margin-inline-start:2px}
 button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
 .hide{display:none!important}
-.hd .ttl,.plate .hl,.nbtn,.toc .first .t,.cap2,.sheethd h4,.comhd h4,.aboutbody h3,.abver h4,.abthanks h4,.abcontact h4,.abgive .t,.abcred h4,.setbody h5,.calnav .mt{font-weight:500}
+.hd .ttl,.plate .hl,.nbtn,.cap2,.sheethd h4,.comhd h4,.aboutbody h3,.abver h4,.abthanks h4,.abcontact h4,.abgive .t,.abcred h4,.setbody h5,.calnav .mt{font-weight:500}
 .chev{display:inline-block;flex:none;width:.55em;height:.55em;border:solid currentColor;border-width:0 0 .13em .13em;transform:rotate(-135deg)}
 .ld{flex:1;min-width:10px}
 
@@ -86,7 +87,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
   --rh:clamp(31px,5.05vh,49px)}
 .plate{flex:none;margin:0 auto;width:calc(100% - 48px);max-width:692px;padding:clamp(10px,1.9vh,20px) 12px clamp(4px,.9vh,10px);display:grid;justify-items:center;text-align:center;cursor:pointer;
   border:1px solid color-mix(in srgb,var(--gold) 65%,transparent);border-bottom:0;border-radius:26px 26px 0 0}
-.plate .d{font-size:13.5px;color:var(--on-mute)}
+.plate .d{font-family:var(--f-ui);font-size:13px;color:var(--on-mute)}
 .plate .d button{color:var(--gold-hi);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold-lo)}
 .plate .hl{font-family:var(--f-disp);font-size:clamp(22px,7.2vw,28px);line-height:1.25;color:var(--gold-hi)}
 .plate .tm{font-family:var(--f-ui);font-size:13.5px;color:var(--on);font-variant-numeric:tabular-nums}
@@ -98,36 +99,55 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
 #home .frame{flex:1;display:flex}
 #home .frame,#home .plate{box-sizing:border-box}
 #home .leaf{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;padding:clamp(8px,1.5vh,14px) 16px calc(4px + env(safe-area-inset-bottom))}
-.now{background:none;display:grid;grid-template-columns:1.25fr 1fr;gap:0 9px}
-.now.one{grid-template-columns:1fr}
+.now{background:none;display:flex;flex-wrap:wrap;gap:0 9px}
+.now .cap{flex:0 0 100%}
 .nbtn{height:clamp(38px,5.8vh,54px);display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border:1px solid var(--rule);border-radius:var(--r);background:var(--page);
-  font-family:var(--f-disp);font-size:clamp(18px,5.4vw,22px);overflow:hidden}
+  font-family:var(--f-disp);font-size:clamp(16px,5vw,20px);overflow:hidden;flex:1 1 0;min-width:0}
+.nbtn.pri{flex-grow:1.25}
+.nbtn.long{white-space:normal;text-align:center;line-height:1.05;padding:0 6px;font-size:clamp(13px,4.1vw,18px)!important;text-wrap:balance}
 .nbtn.pri,.nbtn.pri:active{background:var(--pri);color:var(--on-pri);border-color:transparent}
-.nbtn:not(.pri){font-size:clamp(12.5px,4.6vw,20px)}
 .nbtn:active,.toc .row:active,.tl button:active,.idx button:active,.srw:active,.cc:active{background:var(--page2)}
 .nbtn:active,.askbtns button:active,.combtn:active,.ib:active,.fs button:active,.pbtn:active,.chipb:active,.com .c:active{transform:scale(.97)}
 .toc{list-style:none;margin:clamp(1px,.6vh,6px) 0 0;padding:0}
 .toc .row{display:flex;align-items:baseline;gap:8px;width:calc(100% + 12px);margin-inline:-6px;padding-inline:6px;height:var(--rh);padding-top:calc((var(--rh) - 26px) / 2);border-bottom:1px solid var(--hair)}
-.toc .n{flex:none;font-family:var(--f-disp);color:var(--gold-mk);width:18px;font-size:18px}
-.toc .t{flex:none;font-size:clamp(14.5px,5.2vw,21px);white-space:nowrap}
-.toc .first .t{font-family:var(--f-disp);font-size:clamp(17px,6vw,24px)}
-.toc .x{flex:0 1 auto;min-width:0;font-size:14.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toc .n{flex:none;font-family:var(--f-disp);color:var(--gold-mk);min-width:18px;font-size:17px}
+.toc .t{flex:none;font-family:var(--f-disp);font-size:clamp(17px,5.2vw,20.5px);white-space:nowrap}
+.toc .x{flex:0 1 auto;min-width:0;font-family:var(--f-ui);font-size:13.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toc .x.add{color:var(--add)}
-.side{display:grid;gap:clamp(8px,1.4vh,12px);margin-top:clamp(10px,1.8vh,18px)}
-.zm{padding:clamp(9px,1.5vh,13px) 14px clamp(7px,1.3vh,11px);display:grid;gap:1px}
-.zm .r{display:flex;align-items:baseline;gap:8px;font-size:15px;line-height:1.35;color:var(--mute)}
-.zm .r em{font-style:normal;color:var(--add)}
-.zm .r b{font-weight:400;font-family:var(--f-ui);font-variant-numeric:tabular-nums;color:var(--ink);font-size:16px}
-.zm .r.big{font-size:19px;color:var(--ink)}
-.zm .r.big b{font-size:20px}
-.zm .lnk{display:none;justify-self:end;font-size:14.5px;color:var(--ins);text-decoration:underline;text-underline-offset:3px;padding:3px 0}
+/* the small screen of the day: one card at a time, changing on its own, by a swipe, or by a touch on the dots.
+   The cards lie on one another in a single grid cell, so the box is as tall as the tallest of them and nothing jumps. */
+.toc{margin-bottom:clamp(8px,1.5vh,14px)}
+/* spare height of a tall screen is shared between the panel, the buttons and the foot */
+.rot{position:relative;display:grid;grid-template-columns:minmax(0,1fr);margin:auto 0 clamp(8px,1.5vh,14px);border-radius:var(--r);background:var(--page2);padding:clamp(7px,1.2vh,11px) 14px 21px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.rot .c{grid-area:1/1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:1px;opacity:0;visibility:hidden;transform:translateY(5px);transition:opacity .2s ease,transform .2s ease,visibility 0s .2s}
+.rot .c.on{opacity:1;visibility:visible;transform:none;transition:opacity .3s ease .2s,transform .3s ease .2s}   /* the old card leaves first, then the new one comes: they never lie on one another */
+.rot .cap{display:flex;align-items:center;gap:6px;margin-bottom:2px;font-family:var(--f-ui);font-size:12.5px;color:var(--mute)}
+.rot .cap svg{flex:none;width:14px;height:14px;fill:none;stroke:var(--gold-mk);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rot .r{display:flex;align-items:baseline;gap:8px;width:100%;font-family:var(--f-ui);font-size:14px;line-height:1.38;color:var(--mute);white-space:nowrap}
+.rot .r>span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rot .r em{font-style:normal;color:var(--add)}
+.rot .r b{flex:none;font-weight:400;font-family:var(--f-ui);font-variant-numeric:tabular-nums;color:var(--ink);font-size:15.5px}
+.rot .r small{flex:none;font-family:var(--f-ui);font-size:11.5px;font-weight:700;color:var(--gold-mk)}
+.rot .r.big{font-size:16px;font-weight:500;color:var(--ink)} .rot .r.big b{font-size:17px}
+.rot button.r:active{background:var(--hair)}
+.rot .dots{position:absolute;inset-inline:0;bottom:0;height:21px;display:flex;align-items:center;justify-content:center;gap:5px}
+.rot .dots i{width:6px;height:6px;border-radius:50%;background:var(--rule);transition:width .3s ease,background-color .3s ease}
+.rot .dots i.on{width:16px;border-radius:3px;background:var(--gold-mk)}
+/* the tools: buttons that carry their own sign */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,1vh,9px) 7px;margin:auto 0 clamp(6px,1.2vh,12px)}
+.tile{display:grid;justify-items:center;align-content:center;gap:3px;min-width:0;padding:clamp(6px,1.7vh,17px) 2px clamp(5px,1.4vh,14px);border:1px solid var(--rule);border-radius:var(--r);background:var(--page);
+  font-family:var(--f-ui);font-size:clamp(11.5px,3.2vw,13px);line-height:1.2;color:var(--ink);text-align:center}
+.tile svg{width:clamp(21px,3.3vh,29px);height:clamp(21px,3.3vh,29px);fill:none;stroke:var(--pri);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+:root[data-theme="dark"] .tile svg{stroke:var(--gold-mk)}
+.tile.go1{background:var(--pri);border-color:transparent;color:var(--on-pri)} .tile.go1 svg{stroke:var(--on-pri)}
+.tile:active{transform:scale(.96);background:var(--page2)} .tile.go1:active{background:var(--pri)}
 .foot{padding-top:clamp(3px,.8vh,8px);text-align:center;font-size:15px;line-height:1.35}
 .foot:empty{display:none}
 .foot .tn{color:var(--add)}
 .col{display:flex;justify-content:center;border-top:1px solid var(--rule);margin-top:auto;padding-top:1px;font-family:var(--f-ui);font-size:15px;color:var(--mute)}
 .col button{padding:clamp(3px,.8vh,6px) clamp(6px,3.4vw,16px)}
 .col button+button{border-inline-start:1px solid var(--hair)}
-.ded{margin:0;padding:clamp(0px,.35vh,4px) 0 clamp(0px,.3vh,3px);text-align:center;font-size:12.5px;line-height:1.4;color:var(--mute)}
+.ded{margin:0;padding:clamp(0px,.35vh,4px) 0 clamp(0px,.3vh,3px);text-align:center;font-family:var(--f-ui);font-size:12px;line-height:1.4;color:var(--mute)}
 
 /* ---------- head of the inner pages (on the blue) ---------- */
 .hd{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;
@@ -152,43 +172,45 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .fs button+button{border-inline-start:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
 .fs .sm{font-size:14px}
 .fs .lg{font-size:23px}
-.sub{text-align:center;font-size:14.5px;color:var(--on-mute);margin:-4px 0 10px}
+.sub{text-align:center;font-family:var(--f-ui);font-size:13.5px;color:var(--on-mute);margin:-4px 0 10px}
 
 /* ---------- menus ---------- */
-.tl{list-style:none;margin:2px 0 0;padding:0;position:relative}
-.tl::before{content:"";position:absolute;inset-block:22px;inset-inline-start:5px;width:1px;background:var(--rule);opacity:.6}
-.tl li{position:relative;border-bottom:1px dotted var(--hair)}
+/* Every menu list is one kind of row, the home page's: a gold letter, the name in the book's letter, a hint in the plain
+   letter, an arrow. The prayer of this hour carries a small gold label, not a larger letter. */
+.tl{list-style:none;margin:2px 0 0;padding:0}
+.tl li{border-bottom:1px solid var(--hair)}
 .tl li:last-child{border-bottom:0}
-.tl li::before{content:"";position:absolute;inset-inline-start:1px;top:50%;width:9px;height:9px;margin-top:-5px;transform:rotate(45deg);background:var(--page);border:1px solid var(--rule);pointer-events:none}
-.tl button{display:flex;align-items:baseline;gap:8px;width:100%;min-height:49px;padding:12px 0 10px;padding-inline:26px 4px}
-.tl .t{flex:1}
-.tl .ld{flex:1}
+.tl button{display:flex;align-items:baseline;gap:8px;width:100%;min-height:50px;padding:12px 0 10px}
+.tl .n{flex:none;min-width:18px;font-family:var(--f-disp);color:var(--gold-mk);font-size:17px}
+.tl .t{flex:1;font-family:var(--f-disp);font-size:clamp(17px,5.2vw,20.5px)}
 .tl .t:has(+ .ld){flex:none}
-.tl .t{font-size:20.5px}
-.tl .x{flex:none;font-size:14.5px;color:var(--mute)}
-.tl .is-now .t{font-family:var(--f-disp);font-size:24px}
-.tl .is-now .x{color:var(--ins)}
-.tl .is-now::before{inset-inline-start:-1px;width:13px;height:13px;margin-top:-7px;background:var(--gold-mk);border-color:var(--gold-mk)}
+.tl .ld{flex:1}
+.tl .x{flex:none;font-family:var(--f-ui);font-size:13.5px;color:var(--mute)}
+.tl .is-now .x{background:var(--gold);color:var(--gold-ink);font-size:11.5px;font-weight:700;padding:1px 9px;border-radius:999px}
 .tl .is-sp .x{color:var(--add)}
-.tl .is-sp::before{border-color:var(--add)}
 .tl.two{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
-.tl.two::before{display:none}
+/* a caption over a part of a menu, as the captions of the home page */
+.mcap{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-family:var(--f-ui);font-size:12.5px;font-weight:500;color:var(--mute);letter-spacing:.02em}
+.mcap::after{content:"";flex:1;height:1px;background:var(--hair)}
 .idx{list-style:none;margin:2px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:22px;background:linear-gradient(var(--hair),var(--hair)) center/1px 100% no-repeat}
-.idx li{border-bottom:1px dotted var(--hair)}
+.idx li{border-bottom:1px solid var(--hair)}
 .idx button{display:flex;align-items:baseline;gap:6px;width:100%;min-height:48px;padding:12px 2px 10px}
 .idx .t{flex:1}
-.idx .n{flex:none;font-family:var(--f-disp);color:var(--ins);width:14px;font-size:15px}
-.idx .t{font-size:clamp(16px,4.8vw,18.5px)}
+.idx .n{flex:none;font-family:var(--f-disp);color:var(--gold-mk);min-width:16px;font-size:16px}
+.idx .t{font-family:var(--f-disp);font-size:clamp(16px,4.8vw,18.5px)}
 .empty{text-align:center;color:var(--mute);padding:56px 20px;font-size:16px;line-height:1.7}
 
 /* ---------- reader ---------- */
 #reader .leaf{padding-top:0}
-.steps{position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:10;display:flex;gap:18px;align-items:baseline;overflow-x:auto;scrollbar-width:none;
-  margin:0 -16px;padding:11px 16px 8px;background:var(--page);border-bottom:1px solid var(--rule);border-radius:22px 22px 0 0;font-family:var(--f-ui);font-size:14.5px;white-space:nowrap}
-.steps::-webkit-scrollbar{display:none}
-.steps button{flex:none;color:var(--mute);padding:2px 0}
-.steps .on{color:var(--ink);display:flex;align-items:center;gap:7px;box-shadow:0 2px 0 var(--gold-mk)}
-.steps .on::before{content:"";width:7px;height:7px;transform:rotate(45deg);background:var(--gold-mk)}
+/* the parts of the prayer, as pill buttons (chosen by the owner, 14.10): the current one filled; the ends fade, so it shows
+   there is more to scroll; the strip itself keeps the sheet's colour under it, only the row of buttons fades */
+.steps{position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:10;margin:0 -16px;background:var(--page);border-bottom:1px solid var(--hair);border-radius:22px 22px 0 0;font-family:var(--f-ui)}
+.steps .sr{display:flex;gap:7px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:9px 16px;white-space:nowrap;scroll-behavior:smooth;
+  -webkit-mask-image:linear-gradient(to left,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%);mask-image:linear-gradient(to left,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%)}
+.steps .sr::-webkit-scrollbar{display:none}
+.steps button{flex:none;height:34px;padding:0 14px;border-radius:999px;background:var(--page2);border:1px solid var(--rule);color:var(--ink);font-size:14px}
+.steps .on{background:var(--pri);color:var(--on-pri);border-color:transparent;font-weight:500}
+.steps button:active{transform:scale(.96)}
 .rbody{max-width:760px;margin:0 auto;padding:14px 0 calc(60px + env(safe-area-inset-bottom));
   font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:var(--lh);text-align:justify;word-spacing:.02em}
 .rbody p{margin:0 0 .55em}
@@ -202,6 +224,30 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .rbody .fc[data-c="0393a3"]{--fc:var(--c-teal)!important}
 .rbody .fc[data-c="ff8040"]{--fc:var(--c-orange)!important}
 .rbody a.sk{display:block;height:0;scroll-margin-top:calc(104px + env(safe-area-inset-top))}
+/* The page in the layout of the printed siddur (laid out by layPrinted in app.js, from the same text): every part ends
+   with its last line in the middle and opens with a larger word; instructions are small, in the middle, in the colour of
+   the text; a short blessing stands in the middle; a part's name is a head with an ornament; the letters of "אנא בכח" stand
+   at the side. */
+.rbody .par{text-align-last:center}
+:root[data-align="start"] .rbody .par{text-align-last:start}
+.rbody .iw{font-size:1.3em;font-weight:700;line-height:1}
+.rbody .ins{margin:.8em 0 .35em;font-family:var(--body),'Ezra',serif;font-weight:700;font-size:.62em;line-height:1.5;text-align:center;text-align-last:center;text-wrap:balance;word-spacing:0;color:var(--ink)}
+.rbody .ins .fc{color:inherit}
+.rbody .brk{text-align:center;text-align-last:center;text-wrap:balance}
+.rbody .hd2,.rbody .chap{margin:1em 0 .45em;text-align:center;text-align-last:center;font-weight:700;color:var(--ink)}
+.rbody .hd2{font-family:var(--body),'Ezra',serif;font-size:.95em}
+.rbody .hd2::before{content:"";display:block;width:132px;height:9px;margin:0 auto .5em;background:currentColor;
+  clip-path:polygon(0 44%,44% 44%,50% 0,56% 44%,100% 44%,100% 56%,56% 56%,50% 100%,44% 56%,0 56%)}
+.rbody .acr{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0;text-align:start;font-size:.82em;line-height:1.75}
+.rbody .acr small{flex:none;font-size:.62em;font-weight:700;white-space:nowrap}
+.rbody .nt{font-size:.66em;font-weight:700}
+/* the print's middle and small letter (sizes.js) */
+.rbody .sz-m{font-size:.88em}
+.rbody .sz-s{font-size:.76em}
+.rbody .acr.sz-s{font-size:.68em}
+/* the letter of the print is a heavy one: with "פרנק" the page is set a little heavier and closer */
+:root[data-font="Frank"] .rbody{font-weight:500;line-height:1.68}
+:root[data-font="Frank"] .rbody .iw,:root[data-font="Frank"] .rbody .hd2,:root[data-font="Frank"] .rbody .chap{font-weight:800}
 
 /* ---------- commentary in place ---------- */
 .rbody .vs{font:inherit;color:inherit;pointer-events:none}
@@ -236,7 +282,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .combtn i{width:7px;height:7px;transform:rotate(45deg);border:1px solid var(--gold-mk)}
 .combtn[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
 .combtn[aria-pressed="true"] i{background:var(--gold-ink);border-color:var(--gold-ink)}
-.sheet.comsheet{font-family:var(--f-serif);max-height:62vh;padding-top:0;display:flex;flex-direction:column;overflow:hidden}
+.sheet.comsheet{font-family:var(--body),'Ezra',serif;max-height:62vh;padding-top:0;display:flex;flex-direction:column;overflow:hidden}
 .comhd{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:12px 0 8px;border-bottom:1px solid var(--rule)}
 .comhd h4{margin:0;font-family:var(--f-disp);font-weight:400;font-size:22px}
 .comhd button{flex:none;font-size:15px;color:var(--ins);padding:4px 2px}
@@ -262,9 +308,19 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 
 /* ---------- search, reminders, chok ---------- */
 #home{position:relative}
-.homefind{position:absolute;top:calc(clamp(4px,.9vh,8px) + clamp(10px,1.9vh,20px) + 15px + env(safe-area-inset-top));inset-inline-end:30px;width:40px;height:40px;display:grid;place-items:center;color:var(--gold);z-index:2}
-.homefind svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
-.homefind:active{transform:scale(.94)}
+/* sharing the siddur */
+.sharesheet{display:grid;justify-items:center;gap:12px;text-align:center}
+.sharesheet .sheethd{justify-self:stretch;padding-inline:0}
+.sharemsg{justify-self:stretch;margin:0;padding:11px 14px;border-radius:var(--r);background:var(--page2);font-family:var(--f-serif);font-size:16.5px;line-height:1.45;text-align:start}
+.sharemsg b{display:block;margin-top:3px;font-family:var(--f-ui);font-weight:500;font-size:14.5px;color:var(--ins);direction:ltr;text-align:right;word-break:break-all}
+.shareqr{width:150px;height:150px;padding:9px;background:#fff;border:1px solid var(--rule);border-radius:var(--r)}
+.shareqr svg{display:block;width:100%;height:100%}
+.sharenote{margin:-4px 0 0;font-size:13px;color:var(--mute)}
+.sharebtns{justify-self:stretch;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sharebtns button{height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--rule);border-radius:var(--r);font-family:var(--f-serif);font-size:17px;white-space:nowrap}
+.sharebtns .pri{background:var(--pri);color:var(--on-pri);border-color:transparent}
+.sharebtns button:active{transform:scale(.97)}
+.sharebtns svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .sheet.findsheet{padding:0;top:calc(10px + env(safe-area-inset-top));bottom:0;max-height:none;display:flex;flex-direction:column;overflow:hidden;border-radius:18px 18px 0 0;border-top:0}
 .findbar{flex:none;display:flex;gap:10px;align-items:center;padding:12px 14px 10px;border-bottom:1px solid var(--hair)}
 .findbar input{flex:1;min-width:0;font-size:16px;font-family:var(--f-ui);padding:11px 12px;border:1px solid var(--rule);background:var(--page);color:var(--ink);border-radius:0}
@@ -307,12 +363,12 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 /* ---------- zmanim ---------- */
 .luhead{text-align:center;padding:10px 0 8px;border-bottom:1px solid var(--rule)}
 .luhead .d1{font-family:var(--f-disp);font-size:22px}
-.luhead .d2{font-size:14px;color:var(--mute);margin-top:2px}
-.lunotes{padding:10px 0 4px;text-align:center;font-size:15.5px;line-height:1.75}
+.luhead .d2{font-family:var(--f-ui);font-size:13.5px;color:var(--mute);margin-top:2px}
+.lunotes{padding:10px 0 4px;text-align:center;font-family:var(--f-ui);font-size:14.5px;line-height:1.75}
 .lurow{display:flex;align-items:baseline;gap:8px;min-height:42px;padding:9px 2px 7px;border-bottom:1px dotted var(--hair)}
-.lurow .nm{font-size:19px}
+.lurow .nm{font-family:var(--f-ui);font-size:16px}
 .lurow .tm{font-size:18px;font-variant-numeric:tabular-nums;font-family:var(--f-ui)}
-.lurow.hl .nm{font-family:var(--f-disp);font-size:22px}
+.lurow.hl .nm{font-family:var(--f-ui);font-size:17.5px;font-weight:500}
 .lurow.hl .tm{font-size:21px;color:var(--ins)}
 .lurow.hl{box-shadow:10px 0 0 var(--page),13px 0 0 var(--gold-mk)}
 .luwarn{padding:14px 4px 6px;font-size:12.5px;color:var(--mute);line-height:1.7;text-align:center;font-family:var(--f-ui)}
@@ -339,6 +395,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .abcontact .sm{text-align:center;margin:10px 0 0;font-size:13.5px;color:var(--mute);font-family:var(--f-ui)}
 .abrow{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .abrow .pbtn{flex:1 1 150px;gap:8px;font-family:var(--f-ui);font-size:15.5px;text-decoration:none;color:var(--ins)}
+.abrow .wa{flex-basis:100%;background:var(--pri);color:var(--on-pri);border-color:transparent;font-weight:500}
 .abrow svg{flex:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 .abhouse{display:block;margin:6px 0 4px;padding:12px;text-align:center;text-decoration:none;color:var(--mute);font-family:var(--f-ui);font-size:14.5px;border-block:1px solid var(--hair)}
 .abhouse b{color:var(--ink);letter-spacing:1.5px}
@@ -442,7 +499,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .pbtn.main{border:0;background:var(--gold);color:var(--gold-ink);font-weight:700}
 .chipb{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px;border:1px solid var(--rule);font-size:14.5px;background:var(--page)}
 .chipb[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold-lo)}
-.lnk{color:var(--ins);text-decoration:underline;text-underline-offset:3px}
+.lnk{font-family:var(--f-ui);color:var(--ins);text-decoration:underline;text-underline-offset:3px}
 .sel{width:100%;padding:12px 12px;border:1px solid var(--rule);background:var(--page);color:var(--ink);font-size:16px;font-family:var(--f-ui);border-radius:0}
 
 /* ---------- calendar ---------- */
@@ -452,7 +509,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 .calnav .gm{display:block;font-family:var(--f-ui);font-size:12.5px;color:var(--mute)}
 .calyr{display:flex;justify-content:center;gap:18px;font-size:14.5px;padding-bottom:6px}
 .calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--rule);border-inline-start:1px solid var(--hair);margin-top:4px}
-.calgrid .wd{font-size:12.5px;color:var(--mute);text-align:center;padding:4px 0;border-bottom:1px solid var(--rule);border-inline-end:1px solid var(--hair)}
+.calgrid .wd{font-family:var(--f-ui);font-size:12.5px;color:var(--mute);text-align:center;padding:4px 0;border-bottom:1px solid var(--rule);border-inline-end:1px solid var(--hair)}
 .cc{position:relative;min-height:clamp(56px,15vw,84px);padding:4px 4px 3px;border-bottom:1px solid var(--hair);border-inline-end:1px solid var(--hair);display:flex;flex-direction:column;gap:1px;text-align:start;overflow:hidden}
 .cc.blank{background:none}
 .cc .hn{font-family:var(--f-disp);font-size:clamp(17px,5vw,22px);line-height:1}
@@ -564,18 +621,192 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   #home .frame{max-width:1040px}
   #home .plate{max-width:992px}
   #home .leaf{display:grid;grid-template-columns:1.15fr 1fr;column-gap:40px;align-content:start;padding-inline:26px;
-    grid-template-areas:"now zm" "toc zm" "toc foot" "col col" "ded ded";grid-template-rows:auto auto 1fr auto auto}
-  #home .now{grid-area:now} #home .toc{grid-area:toc} #home .side{grid-area:zm;margin-top:12px;align-self:start} #home .foot{grid-area:foot;align-self:end} #home .col{grid-area:col} #home .ded{grid-area:ded} #home .zm .lnk{display:block}
+    grid-template-areas:"now rot" "toc rot" "toc tiles" "foot foot" "col col" "ded ded";grid-template-rows:auto auto 1fr auto auto auto}
+  #home .now{grid-area:now} #home .toc{grid-area:toc} #home .rot{grid-area:rot;margin:12px 0 0;align-self:start} #home .tiles{grid-area:tiles;margin:14px 0 0;align-self:start} #home .toc{margin-bottom:0} #home .foot{grid-area:foot} #home .col{grid-area:col} #home .ded{grid-area:ded}
   .hd .ttl{max-width:460px}
 }
 @media (min-width:600px){
   .leaf{padding-inline:28px}
-  .steps{margin-inline:-28px;padding-inline:28px}
+  .steps{margin-inline:-28px} .steps .sr{padding-inline:28px}
   .sheet{border-inline:1px solid var(--rule)}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important}.comstrip{animation:none}.sheet{transition:opacity .2s ease!important}}
 @media (prefers-reduced-transparency:reduce){.hd{background:var(--velvet);-webkit-backdrop-filter:none;backdrop-filter:none}}
 @media (prefers-contrast:more){:root{--hair:var(--rule)}.hd{background:var(--velvet2);-webkit-backdrop-filter:none;backdrop-filter:none}}
+
+/* ================= one design line =================
+   One letter (Heebo). Five sizes, three weights:
+   titles 700 (the blue bar, sheet heads, page heads) - names 500 (what you open: prayers, books, screens) -
+   text and information 400; captions 12.5px 600 in the muted colour; numerals of lists in gold 600. */
+.hd .ttl{font-weight:700;font-size:clamp(18px,5.4vw,21px);letter-spacing:.01em}
+.plate .hl{font-weight:700;font-size:clamp(22px,6.6vw,26px);letter-spacing:.01em}
+.sheethd h4{font-weight:700;font-size:22px}
+.comhd h4{font-family:var(--f-app);font-weight:700;font-size:19px}
+.csrc,.comhd button,#comBody .lb{font-family:var(--f-app)}
+.aboutbody h3{font-weight:700;font-size:22px}
+.abver h4,.abthanks h4,.abcontact h4,.abcred h4,.shulbox h3{font-weight:700;font-size:18px}
+.abgive .t{font-weight:700;font-size:18px}
+.calnav .mt{font-weight:700;font-size:clamp(20px,6vw,24px)}
+.luhead .d1{font-weight:700;font-size:19px}
+.setbody h5{font-weight:600;font-size:15px}
+.cap2{font-weight:600;font-size:15px}
+.cap,.mcap,.rot .cap{font-size:12.5px;font-weight:600;letter-spacing:.02em;color:var(--mute)}
+.toc .t,.tl .t{font-weight:500;font-size:clamp(16px,4.8vw,18px)}
+.idx .t{font-weight:500;font-size:clamp(15px,4.4vw,16.5px)}
+.toc .n,.tl .n,.idx .n,.gsec .n,.pn{font-weight:600;font-size:15px;color:var(--gold-mk)}
+.nbtn{font-weight:600;font-size:clamp(15px,4.6vw,17.5px)}
+.nbtn.long{font-size:clamp(12.5px,3.8vw,15px)!important}
+.pbtn,.sharebtns button,.combtn,.chipb,.remdays .chipb{font-weight:500;font-size:15px}
+.comstrip button,.pact button{font-weight:500;font-size:14px}
+.sharemsg{font-size:15.5px}
+.findres .fr,.yzres .t{font-size:15.5px}
+.shulrow .tx b{font-weight:500;font-size:16.5px}
+.cc .hn{font-weight:600;font-size:clamp(15px,4.4vw,18px)}
+.lurow .nm{font-size:15.5px} .lurow.hl .nm{font-size:16.5px;font-weight:700}
+.fs .sm{font-size:13px;font-weight:600} .fs .lg{font-size:19px;font-weight:600}
+
+/* ================= the design upgrade (approved by the owner, 14.10; docs/mockups/polish.html) =================
+   A deep sky with the cover's arch drawn faint in gold; white cards floating on the page with a soft shadow;
+   signs in tinted squares; buttons with depth; screens fade in. The order of every screen is unchanged. */
+:root{--card:#fff;--tint:#f4f1e9;--deep:linear-gradient(180deg,#26398f,#16246a);--shine:linear-gradient(180deg,#d8b45e,#b8913d);
+  --sh1:0 1px 2px rgba(20,22,40,.06),0 6px 18px rgba(20,22,40,.07);--sh2:0 2px 4px rgba(20,22,40,.08),0 14px 34px rgba(20,22,40,.13)}
+:root[data-theme="sepia"]{--card:#fbf5e6;--tint:#eee3c8}
+:root[data-theme="dark"]{--card:#171c31;--tint:#232945;--deep:linear-gradient(180deg,#2e43a6,#1a2878);
+  --sh1:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);--sh2:0 2px 4px rgba(0,0,0,.35),0 14px 34px rgba(0,0,0,.45)}
+body::before{background:radial-gradient(120% 70% at 50% -8%,#2a3f9a 0%,var(--velvet) 42%,var(--velvet2) 100%)}
+:root[data-theme="dark"] body::before{background:radial-gradient(120% 70% at 50% -8%,#1b2a6e 0%,var(--velvet) 42%,var(--velvet2) 100%)}
+body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-area-inset-top)) 0 auto 0;height:340px;pointer-events:none;opacity:.17;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 320' fill='none' stroke='%23e7c873' stroke-width='1.2'%3E%3Cpath d='M60 330V150a140 140 0 0 1 280 0v180'/%3E%3Cpath d='M80 330V155a120 120 0 0 1 240 0v175'/%3E%3Cpath d='M200 18v14M186 25h28'/%3E%3Ccircle cx='200' cy='58' r='9'/%3E%3C/svg%3E") center top/min(560px,140%) auto no-repeat}
+/* the sheet and the cards */
+.leaf{border-radius:28px 28px 0 0;box-shadow:0 -12px 30px rgba(3,6,30,.22)}
+.sheet{border-radius:28px 28px 0 0} .sheet.setsheet{border-radius:28px 28px 0 0}
+/* the home page: the head as a frosted card over the sky */
+.plate{width:calc(100% - 32px);border:1px solid color-mix(in srgb,var(--gold) 60%,transparent);border-radius:24px;padding-bottom:clamp(8px,1.2vh,12px);
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 12px 30px rgba(3,6,30,.35);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.plate .more,.pill,.sheethd .done{background:var(--shine);box-shadow:0 2px 6px rgba(0,0,0,.22)}
+#home .frame{margin-top:clamp(8px,1.4vh,14px)}
+.nbtn{border:0;border-radius:16px;background:var(--card);box-shadow:var(--sh1)}
+.nbtn.pri,.nbtn.pri:active{background:var(--deep);color:var(--on-pri);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent),0 8px 18px rgba(22,36,106,.32)}
+.toc{background:var(--card);border-radius:20px;box-shadow:var(--sh1);padding:0 14px;margin-top:clamp(6px,1.2vh,12px)}
+.toc .row{width:100%;margin-inline:0;padding-inline:0}
+.toc li:last-child .row{border-bottom:0}
+.toc .t,.tl .t,.idx .t{font-weight:600}
+.rot{background:var(--card);border-radius:20px;box-shadow:var(--sh1)}
+.rot .cap svg{width:22px;height:22px;padding:4px;border-radius:7px;background:var(--tint);stroke-width:2}
+.rot .dots i.on{width:18px;background:var(--shine)}
+.tile{border:0;border-radius:18px;background:var(--card);box-shadow:var(--sh1);font-weight:600}
+.tile svg{width:clamp(30px,4.3vh,36px);height:clamp(30px,4.3vh,36px);padding:clamp(5px,.8vh,7px);border-radius:12px;background:var(--tint);stroke-width:1.8}
+.tile.go1,.tile.go1:active{background:var(--deep);box-shadow:0 8px 18px rgba(22,36,106,.32)} .tile.go1 svg{background:rgba(255,255,255,.13)}
+/* the bar of inner screens: round glass buttons */
+.ib{border-radius:13px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.13);color:var(--gold-hi)}
+.ib:active{background:rgba(255,255,255,.18)}
+.hd .ttl{font-weight:800}
+/* the menus: the day's prayers in one card, the prayers of any hour as small cards */
+.tl{background:var(--card);border-radius:20px;box-shadow:var(--sh1);padding:0 14px}
+.tl.two{background:none;box-shadow:none;padding:0;gap:8px}
+.tl.two li,.idx li{background:var(--card);border-radius:14px;box-shadow:var(--sh1);border:0;padding:0 12px}
+.idx{background:none;gap:8px}
+.idx button{min-height:46px;padding:10px 0}
+.tl .is-now .x{background:var(--shine)}
+/* the prayer page: the strip and the commentary button float over the page */
+.steps{border-bottom:0;box-shadow:0 10px 16px -14px rgba(20,22,40,.4)}
+.steps button{border:0;background:var(--card);box-shadow:var(--sh1)}
+.steps .on{background:var(--deep);color:var(--on-pri)}
+.combtn{border:0;background:var(--card);box-shadow:var(--sh2)}
+.comstrip{border:0;box-shadow:var(--sh2)}
+.pbtn{border:0;background:var(--card);box-shadow:var(--sh1);border-radius:14px} .pbtn.main{background:var(--shine)}
+/* a screen fades in when it opens (only the colour moves, so nothing on it shifts) */
+@keyframes viewin{from{opacity:.45}}
+.view.show{animation:viewin .22s ease-out}
+/* the books that speak on a part of the prayer: a small card - a caption with a book sign, then one row of soft
+   pills that scrolls sideways, its ends fading */
+:root[data-com="on"] .rbody .com{display:block;margin:10px 0 14px;padding:10px 0 11px;border:0;border-radius:18px;background:var(--card);box-shadow:var(--sh1);
+  font-family:var(--f-app);text-align:start;line-height:1.3;word-spacing:0}
+.rbody .com .lb{display:flex;align-items:center;gap:8px;padding:0 14px 8px;font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.02em}
+.rbody .com .lb::before{content:"";flex:none;width:22px;height:22px;border-radius:7px;background:var(--tint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ad8834' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 6.5C10 5.2 7.5 4.8 4.5 5v12.5c3-.2 5.5.2 7.5 1.5 2-1.3 4.5-1.7 7.5-1.5V5c-3-.2-5.5.2-7.5 1.5zM12 6.5V19'/%3E%3C/svg%3E") center/13px no-repeat}
+.rbody .com .cs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 14px 4px;overscroll-behavior-x:contain;
+  -webkit-mask-image:linear-gradient(to left,transparent 0,#000 16px,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(to left,transparent 0,#000 16px,#000 calc(100% - 16px),transparent)}
+.rbody .com .cs::-webkit-scrollbar{display:none}
+.rbody .com .c{flex:none;height:34px;padding:0 14px;border:0;border-radius:999px;background:var(--tint);color:var(--ink);font-size:14px;font-weight:500;white-space:nowrap}
+.rbody .com .c:active{background:var(--deep);color:var(--on-pri)}
+
+/* ================= the design line on the other screens ================= */
+/* shared pieces: a card, a soft pill, a field */
+.box,.grp,.calbox{background:var(--card);border:0;border-radius:20px;box-shadow:var(--sh1)}
+.sel,.smvtools select,.findbar input{border:0;border-radius:14px;background:var(--card);box-shadow:var(--sh1);font-weight:500}
+.lnk{text-decoration:none;font-weight:600;font-size:13.5px;padding:5px 13px;border-radius:999px;background:var(--tint);color:var(--ink)}
+.lnk:active{background:var(--hair)}
+.chipb{border:0;background:var(--tint);color:var(--ink);font-weight:500}
+.chipb[aria-pressed="true"],.chipb.on{background:var(--deep);color:var(--on-pri)}
+.cap2{gap:10px;color:var(--ink);font-size:15px;font-weight:700}
+.cap2::before,.cap2::after{background:var(--hair);opacity:1}
+/* the strips of months, weekdays and aliyot: the same pills as the prayer's parts */
+#calMonths,#chokDays,#smvAl{display:flex;flex-wrap:wrap;gap:7px;padding:10px 16px 12px}
+#calMonths button,#chokDays button,#smvAl button{height:32px;padding:0 13px;font-size:13.5px}
+/* calendar */
+.calnav button{width:40px;height:40px;margin:auto;border-radius:13px;background:var(--tint);color:var(--gold-mk)}
+.calyr{gap:8px;padding:2px 0 10px}
+.calgrid{border:0;border-radius:18px;overflow:hidden;background:var(--card);box-shadow:var(--sh1);margin-top:6px}
+.calgrid .wd{border-bottom:1px solid var(--hair);border-inline-end:0;font-weight:600;padding:7px 0}
+.cc{border-color:var(--hair)}
+.cc:nth-child(7n){border-inline-end:0}
+.cc.today{box-shadow:inset 0 0 0 2px var(--gold-mk);border-radius:10px}
+.calinfo{font-family:var(--f-app);font-size:12.5px;padding:10px 6px 0}
+.calinfo b{font-weight:600}
+.callabels span{border:0;border-radius:999px;background:var(--tint);color:var(--ins);font-weight:600;font-size:13px;padding:3px 12px}
+.calorig{font-family:var(--f-app);font-size:15px}
+.yz li{font-size:15.5px;border-bottom:1px solid var(--hair)}
+.yz li i{border-color:var(--gold-mk)}
+/* the times of the day: the date and the day in one card, the times in another */
+.luhead{background:var(--card);border-radius:20px 20px 0 0;box-shadow:var(--sh1);border-bottom:1px solid var(--hair);margin-top:4px;padding:14px 12px 10px}
+.lunotes{background:var(--card);border-radius:0 0 20px 20px;box-shadow:var(--sh1);padding:8px 12px 12px;font-size:14px}
+#luTable{margin-top:12px;background:var(--card);border-radius:20px;box-shadow:var(--sh1);padding:2px 16px}
+.lurow{border-bottom:1px solid var(--hair)}
+#luTable .lurow:last-child{border-bottom:0}
+.lurow .tm{font-weight:600}
+.lurow.hl{box-shadow:none;margin-inline:-16px;padding-inline:16px;background:linear-gradient(to left,color-mix(in srgb,var(--gold) 16%,transparent),transparent 70%)}
+.lurow.hl .tm{color:var(--ins);font-weight:700}
+/* Chumash and Chok */
+.smvtools .pbtn{min-height:38px;font-size:14px}
+.pact button{border:0;border-radius:999px;background:var(--tint);color:var(--ins);font-family:var(--f-app);font-weight:600;font-size:12.5px;padding:4px 12px}
+.pact .rbtn[aria-expanded="true"]{background:var(--deep);color:var(--on-pri)}
+/* reminders */
+.remlist{background:var(--card);border-radius:20px;box-shadow:var(--sh1);padding:0 14px}
+.remlist:empty{display:none}
+.remlist li{border-bottom:1px solid var(--hair)}
+.remlist li:last-child{border-bottom:0}
+.remlist .rrow .t{font-size:16.5px;font-weight:600}
+.remlist .none{background:var(--card)}
+/* settings: cards with a soft shadow */
+.setbody h5::before{border-radius:2px}
+.grp{overflow:hidden}
+/* about */
+.abgive{border:0;border-radius:22px;background:var(--card);box-shadow:var(--sh2)}
+.abgive .b{background:var(--shine);border-radius:14px;box-shadow:0 6px 16px rgba(173,136,52,.35)}
+.abrow .pbtn{border-radius:14px}
+.abrow .wa{background:var(--deep);color:var(--on-pri)}
+/* guide: each topic a card */
+.gsec{background:var(--card);border:0;border-radius:18px;box-shadow:var(--sh1);margin-bottom:9px;padding:0 14px}
+.gsec summary{margin-inline:0;padding-inline:0}
+.gsec summary:active{background:none}
+.gsec .n{display:none}   /* no letter numbering on rows (the owner, 14.10) */
+.gsec .t{font-size:17px;font-weight:600}
+.gsec ul{font-size:15.5px}
+/* search */
+.findres li{border-bottom:1px solid var(--hair)}
+
+/* the day/night switch: a moon by day, a sun by night */
+.nightbtn .sun{display:none}
+:root[data-theme="dark"] .nightbtn .sun{display:block} :root[data-theme="dark"] .nightbtn .moon{display:none}
+.plate{position:relative}
+.homenight{position:absolute;top:8px;inset-inline-end:8px;width:34px;height:34px;border-radius:12px}
+.homenight svg{width:18px;height:18px}
+#reader .hd .en{gap:4px}
+/* the two small dialogs (the question near sunset, the synagogue) in the design line */
+.askbox{border:0;border-radius:22px;background:var(--card);box-shadow:var(--sh2)}
+.askbtns button{border:0;border-radius:14px;background:var(--tint);font-weight:600}
+.askbtns button.main{background:var(--shine)}
 </style>
 </head>
 <body>
@@ -583,8 +814,8 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 
 <!-- ============ HOME ============ -->
 <section id="home" class="view">
-  <button class="homefind" id="homeFind" aria-label="חיפוש תפילה"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg></button>
   <div class="plate" id="plate" role="button" tabindex="0" aria-label="לוח זמני היום">
+    <button class="ib nightbtn homenight" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
     <span class="d"><span id="dHeb">…</span> · <button id="dLoc" aria-label="החלפת עיר">…</button></span>
     <span class="hl" id="hlLine">סידור וחומש</span>
     <span class="plrow"><span class="tm" id="tmLine"></span><span class="more">כל הזמנים<i class="go"></i></span></span>
@@ -592,12 +823,10 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="frame"><div class="leaf">
     <div class="box now hide" id="nowBox"><span class="cap">עכשיו אומרים</span></div>
     <ol class="toc" id="mainlist"></ol>
-    <div class="side">
-      <div class="box zm" id="zmBox"><span class="cap">היום</span><div id="zmRows"></div><button class="lnk" id="zmFull">לוח הזמנים המלא</button></div>
-      <div class="box zm hide" id="shabBox"><span class="cap">שבת קודש</span><div id="shabRows"></div></div>
-    </div>
+    <div class="rot hide" id="rot" role="group" aria-roledescription="carousel" aria-label="היום"></div>
+    <nav class="tiles" id="tiles" aria-label="כלים"><button class="tile" data-go="#cal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>לוח שנה</span></button><button class="tile" data-go="#luach"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18.5h18M6.5 18.5a5.5 5.5 0 0 1 11 0M12 6.5V9M5.3 9.7 7 11.4M18.7 9.7 17 11.4"/></svg><span>זמני היום</span></button><button class="tile go1" data-go="#shul"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4 4.5 10.6l6.3 2.6 2.6 6.3z"/></svg><span>בית כנסת</span></button><button class="tile" data-go="#rem"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 17v-6a5.5 5.5 0 0 1 11 0v6l1.5 1.5H5zM10 20.6a2.2 2.2 0 0 0 4 0"/></svg><span>תזכורות</span></button><button class="tile" data-go="#find"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg><span>חיפוש</span></button><button class="tile" data-go="#share"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="m8.6 10.9 6.3-3.7M8.6 13.1l6.3 3.7"/></svg><span>שיתוף</span></button><button class="tile" data-go="#settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg><span>הגדרות</span></button><button class="tile" data-go="#guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5.2 7.5 4.8 4.5 5v12.5c3-.2 5.5.2 7.5 1.5 2-1.3 4.500-1.700 7.500-1.500V5c-3-.2-5.500.2-7.500 1.500zM12 6.500V19"/></svg><span>מדריך</span></button></nav>
     <div class="foot" id="infoBar"></div>
-    <nav class="col" id="colophon"><button data-go="#settings">הגדרות</button><button data-go="#rem">תזכורות</button><button data-go="#guide">מדריך</button><button data-go="#about">אודות</button></nav>
+    <nav class="col" id="colophon"><button data-go="#find">מועדפים</button><button data-go="#about">אודות</button></nav>
     <p class="ded">אשר ניסן בן לאה מליא לברכה ולהצלחה</p>
   </div></div>
 </section>
@@ -618,7 +847,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="hd">
     <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
     <div class="ttl" id="rtitle"></div>
-    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib nightbtn" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
   </div>
   <div class="frame"><div class="leaf">
     <nav class="steps hide" id="steps" aria-label="מעבר לחלק בתפילה"></nav>
@@ -675,7 +904,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="hd">
     <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
     <div class="ttl" id="smvTitle">חומש</div>
-    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib nightbtn" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
   </div>
   <div class="sub" id="smvSub"></div>
   <div class="frame"><div class="leaf" style="padding-top:0">
@@ -699,7 +928,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="hd">
     <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
     <div class="ttl">חוק לישראל</div>
-    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib nightbtn" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
   </div>
   <div class="sub" id="chokSub"></div>
   <div class="frame"><div class="leaf" style="padding-top:0">
@@ -735,7 +964,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="frame"><div class="leaf">
   <div class="aboutbody">
     <h3>סידור וחומש בית אהרן וישראל</h3>
-    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.19</span> · ניתן בחינם</p>
+    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.36</span> · ניתן בחינם</p>
     <p class="ab-lead">הסידור, החומש, חוק לישראל, ספר תהילים ולוח השנה במקום אחד, בנוסח חסידות קארלין סטאלין.</p>
     <div class="abthanks">
       <h4>תודות</h4>
@@ -769,6 +998,7 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
       <h4>יצירת קשר</h4>
       <p class="nm">אשר בוקשפן</p>
       <div class="abrow">
+        <a class="pbtn wa" href="https://wa.me/972525640054?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8%3A"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.500l1.100-3.700A7.500 7.500 0 1 1 8.500 18.600z"/><path d="M9.300 8.700c-.3 2.600 3.400 6.300 6 6l.900-1.300-1.800-1-.9.700c-.900-.400-1.800-1.300-2.200-2.200l.700-.900-1-1.800z"/></svg><span>וואטסאפ</span></a>
         <a class="pbtn" href="tel:0525640054"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4h3l1.4 4-2 1.4a11 11 0 0 0 5.7 5.7l1.4-2 4 1.4v3c0 1-.8 1.7-1.8 1.6C11.400 18.400 5.600 12.600 4.900 5.800 4.800 4.800 5.500 4 6.500 4z"/></svg><span dir="ltr">052-5640054</span></a>
         <a class="pbtn" href="mailto:asher205@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.500h16v11H4zM4.500 7l7.500 6 7.500-6"/></svg><span dir="ltr">asher205@gmail.com</span></a>
       </div>
@@ -799,12 +1029,12 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
     <details class="gsec"><summary><span class="n">ד</span><span class="t">חומש ושניים מקרא</span><i class="chev"></i></summary><div class="gb"><ul><li>נפתח בפרשת השבוע ובעלייה של היום. פס העליות נמצא למעלה, ופרשה אחרת בוחרים בתיבה "פרשה".</li><li>לחיצה על מילה מסומנת פותחת את רש"י עליה, במקום. מתחת לרש"י אפשר לפתוח את מפרשיו.</li><li>בסוף כל עלייה מסמנים "סיימתי". הסידור זוכר היכן עצרת ומציע להמשיך משם.</li><li>יש גם "כל רש"י פתוח", "גלילה אוטומטית" ו"מצב לימוד".</li><li>טעמים, תרגום, מקרא פעמיים וכתב רש"י: בהגדרות.</li></ul><button class="pbtn" data-go="#smv">לחומש</button></div></details>
     <details class="gsec"><summary><span class="n">ה</span><span class="t">חוק לישראל</span><i class="chev"></i></summary><div class="gb"><ul><li>סדר הלימוד היומי כפי שהוא בספר, מיום ראשון עד יום שישי, לפי פרשת השבוע. נפתח ביום של היום.</li><li>הלשונית "הקדמות" מביאה את הקדמות הספר ואת התפילות שלפני הלימוד.</li><li>"סיימתי את הלימוד של היום" מסמן את היום, והסימן מופיע גם בעמוד הראשי.</li></ul><button class="pbtn" data-go="#chok">לחוק לישראל</button></div></details>
     <details class="gsec"><summary><span class="n">ו</span><span class="t">לוח שנה ויארצייט</span><i class="chev"></i></summary><div class="gb"><ul><li>לוח עברי, עם התאריך הלועזי בקטן. לחיצה על יום מציגה את פרטיו: זמני היום, לוח התחנון של הסידור, ויארצייט צדיקים.</li><li>מעל הלוח עוברים בין חודשים ושנים, וחוזרים ל"היום".</li><li>זכוכית המגדלת מחפשת ברשימת היארצייט לפי שם, עיר או ספר, ופותחת את היום בלוח.</li><li>רשימת יארצייט הצדיקים היא רשימה כללית, לידיעה בלבד. אמירת תחנון נקבעת רק לפי "לוח תחנון" של הסידור.</li></ul><button class="pbtn" data-go="#cal">ללוח השנה</button></div></details>
-    <details class="gsec"><summary><span class="n">ז</span><span class="t">זמני היום והעיר</span><i class="chev"></i></summary><div class="gb"><ul><li>הזמנים מחושבים לפי העיר שבהגדרות. לחיצה על שם העיר, בראש העמוד הראשי, מחליפה עיר.</li><li>"לפי המיקום שלי" בהגדרות: המכשיר מזהה היכן אתה, והזמנים מחושבים למקום עצמו. המיקום נשאר במכשיר, והעיר שנבחרה משמשת כשאין מיקום.</li><li>העמוד הראשי מציג את הזמנים הקרובים, ו"לוח הזמנים המלא" מציג את כולם.</li><li>בערב שבת מופיעים גם הדלקת נרות ומוצאי שבת.</li><li>אין להשתמש בזמנים הלכה למעשה בלי לקחת בחשבון סטייה אפשרית של כמה דקות.</li></ul><button class="pbtn" data-go="#luach">לזמני היום</button></div></details>
+    <details class="gsec"><summary><span class="n">ז</span><span class="t">זמני היום והעיר</span><i class="chev"></i></summary><div class="gb"><ul><li>הזמנים מחושבים לפי העיר שבהגדרות. לחיצה על שם העיר, בראש העמוד הראשי, מחליפה עיר.</li><li>"לפי המיקום שלי" בהגדרות: המכשיר מזהה היכן אתה, והזמנים מחושבים למקום עצמו. המיקום נשאר במכשיר, והעיר שנבחרה משמשת כשאין מיקום.</li><li>העמוד הראשי מציג את הזמן הקרוב בראשו ואת הבאים אחריו במסך הקטן שמתחלף. הלחצן "זמני היום" מציג את כולם.</li><li>בערב שבת מופיעים גם הדלקת נרות ומוצאי שבת.</li><li>אין להשתמש בזמנים הלכה למעשה בלי לקחת בחשבון סטייה אפשרית של כמה דקות.</li></ul><button class="pbtn" data-go="#luach">לזמני היום</button></div></details>
     <details class="gsec"><summary><span class="n">ח</span><span class="t">תזכורות</span><i class="chev"></i></summary><div class="gb"><ul><li>תזכורת לפני זמן מזמני היום, למשל רבע שעה לפני סוף זמן קריאת שמע, או בשעה קבועה.</li><li>אפשר להצמיד לתזכורת תפילה או לימוד. לחיצה על ההתראה פותחת את הסידור ישר שם.</li><li>תזכורת לפי זמן זזה מעצמה עם העונה ועם העיר.</li><li>בפעם הראשונה המכשיר מבקש אישור להציג התראות. בלי האישור התזכורות לא יופיעו.</li></ul><button class="pbtn" data-go="#rem">לתזכורות</button></div></details>
     <details class="gsec"><summary><span class="n">ט</span><span class="t">בזמן התפילה</span><i class="chev"></i></summary><div class="gb"><ul><li>"אל תפריע לי בעת תפילה": הטלפון מושתק כשתפילה פתוחה, וחוזר לקדמותו כשיוצאים ממנה. בהפעלה הראשונה נפתח מסך של המכשיר שבו מאשרים זאת. באנדרואיד בלבד.</li><li>הכותרת נעלמת כשגוללים את התפילה למטה וחוזרת כשגוללים למעלה, כדי שהדף כולו יהיה לתפילה.</li><li>שתי האפשרויות נמצאות בהגדרות, תחת "כללי".</li></ul><button class="pbtn" data-go="#settings">להגדרות</button></div></details>
     <details class="gsec"><summary><span class="n">י</span><span class="t">חלון למסך הבית</span><i class="chev"></i></summary><div class="gb"><p class="only">בטלפון ובטאבלט של אנדרואיד</p><ul><li>לחיצה ארוכה על מקום ריק במסך הבית של הטלפון, "ווידג'טים", ובוחרים "סידור".</li><li>החלון מציג את התאריך העברי, את הזמן הקרוב ומה אומרים עכשיו. לחיצה עליו פותחת את הסידור.</li></ul></div></details>
-    <details class="gsec"><summary><span class="n">כ</span><span class="t">חיפוש ומועדפים</span><i class="chev"></i></summary><div class="gb"><ul><li>זכוכית המגדלת שבפינת העמוד הראשי מחפשת תפילה, פרק תהילים, פרשה או מסך.</li><li>הכוכב שליד תוצאה שומר אותה למועדפים. המועדפים מופיעים מיד כשפותחים את החיפוש.</li></ul><button class="pbtn" data-go="#find">לחיפוש</button></div></details>
-    <details class="gsec"><summary><span class="n">ל</span><span class="t">ניווט לבית כנסת</span><i class="chev"></i></summary><div class="gb"><ul><li>"ניווט לבית כנסת הקרוב" בעמוד הראשי, או הלחצן המוזהב שבמסך הפתיחה.</li><li>הסידור מציע את בית הכנסת הקרוב אליך ופותח את הניווט של המכשיר.</li><li>אישור גישה למיקום מדייק את הבחירה. בלי אישור, הבחירה היא לפי העיר שבהגדרות.</li></ul><button class="pbtn" data-go="#shul">לניווט</button></div></details>
+    <details class="gsec"><summary><span class="n">כ</span><span class="t">חיפוש ומועדפים</span><i class="chev"></i></summary><div class="gb"><ul><li>הלחצן "חיפוש" בעמוד הראשי מחפש תפילה, פרק תהילים, פרשה או מסך.</li><li>הכוכב שליד תוצאה שומר אותה למועדפים. המועדפים מופיעים מיד כשפותחים את החיפוש, וגם בלחיצה על "מועדפים" בתחתית העמוד הראשי.</li></ul><button class="pbtn" data-go="#find">לחיפוש</button></div></details>
+    <details class="gsec"><summary><span class="n">ל</span><span class="t">ניווט לבית כנסת</span><i class="chev"></i></summary><div class="gb"><ul><li>הלחצן "בית כנסת" בעמוד הראשי, או הלחצן המוזהב שבמסך הפתיחה.</li><li>הסידור מציע את בית הכנסת הקרוב אליך ופותח את הניווט של המכשיר.</li><li>אישור גישה למיקום מדייק את הבחירה. בלי אישור, הבחירה היא לפי העיר שבהגדרות.</li></ul><button class="pbtn" data-go="#shul">לניווט</button></div></details>
     <details class="gsec"><summary><span class="n">מ</span><span class="t">הגדרות ותצוגה</span><i class="chev"></i></summary><div class="gb"><ul><li>גודל כתב, גופן, ערכת נושא (יום, ספיה, לילה) וצבעי ההנחיות, עם דוגמה חיה בראש המסך.</li><li>נוסח התפילה: שמות ה', ועננו בורא עולם, יהי רצון לחולים ויום הפורים.</li><li>כל שינוי נשמר מיד וחל בכל המסכים.</li></ul><button class="pbtn" data-go="#settings">להגדרות</button></div></details>
     <p style="text-align:center;margin:20px 0 0"><button class="lnk" data-go="page:help" data-label="עזרה">ההנחיות של התוכנה המקורית</button></p>
   </div></div></div>
@@ -872,6 +1102,16 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 <div class="sheet findsheet" id="sheetFind" role="dialog" aria-modal="true" aria-label="חיפוש">
   <div class="findbar"><input id="findQ" type="search" placeholder="חיפוש תפילה, פרק או פרשה" enterkeyhint="search" autocomplete="off"><button id="findClose">סגירה</button></div>
   <div class="findbody"><p class="findnote" id="findNote"></p><ul class="findres" id="findRes"></ul></div>
+</div>
+
+<!-- ============ SHARING THE SIDDUR ============ -->
+<div class="scrim" id="scrimShare"></div>
+<div class="sheet sharesheet" id="sheetShare" role="dialog" aria-modal="true" aria-labelledby="shareHead">
+  <div class="sheethd"><h4 id="shareHead">שיתוף הסידור</h4><button class="done" id="shareClose">סגירה</button></div>
+  <p class="sharemsg" id="shareMsg"></p>
+  <div class="shareqr" id="shareQr" role="img" aria-label="קוד לסריקה שמוביל אל הסידור"><svg viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#000" d="M0 0h7v1h-7zM9 0h1v1h-1zM11 0h1v1h-1zM14 0h1v1h-1zM18 0h2v1h-2zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM11 1h2v1h-2zM16 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM14 2h2v1h-2zM17 2h2v1h-2zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h1v1h-1zM11 3h3v1h-3zM16 3h1v1h-1zM19 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h2v1h-2zM12 5h1v1h-1zM15 5h6v1h-6zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM9 7h2v1h-2zM12 7h2v1h-2zM15 7h3v1h-3zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM1 9h4v1h-4zM10 9h1v1h-1zM13 9h1v1h-1zM15 9h2v1h-2zM20 9h3v1h-3zM25 9h1v1h-1zM28 9h1v1h-1zM0 10h1v1h-1zM2 10h1v1h-1zM6 10h5v1h-5zM13 10h3v1h-3zM18 10h3v1h-3zM22 10h2v1h-2zM25 10h3v1h-3zM0 11h2v1h-2zM5 11h1v1h-1zM8 11h2v1h-2zM11 11h3v1h-3zM16 11h1v1h-1zM18 11h2v1h-2zM21 11h1v1h-1zM26 11h2v1h-2zM2 12h1v1h-1zM4 12h1v1h-1zM6 12h1v1h-1zM9 12h3v1h-3zM14 12h4v1h-4zM21 12h2v1h-2zM25 12h1v1h-1zM27 12h2v1h-2zM1 13h1v1h-1zM3 13h3v1h-3zM10 13h1v1h-1zM13 13h4v1h-4zM19 13h3v1h-3zM1 14h4v1h-4zM6 14h1v1h-1zM10 14h1v1h-1zM12 14h3v1h-3zM20 14h1v1h-1zM22 14h1v1h-1zM25 14h4v1h-4zM0 15h1v1h-1zM2 15h1v1h-1zM5 15h1v1h-1zM8 15h5v1h-5zM16 15h4v1h-4zM23 15h3v1h-3zM27 15h1v1h-1zM3 16h5v1h-5zM9 16h2v1h-2zM13 16h1v1h-1zM15 16h1v1h-1zM17 16h2v1h-2zM20 16h2v1h-2zM27 16h1v1h-1zM2 17h4v1h-4zM7 17h2v1h-2zM11 17h4v1h-4zM17 17h1v1h-1zM21 17h3v1h-3zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM3 18h1v1h-1zM6 18h3v1h-3zM10 18h1v1h-1zM14 18h1v1h-1zM16 18h2v1h-2zM23 18h2v1h-2zM27 18h2v1h-2zM4 19h1v1h-1zM7 19h5v1h-5zM14 19h1v1h-1zM16 19h5v1h-5zM22 19h1v1h-1zM27 19h2v1h-2zM0 20h1v1h-1zM2 20h1v1h-1zM4 20h3v1h-3zM11 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h2v1h-2zM14 21h1v1h-1zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM11 22h2v1h-2zM16 22h3v1h-3zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM14 23h3v1h-3zM18 23h1v1h-1zM20 23h1v1h-1zM24 23h3v1h-3zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM12 24h1v1h-1zM17 24h1v1h-1zM20 24h5v1h-5zM28 24h1v1h-1zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h5v1h-5zM20 25h1v1h-1zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM10 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM16 26h6v1h-6zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM11 27h1v1h-1zM14 27h8v1h-8zM23 27h2v1h-2zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM10 28h1v1h-1zM14 28h1v1h-1zM17 28h1v1h-1zM19 28h2v1h-2zM22 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></svg></div>
+  <p class="sharenote">לחבר שעומד לידך: סורקים את הקוד במצלמה</p>
+  <div class="sharebtns"><button class="pri" id="shareSend"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="m8.6 10.9 6.3-3.7M8.6 13.1l6.3 3.7"/></svg><span>שליחה לחבר</span></button><button id="shareCopy"><span>העתקת הקישור</span></button></div>
 </div>
 
 <!-- ============ SEARCH IN THE YAHRZEIT LIST ============ -->
@@ -945,6 +1185,9 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
 </div>
 
 <!-- ============ NAVIGATE TO A SYNAGOGUE ============ -->
+<!-- the original's question near sunset: the day that passed, or the day that entered (removed by mistake in fb7933d, restored 14.10) -->
+<div class="scrim" id="scrimAsk"></div>
+<div class="askbox" id="askbox" role="dialog" aria-modal="true"><p id="askText"></p><div class="askbtns" id="askBtns"></div></div>
 <div class="scrim" id="scrimShul"></div>
 <div class="askbox shulbox" id="shulbox" role="dialog" aria-modal="true" aria-labelledby="shulTitle">
   <h3 id="shulTitle">ניווט לבית כנסת</h3>
@@ -954,16 +1197,17 @@ body.hdoff .steps{top:env(safe-area-inset-top)}
   <div class="askbtns" id="shulBtns"></div>
 </div>
 
-<script src="hebcal.js?v=mv6u4kry"></script>
-<script src="shuls.js?v=mv6u4kry"></script>
-<script src="calcore.js?v=mv6u4kry"></script>
-<script src="rt.js?v=mv6u4kry"></script>
-<script src="orig.js?v=mv6u4kry"></script>
-<script src="engine.js?v=mv6u4kry"></script>
-<script src="commentary.js?v=mv6u4kry"></script>
-<script src="app.js?v=mv6u4kry"></script>
-<script src="luach.js?v=mv6u4kry"></script>
-<script src="extras.js?v=mv6u4kry"></script>
-<script src="guide.js?v=mv6u4kry"></script>
+<script src="hebcal.js?v=mv875i7k"></script>
+<script src="shuls.js?v=mv875i7k"></script>
+<script src="calcore.js?v=mv875i7k"></script>
+<script src="rt.js?v=mv875i7k"></script>
+<script src="orig.js?v=mv875i7k"></script>
+<script src="engine.js?v=mv875i7k"></script>
+<script src="commentary.js?v=mv875i7k"></script>
+<script src="sizes.js?v=mv875i7k"></script>
+<script src="app.js?v=mv875i7k"></script>
+<script src="luach.js?v=mv875i7k"></script>
+<script src="extras.js?v=mv875i7k"></script>
+<script src="guide.js?v=mv875i7k"></script>
 </body>
 </html>

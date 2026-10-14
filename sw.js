@@ -1,7 +1,7 @@
 /* Offline cache for the Tfilon reader (personal-use PWA). */
-const CACHE = 'sidur-mv6u4kry';
+const CACHE = 'sidur-mv875i7k';
 const ASSETS = [
-  './', './index.html', './app.js', './hebcal.js', './calcore.js', './luach.js', './extras.js', './guide.js', './yahrzeits.json', './shuls.js', './commentary.js', './commentary/index.json', './rt.js', './orig.js', './engine.js',
+  './', './index.html', './app.js', './hebcal.js', './calcore.js', './luach.js', './extras.js', './guide.js', './sizes.js', './yahrzeits.json', './shuls.js', './commentary.js', './commentary/index.json', './rt.js', './orig.js', './engine.js',
   './cities.json', './content.json', './manifest.webmanifest', './icon-maskable.png', './icon.png', './splash.jpeg',
   './FrankRuhlLibre.ttf', './Heebo.ttf', './Alef-Regular.ttf', './HadasimCLM-Regular.ttf', './SILEOTSR.ttf', './ShofarRegular.ttf',
   './NotoRashiHebrew.woff2'
