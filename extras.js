@@ -70,7 +70,7 @@
     C.PARSHA.concat(['וזאת הברכה']).forEach((p, i) => add('חומש · פרשת ' + p, 'smv:' + i, 'חומש'));
     add('פרשת המן · שניים מקרא ואחד תרגום', '#haman', 'תפילות');
     try { for (const z of dayInfo(sync(NOW())).times) add(z.name + ' · היום ' + z.text, '#luach', 'זמני היום'); } catch (e) { }
-    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
+    [['חוק לישראל', '#chok'], ['לוח שנה ויארצייט', '#cal'], ['זמני היום', '#luach'], ['תזכורות', '#rem'], ['ניווט לבית כנסת הקרוב', '#shul'], ['הגדרות', '#settings'], ['מדריך', '#guide'], ['שיתוף הסידור', '#share'], ['כיוון התפילה: מצפן למקום המקדש', '#compass'], ['עזרה (ההנחיות של התוכנה המקורית)', 'page:help'], ['אודות', '#about']].forEach(([l, t]) => add(l, t, 'מסכים'));
     sync(NOW()); return (findIndex = out);
   }
   const isFav = t => favs.some(f => f.target === t);
@@ -100,6 +100,26 @@
       if (all.length > cut) html += `<li class="fmore"><button data-more="${g}">עוד ${all.length - cut} ב${g}</button></li>`;
     }
     $('#findRes').innerHTML = html; $('#findRes')._hits = hits;
+    libFind(q);
+  }
+  /* the library answers after a short pause, so typing stays quick; its hits are sections, and a snippet of the
+     words in their place comes in as each section arrives */
+  let libT = 0, libQ = '';
+  function libFind(q) {
+    clearTimeout(libT); if (!window.SidurLib || q.replace(/\s/g, '').length < 2) return;
+    libQ = q; $('#findRes').insertAdjacentHTML('beforeend', '<li class="fwait" id="libWait">מחפש גם בספרייה...</li>');
+    libT = setTimeout(() => SidurLib.search($('#findQ').value).then(r => {
+      if (libQ !== q) return; const w = $('#libWait'); if (w) w.remove(); if (!r.hits.length) return;
+      const SHELF = { tanakh: 'תנ"ך', talmud: 'תלמוד', mishnah: 'משנה', midrash: 'מדרש', halakhah: 'הלכה', chasidut: 'חסידות', musar: 'מוסר', kabbalah: 'קבלה' };
+      const by = {}; for (const h of r.hits) (by[h.b.shelf] = by[h.b.shelf] || []).push(h);
+      let html = ''; const hits = $('#findRes')._hits || [];
+      for (const sh of Object.keys(SHELF)) { const all = by[sh]; if (!all) continue;
+        html += `<li class="fgrp">בספרייה · ${SHELF[sh]}<small>${all.length}</small></li>` + all.slice(0, 8).map(h => { hits.push({ lib: h, label: h.b.he, group: 'ספרייה' }); const i = hits.length - 1;
+          return `<li><button class="fr" data-i="${i}" data-lib="${i}"><span class="t">${esc(h.b.he)} · <span class="lk"></span></span><span class="sn" id="libSn${i}"></span></button></li>`; }).join('');
+      }
+      $('#findRes').insertAdjacentHTML('beforeend', html); $('#findRes')._hits = hits;
+      hits.forEach((x, i) => { if (!x.lib) return; SidurLib.snippet(x.lib, q).then(s => { const el = document.getElementById('libSn' + i); if (!el) return; if (s) { el.innerHTML = s.html; x.lib.seg = s.seg; const lk = el.closest('.fr').querySelector('.lk'); if (lk) lk.textContent = s.label; } else el.closest('li').remove(); }); });
+    }).catch(() => { const w = $('#libWait'); if (w) w.textContent = 'החיפוש בספרייה צריך חיבור לאינטרנט, או ספרים שהורדו.'; }), 450);
   }
   $('#findCats').onclick = e => { const b = e.target.closest('[data-c]'); if (!b) return; findCat = b.dataset.c; drawFind(); $('#findRes').parentNode.scrollTop = 0; };
   function openFind() { $('#findQ').value = ''; findCat = ''; findOpen = {}; drawFind(); openSheet('Find'); if (window.Luach && Luach.yzReady) Luach.yzReady.then(() => { if ($('#findQ').value) drawFind(); }); }
@@ -108,7 +128,9 @@
     const more = e.target.closest('[data-more]'); if (more) { findOpen[more.dataset.more] = 1; return drawFind(); }
     const hits = $('#findRes')._hits || [], s = e.target.closest('.star');
     if (s) { const x = hits[+s.dataset.s], at = favs.findIndex(f => f.target === x.target); if (at >= 0) favs.splice(at, 1); else favs.push({ label: x.label, target: x.target }); store.set('favs', favs); return drawFind(); }
-    const b = e.target.closest('.fr'); if (!b) return; const x = hits[+b.dataset.i]; closeSheet('Find'); goTarget(x.target, x.label);
+    const b = e.target.closest('.fr'); if (!b) return; const x = hits[+b.dataset.i]; closeSheet('Find');
+    if (x.lib) return SidurLib.openBook(x.lib.b.id, x.lib.k, { hl: $('#findQ').value, seg: x.lib.seg });
+    goTarget(x.target, x.label);
   };
   $('#scrimFind').onclick = () => closeSheet('Find'); $('#findClose').onclick = () => closeSheet('Find');
 

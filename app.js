@@ -158,7 +158,7 @@ $('#setDone').onclick = () => closeSheet('');
 })();
 
 /* ---------------- view routing ---------------- */
-const VIEWS = ['home', 'listview', 'reader', 'luach', 'cal', 'smv', 'chok', 'rem', 'about', 'guide'];
+const VIEWS = ['home', 'listview', 'reader', 'luach', 'cal', 'smv', 'chok', 'rem', 'about', 'guide', 'compass', 'library', 'libread', 'libsave'];
 let curView = 'home';
 function show(view) {
   if (curView === 'smv' && view !== 'smv' && window.Luach) Luach.leave();      /* stops the automatic scrolling of the chumash */
@@ -193,6 +193,8 @@ window.onpopstate = e => {
   if (st.view === 'smv' && window.Luach) Luach.drawSmv();
   if (st.view === 'chok' && window.SidurExtras) SidurExtras.drawChok();
   if (st.view === 'rem' && window.SidurExtras) SidurExtras.drawRem();
+  if (st.view === 'compass' && window.SidurCompass) return SidurCompass.open(true);
+  if (st.view === 'library' && window.SidurLib) return SidurLib.open(true);
   show(st.view || 'home');
 };
 /* The device's back key, asked by the Android shell: the page itself knows whether there is a step to go back.
@@ -407,6 +409,9 @@ const MORE_CREDITS = '<h4>חומש ולוח</h4><ul><li>מקרא עם טעמים
   + '<li>גור אריה, מזרחי, ברטנורא על התורה, משכיל לדוד: נחלת הכלל, מתוך ספריא.</li>'
   + `<li>חק לישראל, מהדורת "תורת אמת" (www.toratemetfreeware.com). כל הזכויות שמורות לר' פנחס ראובן, לר' שגיב מחפוד ול-J. Alan Groves Center, בכפוף לתנאי רישיון CC BY-NC-SA 2.5 - אסור בשימוש מסחרי.</li>`
   + '<li>פרשת המן: הפסוקים והתפילות מנוסח הסידור; תרגום יונתן בן עוזיאל על התורה: מהדורת תורת אמת, נחלת הכלל (Public Domain), מתוך ספריא.</li>'
+  + '<li>הספרייה (תנ"ך, תלמוד, משנה, מדרש, הלכה, חסידות, מוסר וקבלה): הטקסטים מתוך ספריא (Sefaria). לכל ספר המהדורה והרישיון שלו, והם מופיעים בתחתית כל דף בספרייה. ספרים ברישיון שאינו מסחרי מוצגים כאן כי הסידור ניתן בחינם.</li>'
+  + '<li>צורת הדף בתלמוד: הספרייה daf-renderer, ברישיון MIT.</li>'
+  + '<li>ציור ארון הספרים, כריכות העור וחוגת המצפן: נוצרו בעזרת Gemini של גוגל, בלי כיתוב ובלי סמלים.</li>'
   + '<li>אותיות הכותרות והתפריטים: Frank Ruhl Libre ו-Heebo, ברישיון SIL Open Font License 1.1.</li>'
   + '<li>רשימת יארצייט הצדיקים: רשימה כללית שנאספה מלוח יארצייט יומי. היא מוצגת לידיעה ואינה קובעת את נוסח התפילה.</li></ul>';
 /* ---------------- menus: buttons and targets are the original's ---------------- */
@@ -419,6 +424,9 @@ function go(target, label) {
   if (target === '#smv') return Luach.openSmv();
   if (target === '#chok') return SidurExtras.openChok();
   if (target === '#rem') return SidurExtras.openRem();
+  if (target === '#compass') return SidurCompass.open();
+  if (target === '#library') return SidurLib.open();
+  if (target === '#libsave') return SidurLib.openSave();
   if (target === '#find') return SidurExtras.openFind();
   if (target === '#share') return openShare();
   if (target === '#guide') return nav('guide', { depth: depth() });
@@ -590,8 +598,11 @@ function drawPage() {
   if (Com && !Com.loaded && !drawPage.waiting) { drawPage.waiting = true; Com.ready.then(j => { if (j && curView === 'reader') drawPage(); }); }
   /* the original's jump list, as a strip that follows the reading */
   $('#steps').classList.toggle('hide', !pg.skips.length);
+  /* the direction of prayer is a touch away while the page holds the Amidah */
+  $('#rCompass').classList.toggle('hide', !pg.skips.some(s => /שמונה עשרה|עמידה|תפלת העמידה/.test(s.title)));
   $('#steps').innerHTML = '<div class="sr"><button data-sk="top" class="on">התחלה</button>' + pg.skips.map(s => `<button data-sk="${s.line}">${esc(s.title)}</button>`).join('') + '</div>';
 }
+$('#rCompass').onclick = () => go('#compass');
 $('#comBtn').onclick = () => { cfg.com = cfg.com ? 0 : 1; applyCfg(); };
 /* the strip beside the switch: the books that speak on this page. Choosing one leaves only its marks in the text,
    and "the next place" walks down the page from one of its comments to the next. */

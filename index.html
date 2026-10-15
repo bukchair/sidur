@@ -824,6 +824,192 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 .askbox{border:0;border-radius:22px;background:var(--card);box-shadow:var(--sh2)}
 .askbtns button{border:0;border-radius:14px;background:var(--tint);font-weight:600}
 .askbtns button.main{background:var(--shine)}
+/* ---------- the bookcase: a rendered cabinet (Gemini), the real volumes drawn on its measured shelves ---------- */
+#library #lbCase{--foil:#ecca7a;--brass1:#ecd496;--brass2:#a8823a;flex:1;position:relative;overflow:hidden;background:#1a1009;color:var(--foil);isolation:isolate}
+#library .scene{position:absolute;top:0;aspect-ratio:1536/2752;background:url(img/bookcase.webp) center/100% 100% no-repeat;
+  transform-origin:0 0;transition:transform .8s cubic-bezier(.65,0,.3,1);container-type:inline-size}
+#library .scene::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(26,16,9,.92) 0,rgba(26,16,9,.55) 7%,rgba(26,16,9,0) 15%),radial-gradient(120% 70% at 50% 45%,transparent 55%,rgba(10,6,3,.55))}
+#library .scene .glint{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:0;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,236,170,.9) 50%,transparent 65%) -150% 0/250% 100% no-repeat;animation:glint 2.6s ease .6s 1 both}
+@keyframes glint{0%{opacity:0;background-position:-150% 0}15%{opacity:1}100%{opacity:0;background-position:250% 0}}
+#library .slot{position:absolute;display:flex;align-items:flex-end;gap:.12cqw;padding:0 .5cqw;cursor:pointer;border:0;background:none}
+#library .slot:focus-visible{outline:2px solid var(--foil);outline-offset:1px}
+#library .slot .sp{flex:none;border-radius:.3cqw .3cqw 0 0;background:var(--tex) center/100% 100%;filter:brightness(var(--b,1));box-shadow:.25cqw 0 .5cqw rgba(0,0,0,.55),inset 0 0 0 .1cqw rgba(0,0,0,.35);transition:opacity .35s}
+#library .slot.away .sp{opacity:0}
+#library .plq{position:absolute;transform:translate(50%,0);white-space:nowrap;pointer-events:none;z-index:2;
+  background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:700 2.35cqw/1.25 var(--f-ui);padding:.15cqw 1.3cqw;border-radius:.5cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.6);transition:opacity .3s}
+#library .scene.zoomed .plq{opacity:0}
+#library .dim{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(10,6,3,.35),rgba(10,6,3,.82));opacity:0;pointer-events:none;transition:opacity .5s;z-index:5}
+#library .dim.on{opacity:1;pointer-events:auto}
+/* a shelf up close: the same photo, the volumes now full size and scrolling sideways */
+#library .shelfview{position:absolute;z-index:4;display:flex;flex-direction:column;justify-content:flex-end}
+#library .shelfview[hidden]{display:none}
+#library .shelfview .svrow{display:flex;gap:3px;align-items:flex-end;overflow-x:auto;scrollbar-width:none;padding:0 10px;height:100%;scroll-snap-type:x proximity}
+#library .shelfview .svrow::-webkit-scrollbar{display:none}
+#library .shelfview .svrow::after{content:"";flex:none;width:4px}
+#library .bigsp{flex:none;width:var(--w,50px);height:var(--sh,88%);border:0;border-radius:3px 3px 0 0;position:relative;cursor:pointer;scroll-snap-align:center;background:var(--tex) center/100% 100%;filter:brightness(var(--b,1));box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),3px 0 7px rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(10px);animation:rise .45s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 28ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+#library .bigsp .nm{position:absolute;top:27%;bottom:27%;inset-inline:14%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-family:var(--f-serif);font-weight:800;font-size:var(--fs,16px);color:#f0d184;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.32) 50%,rgba(0,0,0,.55));border-top:1px solid rgba(236,202,122,.7);border-bottom:1px solid rgba(236,202,122,.7);text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 5px rgba(240,209,132,.35);white-space:nowrap;overflow:hidden;border-radius:1px}
+#library .bigsp .no{position:absolute;bottom:5%;font:700 11px var(--f-serif);color:#f0d184;text-shadow:0 1px 0 rgba(0,0,0,.7)}
+#library .bigsp.pull{animation:none;opacity:1;transform:translateY(-16px);box-shadow:0 16px 22px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.4);transition:transform .25s ease}
+#library .svhd{position:absolute;inset-inline:0;top:10px;z-index:6;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s}
+#library .svhd.on{opacity:1}
+#library .svhd .p{display:inline-block;background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:800 14px var(--f-ui);padding:5px 14px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+#library .svhd small{display:block;margin-top:6px;font-size:11.5px;color:#f1e3c2;text-shadow:0 1px 3px #000}
+#library .svft{position:absolute;inset-inline:0;bottom:14px;z-index:6;display:flex;justify-content:center;gap:8px;opacity:0;transition:opacity .4s;pointer-events:none}
+#library .svft.on{opacity:1;pointer-events:auto}
+#library .svft span{font-size:12px;color:#f1e3c2;text-shadow:0 1px 3px #000;align-self:center}
+/* a volume, out of the case and opened */
+#library .vol{position:absolute;z-index:7;perspective:1600px}
+#library .vol .pg{position:absolute;inset:0;background:#f7f0dc;color:#2f2210;border-radius:4px 10px 10px 4px;box-shadow:0 18px 40px rgba(0,0,0,.7),inset 10px 0 16px -12px rgba(80,50,10,.65);padding:16px 14px;overflow:auto;opacity:0;transition:opacity .3s}
+#library .vol.opened .pg{opacity:1}
+#library .vol .cv{position:absolute;inset:0;border-radius:4px 10px 10px 4px;transform-origin:right center;backface-visibility:hidden;z-index:2;
+  background:radial-gradient(120% 90% at 30% 20%,rgba(255,255,255,.12),transparent 60%),linear-gradient(90deg,rgba(0,0,0,.4),rgba(255,255,255,.1) 14%,rgba(0,0,0,.25)),var(--c);
+  box-shadow:0 18px 40px rgba(0,0,0,.7);display:grid;place-items:center;transition:transform .9s cubic-bezier(.4,.1,.2,1)}
+#library .vol .cv .fr{border:2px solid rgba(236,202,122,.75);outline:1px solid rgba(236,202,122,.4);outline-offset:4px;border-radius:6px;padding:16px 14px;text-align:center;color:var(--foil);text-shadow:0 1px 0 rgba(0,0,0,.6)}
+#library .vol .cv .fr b{display:block;font:800 26px/1.15 var(--f-serif)}
+#library .vol .cv .fr small{display:block;margin-top:6px;font:600 11px var(--f-ui);opacity:.9}
+#library .vol.opened .cv{transform:rotateY(-168deg)}
+#library .shaar{text-align:center;border:1px solid #c9b688;border-radius:6px;padding:14px 10px;margin-bottom:10px;background:radial-gradient(circle at 50% 0,#fffaf0,#f3e8cc)}
+#library .shaar .k{font-family:var(--f-serif);font-weight:800;font-size:24px;line-height:1.15}
+#library .shaar .d{font-size:12px;color:#7b6a48;margin-top:4px;line-height:1.5}
+#library .toc2{font-size:12px;font-weight:700;color:#8a6a2a;margin:10px 2px 6px;display:flex;gap:8px;align-items:center}
+#library .toc2::after{content:"";flex:1;height:1px;background:#d9c9a2}
+#library .grid2{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+#library .grid2 button{height:33px;border-radius:7px;background:#fffaf0;box-shadow:0 1px 2px rgba(80,50,10,.25);font-family:var(--f-serif);font-weight:700;font-size:14px;color:#2f2210}
+#library .grid2 button.on{background:linear-gradient(180deg,#d8b45e,#b8913d);color:#221803}
+#library .lst2{list-style:none;margin:0;padding:0}
+#library .lst2 li{display:flex;justify-content:space-between;align-items:baseline;padding:9px 2px;border-bottom:1px solid #e3d6b6;font-family:var(--f-serif);font-weight:700;font-size:15.5px}
+#library .lst2 li small{font-family:var(--f-ui);font-size:11.5px;font-weight:500;color:#7b6a48}
+#library .crumbs{display:block;font-size:11.5px;font-weight:500;color:var(--on-mute);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#library .pbtn2{font:600 12.5px var(--f-ui);color:#2b1c06;background:linear-gradient(180deg,var(--brass1),var(--brass2));border:0;border-radius:999px;padding:6px 13px;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+@media (prefers-reduced-motion:reduce){#library .scene,#library .vol .cv,#library .dim,#library .plq{transition:none}#library .bigsp{animation:none;opacity:1;transform:none}#library .scene .glint{display:none}}
+#library .t-burgundy{--tex:url(img/spine-burgundy.webp)}#library .t-navy{--tex:url(img/spine-navy.webp)}#library .t-green{--tex:url(img/spine-green.webp)}#library .t-brown{--tex:url(img/spine-brown.webp)}#library .t-black{--tex:url(img/spine-black.webp)}#library .t-plum{--tex:url(img/spine-plum.webp)}
+/* the cabinet below the shelves: drawers with brass plates, for what one keeps at hand */
+#library .tray{position:absolute;inset-inline:8px;bottom:8px;z-index:8;max-height:72%;overflow:auto;border-radius:14px;background:#f7f0dc;color:#2f2210;box-shadow:0 -10px 30px rgba(0,0,0,.6);padding:14px 14px 10px;transform:translateY(110%);transition:transform .5s cubic-bezier(.3,.7,.2,1)}
+#library .tray.on{transform:none}
+#library .tray h4{margin:0 0 8px;font:800 17px var(--f-serif);display:flex;justify-content:space-between;align-items:center}
+#library .tray h4 button{border:0;background:#e9dcbd;border-radius:999px;font:600 12.5px var(--f-ui);padding:5px 11px;cursor:pointer;color:#2f2210}
+#library .tray li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 4px;border-top:1px solid #e3d6b6;font:700 15.5px var(--f-serif)}
+#library .tray li small{font:500 12px var(--f-ui);color:#7b6a48}
+#library .tray ul{margin:0;padding:0}
+/* words engraved in gold leaf on the wood: the drawers' names, and "ממשיכים" on the lectern's book */
+#library .drawer,#library .lectbook{position:absolute;border:0;padding:0;background:none;cursor:pointer;border-radius:.8cqw;transition:background-color .25s,box-shadow .25s}
+#library .drawer:hover,#library .lectbook:hover{background-color:rgba(255,226,170,.07)}
+#library .drawer.pulled,#library .lectbook.pulled{background-color:rgba(255,226,170,.12);box-shadow:0 0 2.4cqw rgba(255,214,140,.35)}
+#library .drawer:focus-visible,#library .lectbook:focus-visible{outline:2px solid var(--foil);outline-offset:1px}
+#library .drawer .en,#library .lectbook .en{position:absolute;inset-inline:0;text-align:center;font:800 2.75cqw/1 var(--f-serif);letter-spacing:.02em;white-space:nowrap;
+  color:transparent;background:linear-gradient(180deg,#fbe9b4 0%,#d7b35f 45%,#a77d2e 100%);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 .18cqw .08cqw rgba(0,0,0,.75)) drop-shadow(0 -.06cqw 0 rgba(255,236,190,.25))}
+#library .drawer .en{top:13%}
+#library .lectbook .en{top:calc(100% + 1.6cqw);font-size:2.2cqw}
+#library .tray li[data-open]{cursor:pointer}
+#library .tray li[data-open]:active{background:#efe3c4}
+
+
+/* ---- the library: one screen (the bookcase), never scrolled ---- */
+#library.show{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+#library .hd .ttl{display:grid;justify-items:center;line-height:1.2}
+#library .crumbs,#libread .crumbs{display:block;font:500 11.5px var(--f-ui);color:var(--on-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+#library #lbCase{flex:1;min-height:0}
+#library .slot[disabled]{cursor:default;opacity:.4}
+#library .sp.off,#library .bigsp.off{filter:brightness(.55) saturate(.6)}
+#library .vol .cv{background:radial-gradient(120% 90% at 30% 20%,rgba(255,255,255,.14),transparent 60%),linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.06) 14%,rgba(0,0,0,.3)),var(--tex) center/cover}
+#library .bigsp.off::after{content:"⇣";position:absolute;top:4%;font:700 13px var(--f-ui);color:#f0d184}
+#library .lst2 li{cursor:pointer}
+#library .lst2 li.lh{cursor:default;border:0;padding:12px 2px 2px;font:700 12px var(--f-ui);color:#8a6a2a}
+#library .lst2 li.on,#library .grid2 button.on{outline:2px solid #b8913d;outline-offset:-2px}
+#library .lbwait,#library .lbnote,#libread .lbwait,#libread .lbnote{font:500 13.5px/1.6 var(--f-ui);color:#7b6a48;margin:8px 2px}
+#library .lbnote{background:#efe3c4;border-radius:10px;padding:8px 10px}
+/* ---- the library's reader ---- */
+.lrnav{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+.lrnav > button{flex:none;height:34px;padding:0 12px;border-radius:999px;background:var(--card);box-shadow:var(--sh1);font:600 13px var(--f-ui);color:var(--ink)}
+.lrnav > button:disabled{opacity:.35}
+.lrnav .lrmodes{flex:1;display:flex;justify-content:center;gap:4px;background:var(--tint);border-radius:12px;padding:3px}
+.lrnav .lrmodes.hide{visibility:hidden}
+.lrnav .lrmodes button{flex:1;height:30px;border-radius:9px;font:600 13px var(--f-ui);color:var(--mute)}
+.lrnav .lrmodes button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:var(--sh1)}
+.lrtxt .seg{padding:8px 0 10px;border-bottom:1px solid var(--hair)}
+.lrtxt .seg:last-child{border-bottom:0}
+.lrtxt .seg.hit{background:var(--tint);border-radius:10px;padding-inline:8px}
+.lrtxt .txt{font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:var(--lh);text-align:justify}
+.lrtxt .tools{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center}
+.lrtxt .tools button{height:28px;padding:0 11px;border-radius:999px;background:var(--tint);font:600 12.5px var(--f-ui);color:var(--ins)}
+.lrtxt .tools button small{font-weight:500;color:var(--mute);margin-inline-start:3px}
+.lrtxt .tools button[aria-pressed="true"]{background:var(--deep);color:var(--on-pri)}
+.lrtxt .tools button[aria-pressed="true"] small{color:inherit;opacity:.8}
+.lrtxt .tools .mk{margin-inline-start:auto;background:none;color:var(--gold-mk);font-size:17px;padding:0 6px}
+.lrtxt .com{font-family:'RashiScript','Frank',serif;font-size:calc(var(--fs) * .78);line-height:1.75;margin:8px 0 2px;padding:10px 12px;border-radius:12px;background:var(--card);box-shadow:var(--sh1);text-align:justify}
+.lrtxt .com .lb{display:block;font:700 11.5px var(--f-ui);color:var(--gold-mk);margin-bottom:3px}
+.lrtxt .com b,.lrtxt .com .dh,#libread .whole .dh{font-weight:600;color:var(--ins)}
+#libread mark{background:var(--gold-hi);color:var(--gold-ink);border-radius:3px;padding:0 1px}
+#libread .whole{margin-top:12px;background:var(--card);box-shadow:var(--sh1);border-radius:12px;padding:10px 12px;font-family:'RashiScript','Frank',serif;font-size:calc(var(--fs) * .78);line-height:1.75}
+#libread .whole summary{font:700 13.5px var(--f-ui);color:var(--ins);cursor:pointer}
+#libread .lrsrc{font:500 11.5px/1.6 var(--f-ui);color:var(--mute);margin-top:16px;padding-top:10px;border-top:1px dotted var(--rule)}
+#libread .dafwrap{position:relative;overflow:auto;border-radius:12px;background:#fbf6e8;box-shadow:inset 0 0 0 1px var(--rule);padding:10px 0;color:#1b1b22}
+:root[data-theme="dark"] #libread .dafwrap{background:#14182a;color:#e9e4d6}
+#libread .dafwrap .stage{transform-origin:top right}
+#libread .dafhdr{text-align:center;font:800 15px var(--f-serif);margin-bottom:4px}
+#libread .dafRoot .dh,#libread [class*="dafRoot"] .dh{font-weight:700}
+#libread .lbhint{display:flex;justify-content:space-between;align-items:center;gap:8px;font:500 12.5px var(--f-ui);color:var(--mute)}
+#libread .lbhint button{flex:none;white-space:nowrap;height:30px;padding:0 12px;border-radius:999px;background:var(--deep);color:var(--on-pri);font:600 12.5px var(--f-ui)}
+#lrStar[aria-pressed="true"] svg{fill:var(--gold);stroke:var(--gold)}
+#kitPacks .srw small b{color:var(--gold-mk);font-weight:700}
+#findRes li.fwait{border:0;font:500 13px var(--f-ui);color:var(--mute);padding:10px 2px}
+#findRes .fr .sn{display:block;font:400 14px/1.55 var(--f-serif);color:var(--ink);margin-top:2px}
+#findRes .fr .sn mark{background:var(--gold-hi);color:var(--gold-ink);border-radius:3px}
+/* ---- saved in the phone ---- */
+.lsbar{display:flex;justify-content:space-between;gap:10px;font:600 13.5px var(--f-ui);background:var(--card);box-shadow:var(--sh1);border-radius:14px;padding:12px 14px}
+.lsbar span{color:var(--mute);font-weight:500}
+.lsrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 2px;font:600 14px var(--f-ui)}
+.lslist{list-style:none;margin:0;padding:0 14px;background:var(--card);box-shadow:var(--sh1);border-radius:16px}
+.lslist li{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.lslist li:last-child{border-bottom:0}
+.lslist .t{flex:1;min-width:0;position:relative}
+.lslist .t b{display:block;font:700 15px var(--f-ui)}
+.lslist .t b em{font-style:normal;font-size:11px;font-weight:700;color:var(--gold-ink);background:var(--shine);border-radius:999px;padding:1px 8px;margin-inline-start:6px}
+.lslist .t small{display:block;font:500 12px/1.5 var(--f-ui);color:var(--mute);margin-top:2px}
+.lslist .pr{display:block;height:5px;border-radius:999px;margin-top:6px;background:linear-gradient(90deg,var(--gold) var(--p),var(--tint) var(--p))}
+.lslist .ok{font:700 12.5px var(--f-ui);color:var(--gold-mk)}
+.lslist .dl{font:600 12px var(--f-ui);color:var(--ins);white-space:nowrap}
+.lslist li > button{flex:none;height:32px;padding:0 13px;border-radius:999px;background:var(--tint);font:600 12.5px var(--f-ui);color:var(--ins)}
+.lslist li > button.main{background:var(--deep);color:var(--on-pri)}
+
+/* ---- the compass towards the place of the Temple: a brass dial (rendered once), the winds and the needle set in code ---- */
+/* one screen, never scrolled: the dial takes what the height leaves */
+#compass.show{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+#compass .cmp{flex:1;min-height:0;overflow:hidden;background:radial-gradient(120% 70% at 50% 26%,#3a2615,#1d120a 70%);color:#f1e3c2;padding:clamp(14px,3dvh,26px) 16px calc(12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:clamp(6px,1.4dvh,14px)}
+.cstage{--dial:min(74vw,38dvh,340px);position:relative;flex:none;width:var(--dial);aspect-ratio:1;margin-top:10px}
+.cidx{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-inline:10px solid transparent;border-top:15px solid #d7b35f;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6));z-index:3;transition:filter .3s}
+.cstage.on .cidx{filter:drop-shadow(0 0 9px rgba(255,214,120,.95)) drop-shadow(0 2px 2px rgba(0,0,0,.6))}
+.dial{position:absolute;inset:0;border-radius:50%;background:url(img/dial.webp) center/100% 100%;box-shadow:0 16px 34px rgba(0,0,0,.65),inset 0 0 0 1px rgba(0,0,0,.4);transition:transform .12s linear}
+.dial .dr{position:absolute;left:50%;top:50%;width:0;height:0}
+.dial .dr span{position:absolute;left:0;top:calc(var(--dial) * -.355);transform:translate(-50%,-50%);font:800 clamp(14px,4.2vw,17px) var(--f-serif);color:#4a3410;text-shadow:0 1px 0 rgba(255,236,190,.55),0 -1px 0 rgba(0,0,0,.25);white-space:nowrap}
+.dial .dr.n span{color:#7a1c1c}
+.ndl{position:absolute;left:50%;top:50%;width:0;height:0;transition:transform .3s ease-out}
+.ndl i{position:absolute;left:-3px;bottom:0;width:6px;height:calc(var(--dial) * .36);border-radius:3px 3px 1px 1px;background:linear-gradient(90deg,#7a5a1e,#f5dc93 45%,#b68a35);box-shadow:0 2px 3px rgba(0,0,0,.55)}
+.ndl i::before{content:"";position:absolute;left:50%;top:-13px;transform:translateX(-50%);border-inline:8px solid transparent;border-bottom:15px solid #e7c672}
+.ndl i::after{content:"";position:absolute;left:50%;bottom:-44px;transform:translateX(-50%);width:4px;height:44px;border-radius:2px;background:linear-gradient(90deg,#2b2016,#5d4a33,#2b2016)}
+.ndl b{position:absolute;left:0;bottom:calc(var(--dial) * .44);transform:translateX(-50%);font:800 12px var(--f-ui);color:#2b1c06;background:linear-gradient(180deg,#f1dba0,#b48c3e);border-radius:4px;padding:2px 8px;white-space:nowrap;box-shadow:0 2px 3px rgba(0,0,0,.5)}
+.cpiv{position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fbe9b4,#a77d2e 70%);box-shadow:0 2px 3px rgba(0,0,0,.6);z-index:2}
+.cmsg{flex:none;min-height:44px;text-align:center;font:600 15px/1.45 var(--f-ui);color:#f1e3c2;display:grid;gap:8px;justify-items:center}
+.cmsg b{display:block;font:800 19px var(--f-serif);color:#f6dd9a}
+.cmsg.on b{color:#ffe8a3;text-shadow:0 0 12px rgba(255,214,120,.6)}
+.ccal{margin:0;font-size:13px;color:#f3c58b;text-align:center}
+.cinfo{flex:none;width:100%;max-width:440px;background:rgba(247,240,220,.96);color:#2f2210;border-radius:16px;padding:12px 14px;box-shadow:0 6px 16px rgba(0,0,0,.45)}
+.cinfo dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:0;font-size:14px}
+.cinfo dt{color:#7b6a48}
+.cinfo dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.cinfo .mt{display:flex;gap:6px;margin-top:10px}
+.cinfo .mt button{flex:1;border-radius:11px;padding:8px 6px;background:#efe5c9;color:#5b4a2c;font:600 12.5px/1.3 var(--f-ui)}
+.cinfo .mt button[aria-pressed="true"]{background:#2f2210;color:#f6e5b3}
+.cnote{font-size:12.5px;color:#7b6a48;margin-top:7px;line-height:1.5}
+.csrc{flex:none;width:100%;max-width:440px;margin:0;font:500 13.5px/1.6 var(--f-serif);color:#e8d9b6;border-top:1px solid rgba(236,202,122,.25);padding-top:12px;text-align:justify}
+.csrc small{display:block;font:600 11.5px var(--f-ui);color:#b9a27a;margin-top:3px}
+.tiles:has(> .tile:nth-child(9)){grid-template-columns:repeat(5,1fr)}
+@media (max-height:720px){#compass .csrc{display:none}.cstage{--dial:min(70vw,40dvh,340px)}}
+@media (prefers-reduced-motion:reduce){.dial,.ndl{transition:none}}
 </style>
 </head>
 <body>
@@ -841,7 +1027,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
     <div class="box now hide" id="nowBox"><span class="cap">עכשיו אומרים</span></div>
     <ol class="toc" id="mainlist"></ol>
     <div class="rot hide" id="rot" role="group" aria-roledescription="carousel" aria-label="היום"></div>
-    <nav class="tiles" id="tiles" aria-label="כלים"><button class="tile" data-go="#cal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>לוח שנה</span></button><button class="tile" data-go="#luach"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18.5h18M6.5 18.5a5.5 5.5 0 0 1 11 0M12 6.5V9M5.3 9.7 7 11.4M18.7 9.7 17 11.4"/></svg><span>זמני היום</span></button><button class="tile go1" data-go="#shul"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4 4.5 10.6l6.3 2.6 2.6 6.3z"/></svg><span>בית כנסת</span></button><button class="tile" data-go="#rem"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 17v-6a5.5 5.5 0 0 1 11 0v6l1.5 1.5H5zM10 20.6a2.2 2.2 0 0 0 4 0"/></svg><span>תזכורות</span></button><button class="tile" data-go="#find"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg><span>חיפוש</span></button><button class="tile" data-go="#share"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="m8.6 10.9 6.3-3.7M8.6 13.1l6.3 3.7"/></svg><span>שיתוף</span></button><button class="tile" data-go="#settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg><span>הגדרות</span></button><button class="tile" data-go="#guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5.2 7.5 4.8 4.5 5v12.5c3-.2 5.5.2 7.5 1.5 2-1.3 4.500-1.700 7.500-1.500V5c-3-.2-5.500.2-7.500 1.500zM12 6.500V19"/></svg><span>מדריך</span></button></nav>
+    <nav class="tiles" id="tiles" aria-label="כלים"><button class="tile" data-go="#cal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>לוח שנה</span></button><button class="tile" data-go="#luach"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18.5h18M6.5 18.5a5.5 5.5 0 0 1 11 0M12 6.5V9M5.3 9.7 7 11.4M18.7 9.7 17 11.4"/></svg><span>זמני היום</span></button><button class="tile go1" data-go="#shul"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4 4.5 10.6l6.3 2.6 2.6 6.3z"/></svg><span>בית כנסת</span></button><button class="tile" data-go="#rem"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 17v-6a5.5 5.5 0 0 1 11 0v6l1.5 1.5H5zM10 20.6a2.2 2.2 0 0 0 4 0"/></svg><span>תזכורות</span></button><button class="tile" data-go="#find"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg><span>חיפוש</span></button><button class="tile" data-go="#share"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="12" r="2.3"/><circle cx="17" cy="6" r="2.3"/><circle cx="17" cy="18" r="2.3"/><path d="m8.6 10.9 6.3-3.7M8.6 13.1l6.3 3.7"/></svg><span>שיתוף</span></button><button class="tile" data-go="#library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h3v15H5zM9.5 4.5h3v15h-3zM14.2 5.2l2.9-.8 3.4 14.6-2.9.8z"/></svg><span>ספרייה</span></button><button class="tile" data-go="#compass"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M12 6.8 14 12l-2 5.2-2-5.2z"/></svg><span>כיוון המקדש</span></button><button class="tile" data-go="#settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg><span>הגדרות</span></button><button class="tile" data-go="#guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5.2 7.5 4.8 4.5 5v12.5c3-.2 5.5.2 7.5 1.5 2-1.3 4.500-1.700 7.500-1.500V5c-3-.2-5.500.2-7.500 1.500zM12 6.500V19"/></svg><span>מדריך</span></button></nav>
     <div class="foot" id="infoBar"></div>
     <nav class="col" id="colophon"><button data-go="#find">מועדפים</button><button data-go="#about">אודות</button></nav>
     <p class="ded">אשר ניסן בן לאה מליא לברכה ולהצלחה</p>
@@ -864,7 +1050,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="hd">
     <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
     <div class="ttl" id="rtitle"></div>
-    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib nightbtn" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+    <div class="en"><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div><button class="ib hide" id="rCompass" aria-label="כיוון התפילה"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"/><path d="M12 6.8 14 12l-2 5.2-2-5.2z"/></svg></button><button class="ib nightbtn" data-night aria-label="מצב לילה ויום"><svg class="moon" viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
   </div>
   <div class="frame"><div class="leaf">
     <nav class="steps hide" id="steps" aria-label="מעבר לחלק בתפילה"></nav>
@@ -971,6 +1157,62 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   </div></div>
 </section>
 
+<!-- ============ COMPASS ============ -->
+<section id="compass" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl">כיוון התפילה</div>
+    <div class="en"><button class="ib" data-settings aria-label="הגדרות"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h11M20 17h0"/><circle cx="16" cy="7" r="2.3"/><circle cx="10" cy="12" r="2.3"/><circle cx="17.5" cy="17" r="2.3"/></svg></button></div>
+  </div>
+  <div class="cmp">
+    <div class="cstage" id="cmpStage"><span class="cidx"></span><div class="dial" id="cmpDial"></div><span class="cpiv"></span></div>
+    <div class="cmsg" id="cmpMsg"></div>
+    <p class="ccal hide" id="cmpCal">המצפן לא יציב. מרחיקים את הטלפון ממתכת ומזיזים אותו באוויר בצורת 8.</p>
+    <div class="cinfo">
+      <dl><dt>מיקום</dt><dd id="cmpWhere"></dd><dt>כיוון</dt><dd id="cmpDeg"></dd><dt>מרחק</dt><dd id="cmpKm"></dd></dl>
+      <div class="mt hide" id="cmpMethod"><button data-m="r" aria-pressed="true">כיוון קבוע במפה</button><button data-m="g" aria-pressed="false">הדרך הקצרה על פני כדור הארץ</button></div>
+      <div class="cnote" id="cmpNote"></div>
+    </div>
+    <p class="csrc">היה עומד בח"ל יכוין את לבו כנגד ארץ ישראל... היה עומד בארץ ישראל יכוין את לבו כנגד ירושלים... היה עומד בירושלים יכוין את לבו כנגד בית המקדש<small>ברכות ל.</small></p>
+  </div>
+</section>
+
+<!-- ============ LIBRARY ============ -->
+<section id="library" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" id="lbBack" aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl"><span id="lbT">ספרייה</span><span class="crumbs" id="lbC">לחצו על מדף</span></div>
+    <div class="en"><button class="ib" id="lbFind" aria-label="חיפוש"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg></button></div>
+  </div>
+  <div class="bc" id="lbCase"><div class="scene" id="lbScene"><div class="glint"></div></div><div class="dim" id="lbDim"></div>
+    <div class="shelfview" id="lbSv" hidden><div class="svrow" id="lbRow"></div></div><div class="svhd" id="lbHd"></div><div class="tray" id="lbTray"></div>
+    <div class="svft" id="lbFt"><span>גוללים לצדדים · לחיצה על כרך שולפת אותו</span></div></div>
+</section>
+<section id="libread" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl"><span id="lrT"></span><span class="crumbs" id="lrC"></span></div>
+    <div class="en"><button class="ib" id="lrStar" aria-label="מועדף" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m12 4.5 2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1L4.5 10l5.2-.8z"/></svg></button><div class="fs" role="group" aria-label="גודל אות"><button class="sm" data-fs="-2" aria-label="הקטן אות">א</button><button class="lg" data-fs="2" aria-label="הגדל אות">א</button></div></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div class="lrnav"><button id="lrPrev">הקודם</button><div class="lrmodes hide" id="lrModes" role="group" aria-label="תצוגה"><button data-mode="daf">צורת הדף</button><button data-mode="read">מצב קריאה</button></div><button id="lrNext">הבא</button></div>
+    <div id="lrBody"></div>
+  </div></div>
+</section>
+<section id="libsave" class="view">
+  <div class="hd">
+    <div class="st"><button class="ib" data-back aria-label="חזרה"><i class="chev"></i></button><button class="ib hide" data-home aria-label="לעמוד הראשי"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></svg></button></div>
+    <div class="ttl">שמור בטלפון</div>
+    <div class="en"></div>
+  </div>
+  <div class="frame"><div class="leaf">
+    <div id="lsTop"></div>
+    <div class="lsrow"><span>להוריד רק ב-Wi-Fi</span><button class="sw" role="switch" id="lsWifi" aria-checked="true" aria-label="להוריד רק ב-Wi-Fi"></button></div>
+    <ul class="lslist" id="lsList"></ul>
+    <p class="remstate">החבילות יורדות ברקע, גם כשהאפליקציה סגורה, ונפרסות בטלפון. ספר שלא הורד נקרא מהאינטרנט.</p>
+  </div></div>
+</section>
+
 <!-- ============ ABOUT ============ -->
 <section id="about" class="view">
   <div class="hd">
@@ -981,7 +1223,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="frame"><div class="leaf">
   <div class="aboutbody">
     <h3>סידור וחומש בית אהרן וישראל</h3>
-    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.39</span> · ניתן בחינם</p>
+    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.41</span> · ניתן בחינם</p>
     <p class="ab-lead">הסידור, החומש, חוק לישראל, ספר תהילים ולוח השנה במקום אחד, בנוסח חסידות קארלין סטאלין.</p>
     <div class="abthanks">
       <h4>תודות</h4>
@@ -1168,13 +1410,20 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 <div class="scrim" id="scrimKit"></div>
 <div class="sheet setsheet" id="sheetKit" role="dialog" aria-modal="true" aria-labelledby="kitHead">
   <div class="sheethd"><h4 id="kitHead">ברוך הבא</h4><button class="done" id="kitSkip">דילוג</button></div>
-  <div class="kitsteps" id="kitSteps"><i></i><i></i><i></i><i></i><span id="kitCount"></span></div>
+  <div class="kitsteps" id="kitSteps"><i></i><i></i><i></i><i></i><i></i><span id="kitCount"></span></div>
   <div class="setbody" id="kitBody">
     <div class="kitp" data-title="ברוך הבא">
-      <p>זהו סידור וחומש בית אהרן וישראל, בנוסח קרלין סטולין. ארבעה צעדים קצרים והסידור מוכן בשבילך. אפשר לדלג, ואפשר לשנות הכל אחר כך בהגדרות.</p>
+      <p>זהו סידור וחומש בית אהרן וישראל, בנוסח קרלין סטולין. חמישה צעדים קצרים והסידור מוכן בשבילך. אפשר לדלג, ואפשר לשנות הכל אחר כך בהגדרות.</p>
       <h5>היכן אתה מתפלל</h5>
       <div class="grp"><label class="srw"><span>לפי המיקום שלי<small>המכשיר מזהה היכן אתה, והזמנים מחושבים לשם. המיקום נשאר במכשיר.</small></span><button class="sw" role="switch" aria-checked="false" data-cfg="autoLoc"></button></label><label class="srw"><span>עיר<small class="cityalt">כשאין מיקום</small></span><select data-cfg="city" id="kitCity"></select></label></div>
       <p class="hint locnote">העיר קובעת את זמני היום, את הלוח ואת מנהג ארץ ישראל או חוץ לארץ, בכל המסכים.</p>
+    </div>
+    <div class="kitp" data-title="הספרייה שלך" id="kitLib">
+      <p>מעבר לסידור יש ספרייה: תנ"ך, ש"ס, משנה, הלכה, חסידות, מוסר ועוד. מסמנים מה להוריד לטלפון. ההורדה נעשית ברקע, ואפשר לשנות הכול אחר כך במגירה "שמור בטלפון" שבארון הספרים. ספר שלא הורד נקרא מהאינטרנט.</p>
+      <div class="grp" id="kitPacks"></div>
+      <p class="hint" id="kitPackSum"></p>
+      <div class="grp"><label class="srw"><span>להוריד רק ב-Wi-Fi<small>כדי לא לבזבז את חבילת הגלישה. ההורדה ממתינה עד שיש Wi-Fi.</small></span><button class="sw" role="switch" id="kitWifi" aria-checked="true"></button></label></div>
+      <p><button class="pbtn" id="kitLight">גרסה קלה: בלי ספרים כרגע</button></p>
     </div>
     <div class="kitp" data-title="התצוגה">
       <p>כך ייראה דף התפילה. בוחרים מה שנוח לעין.</p>
@@ -1215,17 +1464,20 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="askbtns" id="shulBtns"></div>
 </div>
 
-<script src="hebcal.js?v=mv8dh8x6"></script>
-<script src="shuls.js?v=mv8dh8x6"></script>
-<script src="calcore.js?v=mv8dh8x6"></script>
-<script src="rt.js?v=mv8dh8x6"></script>
-<script src="orig.js?v=mv8dh8x6"></script>
-<script src="engine.js?v=mv8dh8x6"></script>
-<script src="commentary.js?v=mv8dh8x6"></script>
-<script src="sizes.js?v=mv8dh8x6"></script>
-<script src="app.js?v=mv8dh8x6"></script>
-<script src="luach.js?v=mv8dh8x6"></script>
-<script src="extras.js?v=mv8dh8x6"></script>
-<script src="guide.js?v=mv8dh8x6"></script>
+<script src="hebcal.js?v=mv91kwwr"></script>
+<script src="shuls.js?v=mv91kwwr"></script>
+<script src="calcore.js?v=mv91kwwr"></script>
+<script src="rt.js?v=mv91kwwr"></script>
+<script src="orig.js?v=mv91kwwr"></script>
+<script src="engine.js?v=mv91kwwr"></script>
+<script src="commentary.js?v=mv91kwwr"></script>
+<script src="sizes.js?v=mv91kwwr"></script>
+<script src="app.js?v=mv91kwwr"></script>
+<script src="luach.js?v=mv91kwwr"></script>
+<script src="extras.js?v=mv91kwwr"></script>
+<script src="vendor/daf-renderer.js"></script>
+<script src="library.js?v=mv91kwwr"></script>
+<script src="compass.js?v=mv91kwwr"></script>
+<script src="guide.js?v=mv91kwwr"></script>
 </body>
 </html>
