@@ -1,5 +1,5 @@
 /* Offline cache for the Tfilon reader (personal-use PWA). */
-const CACHE = 'sidur-mv91kwwr';
+const CACHE = 'sidur-mv954bnf';
 const ASSETS = [
   './', './index.html', './app.js', './hebcal.js', './calcore.js', './luach.js', './extras.js', './guide.js', './sizes.js', './compass.js', './img/dial.webp', './library.js', './vendor/daf-renderer.js', './img/bookcase.webp', './img/spine-burgundy.webp', './img/spine-navy.webp', './img/spine-green.webp', './img/spine-brown.webp', './img/spine-black.webp', './img/spine-plum.webp', './haman.json', './yahrzeits.json', './shuls.js', './commentary.js', './commentary/index.json', './rt.js', './orig.js', './engine.js',
   './cities.json', './content.json', './manifest.webmanifest', './icon-maskable.png', './icon.png', './splash.jpeg',

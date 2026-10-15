@@ -74,8 +74,8 @@
     const vols = list => list.map(b => ({ name: short(b.he), books: [b] }));
     const grouped = (list, key) => { const m = new Map(); for (const b of list) { const g = key(b); if (!m.has(g)) m.set(g, { name: g, books: [] }); m.get(g).books.push(b); } return [...m.values()]; };
     const tanakh = pick(b => b.shelf === 'tanakh' && !/תרגום|אונקלוס/.test(b.he));
-    const bavli = pick(b => b.shelf === 'talmud' && b.group[0] === 'בבלי');
-    const half = Math.ceil(bavli.length / 2);
+    const bavli = pick(b => b.shelf === 'talmud' && b.group[0] === 'בבלי' && /^סדר /.test(b.group[1] || ''));
+    const minor = pick(b => b.shelf === 'talmud' && b.group[0] === 'בבלי' && !/^סדר /.test(b.group[1] || ''));
     const sa = pick(b => b.shelf === 'halakhah' && /^(שולחן ערוך|טור)$/.test(b.group[0] || ''));
     const rambam = pick(b => b.shelf === 'halakhah' && b.group[0] === 'משנה תורה');
     const halacha = pick(b => b.shelf === 'halakhah' && !sa.includes(b) && !rambam.includes(b));
@@ -83,8 +83,8 @@
     SETS = [
       { id: 'tanakh', name: 'תנ"ך', full: 'תנ"ך', sub: 'ניקוד וטעמים · מצודות ומפרשים', tex: 'navy', bay: 'C', y: [21.8, 32.5], vols: vols(tanakh) },
       { id: 'chasidut', name: 'חסידות', full: 'ספרי חסידות', sub: 'בית אהרן בראש המדף', tex: 'black', bay: 'C', y: [36.5, 50.1], vols: vols(chas) },
-      { id: 'bavli1', name: 'ש"ס בבלי', full: 'ש"ס בבלי · כרך א', sub: 'עם רש"י ותוספות', tex: 'burgundy', bay: 'R', s: 0, vols: vols(bavli.slice(0, half)) },
-      { id: 'bavli2', name: 'ש"ס בבלי ב', full: 'ש"ס בבלי · כרך ב', sub: 'עם רש"י ותוספות', tex: 'burgundy', bay: 'R', s: 1, vols: vols(bavli.slice(half)) },
+      { id: 'bavli', name: 'ש"ס בבלי', full: 'ש"ס בבלי', sub: 'עם רש"י ותוספות', tex: 'burgundy', bay: 'R', s: 0, vols: vols(bavli) },
+      { id: 'minor', name: 'מסכתות קטנות', full: 'מסכתות קטנות וספרי עזר', sub: 'אבות דרבי נתן, סופרים, שמחות ועוד', tex: 'green', bay: 'R', s: 1, vols: vols(minor) },
       { id: 'yeru', name: 'ירושלמי', full: 'תלמוד ירושלמי', sub: 'עם פני משה', tex: 'green', bay: 'R', s: 2, vols: vols(pick(b => b.shelf === 'talmud' && b.group[0] === 'ירושלמי')) },
       { id: 'mishna', name: 'משנה', full: 'משנה', sub: 'עם ברטנורא', tex: 'brown', bay: 'R', s: 3, vols: vols(pick(b => b.shelf === 'mishnah')) },
       { id: 'midrash', name: 'מדרש', full: 'מדרש', sub: 'מדרש רבה, תנחומא ועוד', tex: 'brown', bay: 'R', s: 4, vols: vols(pick(b => b.shelf === 'midrash')) },
@@ -135,7 +135,7 @@
       const sv = $('#lbSv'); Object.assign(sv.style, { left: c.box.left + 'px', top: c.box.top + 'px', width: c.box.width + 'px', height: c.box.height + 'px' });
       const H = c.box.height, sh = Math.min(96, BOOK_H / (rectOf(s).y1 - rectOf(s).y0) * 100);
       $('#lbRow').className = 'svrow t-' + s.tex;
-      $('#lbRow').innerHTML = s.vols.map((v, k) => `<button class="bigsp${v.books.every(b => !have(b)) ? ' off' : ''}" data-vol="${k}" style="--i:${Math.min(k, 30)};--b:${bri(k)};--w:46px;--sh:${sh}%;--fs:${Math.min(16, Math.max(10, H * sh / 100 * .44 / Math.max(3, v.name.length) * 1.12))}px" aria-label="${esc(v.name)}"><span class="nm">${esc(v.name)}</span><span class="no">${CalCore.heNum(k + 1)}</span></button>`).join('');
+      $('#lbRow').innerHTML = s.vols.map((v, k) => `<button class="bigsp${v.books.every(b => !have(b)) ? ' off' : ''}" data-vol="${k}" style="--i:${Math.min(k, 30)};--b:${bri(k)};--w:54px;--sh:${sh}%;--fs:${Math.min(23, Math.max(13, H * sh / 100 * .5 / Math.max(3, v.name.length) * 1.2))}px" aria-label="${esc(v.name)}"><span class="nm">${esc(v.name)}</span><span class="no">${CalCore.heNum(k + 1)}</span></button>`).join('');
       sv.hidden = false; $('#lbRow').scrollLeft = 0;
       $('#lbHd').innerHTML = `<span class="p">${esc(s.full)}</span><small>${esc(s.sub)} · ${s.vols.length} כרכים</small>`; $('#lbHd').classList.add('on'); $('#lbFt').classList.add('on');
     }, reduce() ? 0 : 760);
@@ -200,7 +200,7 @@
   }
   function today() {
     const rows = [], info = typeof dayInfo === 'function' ? dayInfo(sync(NOW())) : null;
-    if (info && info.daf) { const [mas, daf] = splitDaf(info.daf), b = L.cat.books.find(x => x.kind === 'base' && x.group[0] === 'בבלי' && x.he === mas);
+    if (info && info.daf) { const [mas, daf] = splitDaf(info.daf), b = L.cat.books.find(x => x.kind === 'base' && x.group[0] === 'בבלי' && /^סדר /.test(x.group[1] || '') && x.he === mas);
       rows.push({ a: 'דף יומי: ' + info.daf, b: 'בבלי', attr: b ? `data-open="${b.id}" data-label="${daf}."` : '' }); }
     rows.push({ a: 'חוק לישראל של היום', b: 'חוק לישראל', attr: 'data-go="#chok"' }, { a: 'שניים מקרא: פרשת השבוע', b: 'חומש', attr: 'data-go="#smv"' }, { a: 'תהילים של היום', b: 'תהילים', attr: 'data-go="menu:showTehilimTypeMenu"' });
     return rows;
@@ -217,8 +217,9 @@
     if (opt.label) { const s = t.sections.find(x => x.label === opt.label); if (s) k = s.k; }
     if (k === undefined || k === null || !t.sections.some(x => x.k === k)) k = ((store.get('libpos', {})[id] || {}).k) ?? t.sections[0].k;
     Object.assign(R, { id, k, t, open: {}, hl: opt.hl || null, seg: opt.seg ?? null });
-    if (curView !== 'libread') nav('libread', { depth: depth() });
-    drawReader();
+    const into = async () => { if (curView !== 'libread') nav('libread', { depth: depth() }); await drawReader(); };
+    if (curView === 'library' && book && !reduce() && document.startViewTransition) { document.documentElement.dataset.turn = 'open'; const tr = document.startViewTransition(into); tr.finished.finally(() => { delete document.documentElement.dataset.turn; }); }
+    else into();
   }
   const isTalmud = b => b.shelf === 'talmud' && b.group[0] === 'בבלי';
   const dh = s => { s = String(s).replace(/<[^>]+>/g, ''); const m = s.match(/^(.{2,90}?)\s+[–-]\s+/); return m ? `<b class="dh">${esc(m[1])}</b> ${esc(s.slice(m[0].length))}` : esc(s); };
@@ -260,7 +261,8 @@
   }
   function srcLine() {
     const b = L.by[R.id], all = [b].concat((R.comms || []).map(x => x.c));
-    return '<p class="lrsrc">' + all.map(x => `${esc(x.he)}: ${esc(x.version.title)} (${esc(x.version.license)})`).join(' · ') + '. מתוך ספריא.</p>';
+    const lic = l => /public domain|^pd$/i.test(l) ? 'נחלת הכלל' : /unknown/i.test(l) ? 'רישיון לא מצוין' : l;
+    return '<details class="lrsrc"><summary>מקורות הטקסט</summary>' + all.map(x => `${esc(x.he)}: ${esc(x.version.title)} (${esc(lic(x.version.license))})`).join('<br>') + '<br>מתוך ספריא (Sefaria).</details>';
   }
   function drawDaf(ch) {
     const main = ch.seg.map(t => Array.isArray(t) ? t.join(' ') : t).join(' ');
@@ -268,23 +270,48 @@
     const ra = by(/^rashi/i), to = by(/^tosafot/i);
     const side = x => x ? flat(x.seg).filter(Boolean).map(dh).join(' ') : '';
     const sec = R.t.sections.find(x => x.k === R.k);
-    $('#lrBody').innerHTML = `<div class="dafwrap" id="lrDaf"><div class="stage" id="lrStage"><div class="dafhdr">${esc(L.by[R.id].he)} · ${esc(sec.label)}</div><div id="lrDafRoot"></div></div></div><p class="lbhint"><span>הדף כמו בדפוס וילנא: הגמרא באמצע, רש"י ותוספות בצדדים.</span><button id="lrZoom">הגדלה</button></p>` + srcLine();
+    dafZoom = 1; $('#lrBody').innerHTML = `<p class="lbhint"><span>צביטה או הקשה כפולה מגדילות את הדף.</span><button id="lrZoom">הגדלה</button></p><div class="dafwrap" id="lrDaf"><div class="sizer" id="lrSizer"><div class="stage" id="lrStage"><div class="dafhdr">${esc(L.by[R.id].he)} · ${esc(sec.label)}</div><div id="lrDafRoot"></div></div></div></div>` + srcLine();
     const run = () => {
       try {
         const r = dafRenderer('#lrDafRoot', { contentWidth: '560px', mainWidth: '46%', padding: { vertical: '8px', horizontal: '12px' }, fontFamily: { inner: 'RashiScript', outer: 'RashiScript', main: 'Frank' }, direction: 'rtl', fontSize: { main: '15px', side: '10.5px' }, lineHeight: { main: '19px', side: '14px' } });
-        r.render(main, side(ra), side(to), /:$/.test(sec.label) ? 'b' : 'a');
+        r.render(main, side(ra), side(to), /:$/.test(sec.label) ? 'b' : 'a', undefined, () => fitDaf());
       } catch (e) { $('#lrDafRoot').textContent = 'לא הצלחתי לסדר את הדף.'; }
-      fitDaf();
+      fitDaf(); dafGestures();
+      [250, 800, 2000].forEach(t => setTimeout(() => { if (curView === 'libread' && $('#lrStage')) fitDaf(); }, t));   /* the renderer may still be settling */
     };
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(run);
   }
-  let dafZoom = false;
+  let dafZoom = 1;   /* 1 = the whole page across the screen; up to 3.5 */
   /* the page is laid out at 580px and scaled to the screen; the frame takes the scaled height, so nothing is cut */
-  function fitDaf() { const wrap = $('#lrDaf'), st = $('#lrStage'); if (!wrap || !st) return; const w = wrap.clientWidth; if (!w) return;
-    const s = dafZoom ? Math.max(1, w / 580 * 1.6) : Math.min(1, (w - 8) / 580); st.style.width = '580px'; st.style.transform = `scale(${s})`;
+  /* the page is laid out once at 580px; on the screen it is scaled: fit to the width times the zoom. The frame takes the
+     scaled size, so the page scrolls down with the screen and sideways inside the frame when zoomed in */
+  let dafNat = 0;
+  function fitDaf(focus) { const wrap = $('#lrDaf'), st = $('#lrStage'); if (!wrap || !st) return; const w = wrap.clientWidth; if (!w) return;
+    const fit = w / 580, s = fit * dafZoom; st.style.width = '580px'; st.style.transform = `scale(${s})`;
     /* the three bodies of text are absolutely placed by the renderer: the page is as tall as the lowest of them */
-    let nat = st.offsetHeight; st.querySelectorAll('#lrDafRoot > *').forEach(c => { nat = Math.max(nat, c.offsetTop + c.offsetHeight + (c.offsetParent === st ? 0 : ($('#lrDafRoot').offsetTop || 0))); });
-    wrap.style.height = Math.ceil(nat * s + 24) + 'px'; $('#lrZoom').textContent = dafZoom ? 'הדף כולו' : 'הגדלה'; }
+    /* the page is as tall as its lowest line, wherever the renderer put it (measured on the screen, then unscaled) */
+    const top = st.getBoundingClientRect().top; let low = 0;
+    st.querySelectorAll('#lrDafRoot span, #lrDafRoot div, .dafhdr').forEach(e => { const r = e.getBoundingClientRect(); if (r.height && r.bottom > low) low = r.bottom; });
+    const nat = Math.max(st.offsetHeight, (low - top) / s);
+    dafNat = nat; $('#lrSizer').style.width = Math.ceil(580 * s) + 'px'; $('#lrSizer').style.height = Math.ceil(nat * s + 18) + 'px';
+    $('#lrZoom').textContent = dafZoom > 1.05 ? 'הדף כולו' : 'הגדלה';
+    if (focus) { wrap.scrollLeft = focus.x * s - focus.cx; window.scrollTo(0, focus.y * s + wrap.getBoundingClientRect().top + window.scrollY - focus.cy - (focus.top || 0)); }
+  }
+  /* pinch and double tap on the page; the point under the fingers stays in place */
+  function dafGestures() {
+    const wrap = $('#lrDaf'); if (!wrap || wrap._g) return; wrap._g = 1;
+    let pinch = null, lastTap = 0;
+    const at = (cx, cy) => { const r = wrap.getBoundingClientRect(), s = wrap.clientWidth / 580 * dafZoom; return { x: (cx - r.left + wrap.scrollLeft) / s, y: (cy - r.top) / s, cx: cx - r.left, cy: cy - r.top, top: r.top }; };
+    wrap.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) { const [a, b] = e.touches; pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), z: dafZoom, f: at((a.clientX + b.clientX) / 2, (a.clientY + b.clientY) / 2) }; e.preventDefault(); }
+      else if (e.touches.length === 1) { const now = Date.now(), t = e.touches[0];
+        if (now - lastTap < 300) { e.preventDefault(); const f = at(t.clientX, t.clientY); dafZoom = dafZoom > 1.05 ? 1 : 2.4; fitDaf(dafZoom > 1 ? f : null); lastTap = 0; } else lastTap = now; }
+    }, { passive: false });
+    wrap.addEventListener('touchmove', e => { if (!pinch || e.touches.length !== 2) return; e.preventDefault();
+      const [a, b] = e.touches, d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      dafZoom = Math.min(3.5, Math.max(1, pinch.z * d / pinch.d)); $('#lrStage').style.transform = `scale(${wrap.clientWidth / 580 * dafZoom})`; }, { passive: false });
+    wrap.addEventListener('touchend', e => { if (pinch && e.touches.length < 2) { const f = pinch.f; pinch = null; fitDaf(dafZoom > 1.02 ? f : null); } });
+  }
   const mark = (html, q) => { const re = libWordRe(q); return re ? html.replace(/>([^<]+)</g, (m, t) => '>' + t.replace(re, x => `<mark>${x}</mark>`) + '<').replace(/^([^<]+)/, t => t.replace(re, x => `<mark>${x}</mark>`)) : html; };
   function alert0(t) { $('#lrBody') && ($('#lrBody').innerHTML = `<p class="lbnote">${esc(t)}</p>`); }
 
@@ -370,10 +397,10 @@
     });
     $('#lbFind').onclick = () => go('#find');
     $('#lbBack').onclick = () => { if (drawerOpen) return closeTray(); if (book) return closeVol(); if (cur) return closeShelf(); history.back(); };
-    $('#lrPrev').onclick = () => step(-1); $('#lrNext').onclick = () => step(1);
+    $('#lrPrev').onclick = () => step(-1); $('#lrNext').onclick = () => step(1); swipe($('#lrBody'));
     $('#lrModes').onclick = e => { const b = e.target.closest('[data-mode]'); if (!b) return; R.mode = b.dataset.mode; store.set('libmode', R.mode); drawReader(); };
     $('#lrBody').addEventListener('click', e => {
-      if (e.target.id === 'lrZoom') { dafZoom = !dafZoom; return fitDaf(); }
+      if (e.target.id === 'lrZoom') { dafZoom = dafZoom > 1.05 ? 1 : 2.4; return fitDaf(dafZoom > 1 ? { x: 290, y: 60, cx: $('#lrDaf').clientWidth / 2, cy: 0, top: 0 } : null); }
       const m = e.target.closest('[data-mark]'); if (m) { const i = +m.dataset.mark, sec = R.t.sections.find(x => x.k === R.k), marks = store.get('libmarks', []), at = marks.findIndex(f => f.id === R.id && f.k === R.k && f.seg === i);
         if (at >= 0) marks.splice(at, 1); else marks.unshift({ id: R.id, k: R.k, seg: i, label: sec.label, snip: (document.querySelector('#ls' + i + ' .txt') || {}).textContent.slice(0, 40) }); store.set('libmarks', marks.slice(0, 200)); m.textContent = at >= 0 ? '☆' : '★'; return; }
       const b = e.target.closest('[data-seg][data-c]'); if (!b) return; const i = +b.dataset.seg, j = +b.dataset.c; R.open[i] = R.open[i] === j ? undefined : j;
@@ -389,12 +416,32 @@
     /* the shell tells us when a pack has landed */
     window.SidurLibChanged = () => { refreshInstalled(); if (curView === 'library') drawCase(); if (curView === 'libsave') drawSave(); };
   }
-  async function step(d) { const i = R.t.sections.findIndex(x => x.k === R.k), s = R.t.sections[i + d]; if (!s) return; R.k = s.k; R.open = {}; R.hl = null; drawReader(); }
+  /* a page turns over on its spine: forward the page lifts from the left and goes over to the right, as in a Hebrew
+     book; back it comes over from the right. The browser photographs the page before and after (View Transitions). */
+  function turnPage(dir, change) {
+    const root = document.documentElement;
+    if (reduce() || !document.startViewTransition) return change();
+    root.dataset.turn = dir > 0 ? 'fwd' : 'back';
+    const t = document.startViewTransition(async () => { await change(); window.scrollTo(0, 0); });
+    t.finished.finally(() => { delete root.dataset.turn; });
+  }
+  async function step(d) {
+    const i = R.t.sections.findIndex(x => x.k === R.k), s = R.t.sections[i + d]; if (!s) return;
+    turnPage(d, async () => { R.k = s.k; R.open = {}; R.hl = null; await drawReader(); });
+  }
+  /* a swipe turns the page too: a finger moving right turns forward, left turns back */
+  function swipe(el) {
+    let x0 = 0, y0 = 0, on = false;
+    el.addEventListener('touchstart', e => { const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; on = e.touches.length === 1; }, { passive: true });
+    el.addEventListener('touchend', e => { if (!on) return; on = false; const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+      if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6 && !(e.target.closest && e.target.closest('#lrDaf'))) step(dx > 0 ? 1 : -1); }, { passive: true });
+  }
   let wired = false;
   async function open(fromBack) {
     if (fromBack) show('library'); else if (curView !== 'library') nav('library', { depth: depth() });
     if (!wired) { wired = true; wire(); }
     try { await load(); } catch (e) { head('ספרייה', 'הספרייה עוד לא זמינה'); return; }
+    if (fromBack && (book || cur)) { if (book) head(book.v.name, (cur ? cur.s.name + ' › ' : '') + book.v.name); return; }
     buildSets(); fit(); drawCase();
     if (book) closeVol(true); if (drawerOpen) closeTray(); if (cur) closeShelf();
   }

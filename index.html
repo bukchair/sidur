@@ -838,7 +838,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 #library .slot .sp{flex:none;border-radius:.3cqw .3cqw 0 0;background:var(--tex) center/100% 100%;filter:brightness(var(--b,1));box-shadow:.25cqw 0 .5cqw rgba(0,0,0,.55),inset 0 0 0 .1cqw rgba(0,0,0,.35);transition:opacity .35s}
 #library .slot.away .sp{opacity:0}
 #library .plq{position:absolute;transform:translate(50%,0);white-space:nowrap;pointer-events:none;z-index:2;
-  background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:700 2.35cqw/1.25 var(--f-ui);padding:.15cqw 1.3cqw;border-radius:.5cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.6);transition:opacity .3s}
+  background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:800 3cqw/1.25 var(--f-ui);padding:.15cqw 1.3cqw;border-radius:.5cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.6);transition:opacity .3s}
 #library .scene.zoomed .plq{opacity:0}
 #library .dim{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(10,6,3,.35),rgba(10,6,3,.82));opacity:0;pointer-events:none;transition:opacity .5s;z-index:5}
 #library .dim.on{opacity:1;pointer-events:auto}
@@ -850,13 +850,13 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 #library .shelfview .svrow::after{content:"";flex:none;width:4px}
 #library .bigsp{flex:none;width:var(--w,50px);height:var(--sh,88%);border:0;border-radius:3px 3px 0 0;position:relative;cursor:pointer;scroll-snap-align:center;background:var(--tex) center/100% 100%;filter:brightness(var(--b,1));box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),3px 0 7px rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(10px);animation:rise .45s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 28ms)}
 @keyframes rise{to{opacity:1;transform:none}}
-#library .bigsp .nm{position:absolute;top:27%;bottom:27%;inset-inline:14%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-family:var(--f-serif);font-weight:800;font-size:var(--fs,16px);color:#f0d184;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.32) 50%,rgba(0,0,0,.55));border-top:1px solid rgba(236,202,122,.7);border-bottom:1px solid rgba(236,202,122,.7);text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 5px rgba(240,209,132,.35);white-space:nowrap;overflow:hidden;border-radius:1px}
-#library .bigsp .no{position:absolute;bottom:5%;font:700 11px var(--f-serif);color:#f0d184;text-shadow:0 1px 0 rgba(0,0,0,.7)}
+#library .bigsp .nm{position:absolute;top:24%;bottom:24%;inset-inline:10%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-family:var(--f-serif);font-weight:900;letter-spacing:.03em;font-size:var(--fs,16px);color:#f0d184;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.32) 50%,rgba(0,0,0,.55));border-top:1px solid rgba(236,202,122,.7);border-bottom:1px solid rgba(236,202,122,.7);text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 5px rgba(240,209,132,.35);white-space:nowrap;overflow:hidden;border-radius:1px}
+#library .bigsp .no{position:absolute;bottom:5%;font:800 14px var(--f-serif);color:#f0d184;text-shadow:0 1px 0 rgba(0,0,0,.7)}
 #library .bigsp.pull{animation:none;opacity:1;transform:translateY(-16px);box-shadow:0 16px 22px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.4);transition:transform .25s ease}
 #library .svhd{position:absolute;inset-inline:0;top:10px;z-index:6;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s}
 #library .svhd.on{opacity:1}
-#library .svhd .p{display:inline-block;background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:800 14px var(--f-ui);padding:5px 14px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
-#library .svhd small{display:block;margin-top:6px;font-size:11.5px;color:#f1e3c2;text-shadow:0 1px 3px #000}
+#library .svhd .p{display:inline-block;background:linear-gradient(180deg,var(--brass1),var(--brass2));color:#2b1c06;font:800 17px var(--f-ui);padding:5px 14px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+#library .svhd small{display:block;margin-top:6px;font-size:13.5px;color:#f1e3c2;text-shadow:0 1px 3px #000}
 #library .svft{position:absolute;inset-inline:0;bottom:14px;z-index:6;display:flex;justify-content:center;gap:8px;opacity:0;transition:opacity .4s;pointer-events:none}
 #library .svft.on{opacity:1;pointer-events:auto}
 #library .svft span{font-size:12px;color:#f1e3c2;text-shadow:0 1px 3px #000;align-self:center}
@@ -872,15 +872,15 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 #library .vol .cv .fr small{display:block;margin-top:6px;font:600 11px var(--f-ui);opacity:.9}
 #library .vol.opened .cv{transform:rotateY(-168deg)}
 #library .shaar{text-align:center;border:1px solid #c9b688;border-radius:6px;padding:14px 10px;margin-bottom:10px;background:radial-gradient(circle at 50% 0,#fffaf0,#f3e8cc)}
-#library .shaar .k{font-family:var(--f-serif);font-weight:800;font-size:24px;line-height:1.15}
-#library .shaar .d{font-size:12px;color:#7b6a48;margin-top:4px;line-height:1.5}
-#library .toc2{font-size:12px;font-weight:700;color:#8a6a2a;margin:10px 2px 6px;display:flex;gap:8px;align-items:center}
+#library .shaar .k{font-family:var(--f-serif);font-weight:800;font-size:31px;line-height:1.15}
+#library .shaar .d{font-size:14.5px;color:#7b6a48;margin-top:4px;line-height:1.5}
+#library .toc2{font-size:14.5px;font-weight:700;color:#8a6a2a;margin:10px 2px 6px;display:flex;gap:8px;align-items:center}
 #library .toc2::after{content:"";flex:1;height:1px;background:#d9c9a2}
-#library .grid2{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
-#library .grid2 button{height:33px;border-radius:7px;background:#fffaf0;box-shadow:0 1px 2px rgba(80,50,10,.25);font-family:var(--f-serif);font-weight:700;font-size:14px;color:#2f2210}
+#library .grid2{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+#library .grid2 button{height:42px;border-radius:8px;background:#fffaf0;box-shadow:0 1px 2px rgba(80,50,10,.25);font-family:var(--f-serif);font-weight:800;font-size:18px;color:#2f2210}
 #library .grid2 button.on{background:linear-gradient(180deg,#d8b45e,#b8913d);color:#221803}
 #library .lst2{list-style:none;margin:0;padding:0}
-#library .lst2 li{display:flex;justify-content:space-between;align-items:baseline;padding:9px 2px;border-bottom:1px solid #e3d6b6;font-family:var(--f-serif);font-weight:700;font-size:15.5px}
+#library .lst2 li{display:flex;justify-content:space-between;align-items:baseline;padding:12px 2px;border-bottom:1px solid #e3d6b6;font-family:var(--f-serif);font-weight:800;font-size:19px}
 #library .lst2 li small{font-family:var(--f-ui);font-size:11.5px;font-weight:500;color:#7b6a48}
 #library .crumbs{display:block;font-size:11.5px;font-weight:500;color:var(--on-mute);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #library .pbtn2{font:600 12.5px var(--f-ui);color:#2b1c06;background:linear-gradient(180deg,var(--brass1),var(--brass2));border:0;border-radius:999px;padding:6px 13px;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.5)}
@@ -889,9 +889,9 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 /* the cabinet below the shelves: drawers with brass plates, for what one keeps at hand */
 #library .tray{position:absolute;inset-inline:8px;bottom:8px;z-index:8;max-height:72%;overflow:auto;border-radius:14px;background:#f7f0dc;color:#2f2210;box-shadow:0 -10px 30px rgba(0,0,0,.6);padding:14px 14px 10px;transform:translateY(110%);transition:transform .5s cubic-bezier(.3,.7,.2,1)}
 #library .tray.on{transform:none}
-#library .tray h4{margin:0 0 8px;font:800 17px var(--f-serif);display:flex;justify-content:space-between;align-items:center}
+#library .tray h4{margin:0 0 8px;font:800 21px var(--f-serif);display:flex;justify-content:space-between;align-items:center}
 #library .tray h4 button{border:0;background:#e9dcbd;border-radius:999px;font:600 12.5px var(--f-ui);padding:5px 11px;cursor:pointer;color:#2f2210}
-#library .tray li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 4px;border-top:1px solid #e3d6b6;font:700 15.5px var(--f-serif)}
+#library .tray li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:12px 4px;border-top:1px solid #e3d6b6;font:800 18.5px var(--f-serif)}
 #library .tray li small{font:500 12px var(--f-ui);color:#7b6a48}
 #library .tray ul{margin:0;padding:0}
 /* words engraved in gold leaf on the wood: the drawers' names, and "ממשיכים" on the lectern's book */
@@ -899,7 +899,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 #library .drawer:hover,#library .lectbook:hover{background-color:rgba(255,226,170,.07)}
 #library .drawer.pulled,#library .lectbook.pulled{background-color:rgba(255,226,170,.12);box-shadow:0 0 2.4cqw rgba(255,214,140,.35)}
 #library .drawer:focus-visible,#library .lectbook:focus-visible{outline:2px solid var(--foil);outline-offset:1px}
-#library .drawer .en,#library .lectbook .en{position:absolute;inset-inline:0;text-align:center;font:800 2.75cqw/1 var(--f-serif);letter-spacing:.02em;white-space:nowrap;
+#library .drawer .en,#library .lectbook .en{position:absolute;inset-inline:0;text-align:center;font:900 3.3cqw/1 var(--f-serif);letter-spacing:.02em;white-space:nowrap;
   color:transparent;background:linear-gradient(180deg,#fbe9b4 0%,#d7b35f 45%,#a77d2e 100%);-webkit-background-clip:text;background-clip:text;
   filter:drop-shadow(0 .18cqw .08cqw rgba(0,0,0,.75)) drop-shadow(0 -.06cqw 0 rgba(255,236,190,.25))}
 #library .drawer .en{top:13%}
@@ -924,7 +924,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 #library .lbnote{background:#efe3c4;border-radius:10px;padding:8px 10px}
 /* ---- the library's reader ---- */
 .lrnav{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
-.lrnav > button{flex:none;height:34px;padding:0 12px;border-radius:999px;background:var(--card);box-shadow:var(--sh1);font:600 13px var(--f-ui);color:var(--ink)}
+.lrnav > button{flex:none;height:40px;padding:0 15px;border-radius:999px;background:var(--card);box-shadow:var(--sh1);font:700 15px var(--f-ui);color:var(--ink)}
 .lrnav > button:disabled{opacity:.35}
 .lrnav .lrmodes{flex:1;display:flex;justify-content:center;gap:4px;background:var(--tint);border-radius:12px;padding:3px}
 .lrnav .lrmodes.hide{visibility:hidden}
@@ -933,28 +933,49 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
 .lrtxt .seg{padding:8px 0 10px;border-bottom:1px solid var(--hair)}
 .lrtxt .seg:last-child{border-bottom:0}
 .lrtxt .seg.hit{background:var(--tint);border-radius:10px;padding-inline:8px}
-.lrtxt .txt{font-family:var(--body),'Ezra',serif;font-size:var(--fs);line-height:var(--lh);text-align:justify}
+.lrtxt .txt{font-family:var(--body),'Ezra',serif;font-size:calc(var(--fs) * 1.12);line-height:var(--lh);text-align:justify}
 .lrtxt .tools{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center}
-.lrtxt .tools button{height:28px;padding:0 11px;border-radius:999px;background:var(--tint);font:600 12.5px var(--f-ui);color:var(--ins)}
+.lrtxt .tools button{height:34px;padding:0 13px;border-radius:999px;background:var(--tint);font:700 14.5px var(--f-ui);color:var(--ins)}
 .lrtxt .tools button small{font-weight:500;color:var(--mute);margin-inline-start:3px}
 .lrtxt .tools button[aria-pressed="true"]{background:var(--deep);color:var(--on-pri)}
 .lrtxt .tools button[aria-pressed="true"] small{color:inherit;opacity:.8}
 .lrtxt .tools .mk{margin-inline-start:auto;background:none;color:var(--gold-mk);font-size:17px;padding:0 6px}
-.lrtxt .com{font-family:'RashiScript','Frank',serif;font-size:calc(var(--fs) * .78);line-height:1.75;margin:8px 0 2px;padding:10px 12px;border-radius:12px;background:var(--card);box-shadow:var(--sh1);text-align:justify}
+.lrtxt .com{font-family:'RashiScript','Frank',serif;font-size:calc(var(--fs) * .9);line-height:1.75;margin:8px 0 2px;padding:10px 12px;border-radius:12px;background:var(--card);box-shadow:var(--sh1);text-align:justify}
 .lrtxt .com .lb{display:block;font:700 11.5px var(--f-ui);color:var(--gold-mk);margin-bottom:3px}
 .lrtxt .com b,.lrtxt .com .dh,#libread .whole .dh{font-weight:600;color:var(--ins)}
 #libread mark{background:var(--gold-hi);color:var(--gold-ink);border-radius:3px;padding:0 1px}
 #libread .whole{margin-top:12px;background:var(--card);box-shadow:var(--sh1);border-radius:12px;padding:10px 12px;font-family:'RashiScript','Frank',serif;font-size:calc(var(--fs) * .78);line-height:1.75}
 #libread .whole summary{font:700 13.5px var(--f-ui);color:var(--ins);cursor:pointer}
-#libread .lrsrc{font:500 11.5px/1.6 var(--f-ui);color:var(--mute);margin-top:16px;padding-top:10px;border-top:1px dotted var(--rule)}
-#libread .dafwrap{position:relative;overflow:auto;border-radius:12px;background:#fbf6e8;box-shadow:inset 0 0 0 1px var(--rule);padding:10px 0;color:#1b1b22}
+#libread .lrsrc{font:500 12px/1.7 var(--f-ui);color:var(--mute);margin-top:16px;padding-top:10px;border-top:1px dotted var(--rule)}
+#libread .lrsrc summary{cursor:pointer;font-weight:600}
+#libread .dafwrap{position:relative;overflow-x:auto;overflow-y:hidden;direction:ltr;margin-inline:calc(-1 * var(--gut,16px));background:#fbf6e8;box-shadow:0 1px 0 var(--rule),0 -1px 0 var(--rule);color:#1b1b22;touch-action:pan-x pan-y;scrollbar-width:none}
+#libread .dafwrap::-webkit-scrollbar{display:none}
+#libread .dafwrap .sizer{position:relative;overflow:hidden}
+#libread .dafwrap .stage{position:absolute;top:0;left:0;direction:rtl}
 :root[data-theme="dark"] #libread .dafwrap{background:#14182a;color:#e9e4d6}
-#libread .dafwrap .stage{transform-origin:top right}
+#libread .dafwrap .stage{transform-origin:top left}
 #libread .dafhdr{text-align:center;font:800 15px var(--f-serif);margin-bottom:4px}
 #libread .dafRoot .dh,#libread [class*="dafRoot"] .dh{font-weight:700}
 #libread .lbhint{display:flex;justify-content:space-between;align-items:center;gap:8px;font:500 12.5px var(--f-ui);color:var(--mute)}
 #libread .lbhint button{flex:none;white-space:nowrap;height:30px;padding:0 12px;border-radius:999px;background:var(--deep);color:var(--on-pri);font:600 12.5px var(--f-ui)}
 #lrStar[aria-pressed="true"] svg{fill:var(--gold);stroke:var(--gold)}
+/* ---- turning a page of the library: the old page lifts on its right edge (the spine) and goes over ---- */
+#libread .leaf{view-transition-name:lrpage}
+#library .vol .pg{view-transition-name:lrpage}
+::view-transition-group(lrpage){animation-duration:.62s;animation-timing-function:cubic-bezier(.45,.05,.25,1)}
+:root[data-turn="fwd"]::view-transition-old(lrpage){transform-origin:100% 50%;animation:pageOver .62s cubic-bezier(.45,.05,.25,1) both;z-index:2}
+:root[data-turn="fwd"]::view-transition-new(lrpage){animation:pageUnder .62s ease both}
+:root[data-turn="back"]::view-transition-new(lrpage){transform-origin:100% 50%;animation:pageBack .62s cubic-bezier(.45,.05,.25,1) both;z-index:2}
+:root[data-turn="back"]::view-transition-old(lrpage){animation:pageUnder .62s ease reverse both}
+:root[data-turn="open"]::view-transition-new(lrpage){transform-origin:100% 50%;animation:pageOpen .7s cubic-bezier(.3,.7,.2,1) both}
+:root[data-turn="open"]::view-transition-old(lrpage){animation:fadeOut .35s ease both}
+@keyframes pageOver{0%{transform:perspective(1600px) rotateY(0);filter:brightness(1);box-shadow:0 0 0 rgba(0,0,0,0)}
+  45%{filter:brightness(.82)}100%{transform:perspective(1600px) rotateY(-178deg);filter:brightness(.55);box-shadow:-40px 0 60px rgba(0,0,0,.35)}}
+@keyframes pageBack{0%{transform:perspective(1600px) rotateY(-178deg);filter:brightness(.55)}100%{transform:perspective(1600px) rotateY(0);filter:brightness(1)}}
+@keyframes pageUnder{0%{filter:brightness(.78)}100%{filter:brightness(1)}}
+@keyframes pageOpen{0%{transform:perspective(1600px) rotateY(-70deg) scale(.92);opacity:.2}100%{transform:none;opacity:1}}
+@keyframes fadeOut{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
 #kitPacks .srw small b{color:var(--gold-mk);font-weight:700}
 #findRes li.fwait{border:0;font:500 13px var(--f-ui);color:var(--mute);padding:10px 2px}
 #findRes .fr .sn{display:block;font:400 14px/1.55 var(--f-serif);color:var(--ink);margin-top:2px}
@@ -1223,7 +1244,7 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="frame"><div class="leaf">
   <div class="aboutbody">
     <h3>סידור וחומש בית אהרן וישראל</h3>
-    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.41</span> · ניתן בחינם</p>
+    <p class="ab-sub">נוסח קרלין סטולין · גרסה <span data-ver>2.42</span> · ניתן בחינם</p>
     <p class="ab-lead">הסידור, החומש, חוק לישראל, ספר תהילים ולוח השנה במקום אחד, בנוסח חסידות קארלין סטאלין.</p>
     <div class="abthanks">
       <h4>תודות</h4>
@@ -1464,20 +1485,20 @@ body::after{content:"";position:fixed;z-index:-1;inset:calc(-14px + env(safe-are
   <div class="askbtns" id="shulBtns"></div>
 </div>
 
-<script src="hebcal.js?v=mv91kwwr"></script>
-<script src="shuls.js?v=mv91kwwr"></script>
-<script src="calcore.js?v=mv91kwwr"></script>
-<script src="rt.js?v=mv91kwwr"></script>
-<script src="orig.js?v=mv91kwwr"></script>
-<script src="engine.js?v=mv91kwwr"></script>
-<script src="commentary.js?v=mv91kwwr"></script>
-<script src="sizes.js?v=mv91kwwr"></script>
-<script src="app.js?v=mv91kwwr"></script>
-<script src="luach.js?v=mv91kwwr"></script>
-<script src="extras.js?v=mv91kwwr"></script>
+<script src="hebcal.js?v=mv954bnf"></script>
+<script src="shuls.js?v=mv954bnf"></script>
+<script src="calcore.js?v=mv954bnf"></script>
+<script src="rt.js?v=mv954bnf"></script>
+<script src="orig.js?v=mv954bnf"></script>
+<script src="engine.js?v=mv954bnf"></script>
+<script src="commentary.js?v=mv954bnf"></script>
+<script src="sizes.js?v=mv954bnf"></script>
+<script src="app.js?v=mv954bnf"></script>
+<script src="luach.js?v=mv954bnf"></script>
+<script src="extras.js?v=mv954bnf"></script>
 <script src="vendor/daf-renderer.js"></script>
-<script src="library.js?v=mv91kwwr"></script>
-<script src="compass.js?v=mv91kwwr"></script>
-<script src="guide.js?v=mv91kwwr"></script>
+<script src="library.js?v=mv954bnf"></script>
+<script src="compass.js?v=mv954bnf"></script>
+<script src="guide.js?v=mv954bnf"></script>
 </body>
 </html>

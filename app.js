@@ -204,6 +204,7 @@ window.SidurBack = () => {
   /* the two small dialogs (the synagogue, the question near sunset) are not steps of their own: back closes them */
   if ($('#shulbox').classList.contains('show')) { closeShul(); return true; }
   if ($('#askbox').classList.contains('show')) { $('#scrimAsk').classList.remove('show'); $('#askbox').classList.remove('show'); return true; }
+  if (window.SidurLib && SidurLib.back()) return true;   /* inside the bookcase: the tray, the volume, the shelf, one at a time */
   const st = history.state || {}, open = [...document.querySelectorAll('.sheet.show')];
   if (open.length && st.sheet === undefined) { open.forEach(el => hideSheet(el.id.slice(5))); return true; }
   if (open.length || st.sheet !== undefined || st.depth || curView !== 'home') { history.back(); return true; }
